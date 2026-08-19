@@ -1,0 +1,359 @@
+/* hk_eats — main.css
+   手機優先，唔用任何 CSS 框架。
+   顏色全部行 custom property，深色模式只覆寫變數。 */
+
+:root {
+  --bg: #fbfaf7;
+  --bg-raised: #ffffff;
+  --bg-sunken: #f1efe9;
+  --fg: #23201b;
+  --fg-muted: #5f594f;
+  --fg-faint: #8a8377;
+  --line: #ddd8cd;
+  --line-strong: #c4bcac;
+  --accent: #9a4a1f;
+  --accent-fg: #ffffff;
+  --warn-bg: #fff3d6;
+  --warn-line: #d9a41a;
+  --warn-fg: #6b4a00;
+  --ok-fg: #2f6b3a;
+  --radius: 10px;
+  --measure: 38rem;
+  --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16150f;
+    --bg-raised: #201e17;
+    --bg-sunken: #100f0a;
+    --fg: #ece7dc;
+    --fg-muted: #b0a898;
+    --fg-faint: #837c6e;
+    --line: #35322a;
+    --line-strong: #4c4739;
+    --accent: #e0975f;
+    --accent-fg: #16150f;
+    --warn-bg: #33270c;
+    --warn-line: #b88a25;
+    --warn-fg: #f0d79a;
+    --ok-fg: #7fbf8c;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Noto Sans TC", "PingFang HK", "Hiragino Sans CNS",
+               "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  letter-spacing: .01em;
+}
+
+/* ---------- 版面 ---------- */
+
+.wrap {
+  width: 100%;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0 1.15rem;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-raised);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem 1rem;
+  padding-top: .7rem;
+  padding-bottom: .7rem;
+}
+
+.brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--fg);
+  text-decoration: none;
+}
+.brand span { color: var(--accent); }
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem .9rem;
+  margin-left: auto;
+  font-size: .92rem;
+}
+.site-nav a {
+  color: var(--fg-muted);
+  text-decoration: none;
+  padding: .15rem 0;
+  border-bottom: 2px solid transparent;
+}
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+main { display: block; padding: 1.6rem 0 3rem; }
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: var(--bg-sunken);
+  color: var(--fg-muted);
+  font-size: .87rem;
+  padding: 1.5rem 0 2.5rem;
+}
+.site-footer p { margin: .35rem 0; }
+
+/* ---------- 文字 ---------- */
+
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  letter-spacing: 0;
+  margin: 2.2rem 0 .7rem;
+  font-weight: 700;
+}
+h1 { font-size: 1.72rem; margin-top: .4rem; }
+h2 {
+  font-size: 1.3rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--line);
+}
+h3 { font-size: 1.08rem; }
+h4 { font-size: .98rem; color: var(--fg-muted); }
+
+p, li { max-width: var(--measure); }
+p { margin: 0 0 1.05rem; }
+
+ul, ol { padding-left: 1.3rem; margin: 0 0 1.05rem; }
+li { margin: .3rem 0; }
+
+a { color: var(--accent); text-underline-offset: .18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+strong { font-weight: 700; }
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .88em;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: .05em .35em;
+}
+
+.lede {
+  font-size: 1.06rem;
+  color: var(--fg-muted);
+  border-left: 3px solid var(--accent);
+  padding-left: .9rem;
+  margin-bottom: 1.6rem;
+}
+
+.meta-line {
+  font-size: .85rem;
+  color: var(--fg-faint);
+  margin: -.2rem 0 1.4rem;
+}
+
+/* ---------- 卡片 / hub ---------- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .9rem;
+  margin: 1.4rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 34rem) {
+  .card-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.card {
+  display: block;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow);
+}
+.card:hover { border-color: var(--line-strong); }
+.card h3 { margin: 0 0 .3rem; font-size: 1.05rem; color: var(--accent); }
+.card p { margin: 0; font-size: .92rem; color: var(--fg-muted); max-width: none; }
+
+.post-list { list-style: none; padding: 0; margin: 1.2rem 0 2rem; }
+.post-list li {
+  border-bottom: 1px solid var(--line);
+  padding: .85rem 0;
+  max-width: none;
+}
+.post-list li:first-child { border-top: 1px solid var(--line); }
+.post-list a { font-weight: 600; text-decoration: none; font-size: 1.02rem; }
+.post-list a:hover { text-decoration: underline; }
+.post-list .kicker {
+  display: block;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  margin-bottom: .1rem;
+}
+.post-list p { margin: .25rem 0 0; font-size: .9rem; color: var(--fg-muted); max-width: none; }
+
+/* ---------- 表格 ---------- */
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 30rem;
+  font-size: .92rem;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: .55rem .7rem;
+  border-bottom: 1px solid var(--line);
+}
+thead th {
+  background: var(--bg-sunken);
+  font-size: .85rem;
+  letter-spacing: .03em;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- 易耗芯區塊（freshness.js 控制） ---------- */
+
+.data-block {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.05rem .6rem;
+  margin: 1.3rem 0 1.8rem;
+}
+.data-block > h3:first-child,
+.data-block > h4:first-child { margin-top: 0; }
+.data-block .table-scroll { border: 0; border-radius: 0; background: none; }
+.data-block .table-scroll table { min-width: 26rem; }
+
+[data-fresh-key]:empty::after {
+  content: "…";
+  color: var(--fg-faint);
+}
+
+.freshness {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem .6rem;
+  margin: .6rem 0 .5rem;
+  font-size: .82rem;
+  color: var(--fg-faint);
+  border-top: 1px dashed var(--line);
+  padding-top: .5rem;
+}
+.freshness .verified { white-space: nowrap; }
+
+.freshness-warning {
+  display: block;
+  width: 100%;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-line);
+  border-left-width: 4px;
+  border-radius: 6px;
+  color: var(--warn-fg);
+  font-size: .88rem;
+  font-weight: 600;
+  line-height: 1.55;
+  padding: .55rem .7rem;
+  margin-top: .1rem;
+}
+
+.data-block.is-stale { border-color: var(--warn-line); }
+.data-block.is-error .freshness { color: var(--fg-muted); }
+
+/* ---------- affiliate 連結（affiliates.js 注入 href） ---------- */
+
+.aff-note {
+  font-size: .82rem;
+  color: var(--fg-faint);
+  border: 1px dashed var(--line-strong);
+  border-radius: 6px;
+  padding: .5rem .7rem;
+  margin: 1.2rem 0;
+}
+a[data-aff] { font-weight: 600; }
+a[data-aff]:not([href]) {
+  color: var(--fg-faint);
+  cursor: default;
+  font-weight: 400;
+}
+
+/* ---------- 雜項 ---------- */
+
+.callout {
+  background: var(--bg-sunken);
+  border-left: 3px solid var(--line-strong);
+  border-radius: 0 6px 6px 0;
+  padding: .8rem 1rem;
+  margin: 1.3rem 0;
+}
+.callout p:last-child { margin-bottom: 0; }
+.callout h4 { margin-top: 0; }
+
+.faq h3 { border-top: 1px solid var(--line); padding-top: .9rem; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: .5rem;
+  top: .5rem;
+  z-index: 20;
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: .5rem .8rem;
+  border-radius: 6px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

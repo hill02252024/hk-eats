@@ -1,0 +1,3 @@
+預留：英文版目錄。本次唔填內容，亦唔放 stub 頁。
+全站 <link rel="alternate" hreflang="en"> 已經指向呢個目錄下嘅對應路徑，
+將來加英文版時，路徑同 zh-HK 版一一對應即可，唔洗改 HTML。

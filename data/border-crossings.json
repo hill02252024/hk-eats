@@ -1,0 +1,39 @@
+{
+  "title": "深圳六大口岸 — 易耗芯資料",
+  "belongsTo": "/guides/border-crossings.html",
+  "_status": "seed",
+  "_note": "所有數值屬建站示範值，未經逐項人手覆核。正式上線前請逐格對口岸官方公告核實，並將 verifiedOn 更新為覆核當月。機制本身（顯示核實月份、超過 6 個月警告）已完整運作。",
+  "entries": {
+    "lowu.hours":      { "value": "約 06:30–24:00", "verifiedOn": "2026-08" },
+    "lowu.hkLink":     { "value": "東鐵綫羅湖站（總站，出閘即到）", "verifiedOn": "2026-08" },
+    "lowu.szLink":     { "value": "深圳地鐵 1 號綫羅湖站、深圳火車站", "verifiedOn": "2026-08" },
+    "lowu.peak":       { "value": "假日北向 09:00–12:00；南向 17:00–21:00", "verifiedOn": "2026-08" },
+
+    "futian.hours":    { "value": "約 06:30–22:30", "verifiedOn": "2026-08" },
+    "futian.hkLink":   { "value": "東鐵綫落馬洲站（總站，步行過關）", "verifiedOn": "2026-08" },
+    "futian.szLink":   { "value": "深圳地鐵 4 號綫、10 號綫福田口岸站", "verifiedOn": "2026-08" },
+    "futian.peak":     { "value": "平日北向 07:00–09:30；南向 18:00–20:00", "verifiedOn": "2026-08" },
+
+    "huanggang.hours": { "value": "24 小時", "verifiedOn": "2026-08" },
+    "huanggang.hkLink":{ "value": "跨境巴士、過境小巴、私家車（新田公路）", "verifiedOn": "2026-08" },
+    "huanggang.szLink":{ "value": "深圳地鐵 7 號綫皇崗口岸站、市內巴士", "verifiedOn": "2026-08" },
+    "huanggang.peak":  { "value": "深夜為主要優勢時段；日間高峰不明顯", "verifiedOn": "2026-08" },
+
+    "szbay.hours":     { "value": "約 06:30–24:00", "verifiedOn": "2026-08" },
+    "szbay.hkLink":    { "value": "B2／B3X 等專綫巴士、跨境直通巴、口岸的士", "verifiedOn": "2026-08" },
+    "szbay.szLink":    { "value": "深圳灣口岸站接駁市內巴士，往南山、蛇口", "verifiedOn": "2026-08" },
+    "szbay.peak":      { "value": "週末南向 16:00–21:00 最擠；北向週六早上", "verifiedOn": "2026-08" },
+
+    "liantang.hours":  { "value": "約 07:00–22:00", "verifiedOn": "2026-08" },
+    "liantang.hkLink": { "value": "新界東北巴士（粉嶺／上水方向）、私家車", "verifiedOn": "2026-08" },
+    "liantang.szLink": { "value": "深圳地鐵 2 號綫蓮塘口岸站", "verifiedOn": "2026-08" },
+    "liantang.peak":   { "value": "全日相對疏落，長假前後才明顯", "verifiedOn": "2026-08" },
+
+    "mankamto.hours":  { "value": "約 07:00–20:00（客運班次少，以貨運為主）", "verifiedOn": "2026-08" },
+    "mankamto.hkLink": { "value": "指定跨境巴士路線，無鐵路直達", "verifiedOn": "2026-08" },
+    "mankamto.szLink": { "value": "口岸巴士轉乘，最近地鐵需再轉一程", "verifiedOn": "2026-08" },
+    "mankamto.peak":   { "value": "客運量小，甚少排隊", "verifiedOn": "2026-08" },
+
+    "general.longWeekend": { "value": "公眾假期前一晚及假期首日早上，羅湖與深圳灣的等候時間可以係平日的三至五倍。", "verifiedOn": "2026-08" }
+  }
+}

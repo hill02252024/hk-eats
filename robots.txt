@@ -1,0 +1,5 @@
+# hk_eats — 由 scripts/build.mjs 生成，唔好手改
+User-agent: *
+Allow: /
+
+Sitemap: https://example.github.io/hk_eats/sitemap.xml

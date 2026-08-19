@@ -1,0 +1,31 @@
+{
+  "title": "北上支付設定 — 易耗芯資料",
+  "belongsTo": "/guides/payment-setup.html",
+  "_status": "seed",
+  "_note": "限額、手續費、實名門檻係全站最易變嘅一組數字，亦係最唔應該寫死喺正文入面嘅。此檔的示範值未經逐項覆核，正式上線前請以各服務商當期條款為準。當中『匯率與手續費』一組刻意保留舊嘅 verifiedOn，用嚟驗證超過 6 個月的過時警告確實會出現。",
+  "entries": {
+    "alipayhk.identity":  { "value": "香港身分證實名（升級錢包後方可跨境使用）", "verifiedOn": "2026-07" },
+    "alipayhk.limit":     { "value": "設每筆及每年累計上限，視乎實名級別", "verifiedOn": "2026-07" },
+    "alipayhk.coverage":  { "value": ["連鎖餐飲、便利店、大型超市", "地鐵／公交乘車碼（部分城市）", "網約車、外賣平台（部分）"], "verifiedOn": "2026-07" },
+    "alipayhk.gap":       { "value": "街市散戶、小型個體戶、部分政府收費未必接受境外錢包", "verifiedOn": "2026-07" },
+
+    "wechathk.identity":  { "value": "香港身分證實名，錢包與內地微信支付分開結算", "verifiedOn": "2026-07" },
+    "wechathk.limit":     { "value": "設每筆及每年累計上限，視乎實名級別", "verifiedOn": "2026-07" },
+    "wechathk.coverage":  { "value": ["連鎖餐飲、零售掃碼", "商戶收款碼（多數可用）", "小程序內付款（部分不支援）"], "verifiedOn": "2026-07" },
+    "wechathk.gap":       { "value": "個人對個人轉帳、紅包，一般唔通用；部分小程序只認內地錢包", "verifiedOn": "2026-07" },
+
+    "mainlandWallet.identity": { "value": "需內地手機號碼、護照或回鄉證實名", "verifiedOn": "2026-07" },
+    "mainlandWallet.limit":    { "value": "綁定境外卡有單筆小額免手續費門檻，超過會收費", "verifiedOn": "2026-07" },
+
+    "card.unionpay":      { "value": "接受度最高的實體卡制式，POS 與 ATM 皆廣泛支援", "verifiedOn": "2026-07" },
+    "card.visaMaster":    { "value": "只有涉外酒店、機場、部分連鎖較穩定，一般食肆不宜依賴", "verifiedOn": "2026-07" },
+    "card.atm":           { "value": "跨境提款設每日上限，並可能同時收發卡行與當地手續費", "verifiedOn": "2026-07" },
+
+    "cash.acceptance":    { "value": "法定上仍須收現金，實務上小額店舖經常無零錢找續", "verifiedOn": "2026-07" },
+    "cash.suggestion":    { "value": "建議帶小面額人民幣作最後保險，唔好帶大鈔", "verifiedOn": "2026-07" },
+
+    "fx.note":            { "value": "港元錢包跨境消費按當日參考匯率折算，另可能有貨幣兌換費", "verifiedOn": "2025-11" },
+    "fx.cardFee":         { "value": "信用卡海外交易費通常以交易額百分比計，屬發卡行條款", "verifiedOn": "2025-11" },
+    "fx.atmFee":          { "value": "海外提款每筆固定費 + 兌換差價，短程行程通常唔划算", "verifiedOn": "2025-11" }
+  }
+}

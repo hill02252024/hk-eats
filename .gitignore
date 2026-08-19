@@ -1,0 +1,16 @@
+# 系統
+.DS_Store
+Thumbs.db
+
+# 編輯器
+.vscode/
+.idea/
+*.swp
+
+# 本站唔用 npm 依賴；如果將來加咗工具，唔好 commit
+node_modules/
+npm-debug.log*
+
+# 本機預覽產生嘅嘢
+.cache/
+*.log

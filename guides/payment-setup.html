@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>港人北上支付設定：四種容器，各自的邊界 — hk_eats</title>
+<meta name="description" content="AlipayHK、微信支付香港錢包、實體卡同現金各自適用嘅場景同限制，用「支付容器」嘅角度講點樣砌一套唔會斷纜嘅組合。">
+<link rel="alternate" hreflang="zh-HK" href="../guides/payment-setup.html">
+<link rel="alternate" hreflang="en" href="../en/guides/payment-setup.html">
+<link rel="alternate" hreflang="x-default" href="../guides/payment-setup.html">
+<meta name="jsonld:type" content="Article,FAQPage">
+<meta name="jsonld:headline" content="港人北上支付設定：四種容器，各自的邊界">
+<meta name="jsonld:description" content="境外錢包、內地錢包、實體卡與現金的適用場景、限制與組合策略。">
+<meta name="jsonld:datePublished" content="2026-08-19">
+<meta name="jsonld:dateModified" content="2026-08-19">
+<meta name="jsonld:section" content="北上實務">
+<link rel="stylesheet" href="../css/main.css">
+<script src="../js/freshness.js" defer></script>
+<script src="../js/affiliates.js" defer></script>
+<!-- build:jsonld -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://example.github.io/hk_eats/guides/payment-setup.html"
+      },
+      "headline": "港人北上支付設定：四種容器，各自的邊界",
+      "description": "境外錢包、內地錢包、實體卡與現金的適用場景、限制與組合策略。",
+      "inLanguage": "zh-HK",
+      "datePublished": "2026-08-19",
+      "dateModified": "2026-08-19",
+      "articleSection": "北上實務",
+      "author": {
+        "@type": "Organization",
+        "name": "hk_eats",
+        "url": "https://example.github.io/hk_eats/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "hk_eats",
+        "url": "https://example.github.io/hk_eats/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "只開一個錢包夠唔夠？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "技術上夠，實際上唔建議。部分商戶只貼其中一個平台嘅收款碼，亦有商戶嘅碼對境外錢包支援唔一致。兩個都開嘅邊際成本接近零，但可以消除一大類「掃唔到」嘅情況。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "掃碼失敗一般係咩原因？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "最常見係商戶用緊個人收款碼而唔係商戶碼，境外錢包唔支援；其次係該類目未開通跨境通道；再其次先至係限額或風控。所以掃唔到嘅時候，第一步應該問商戶有冇另一個收款碼，而唔係即刻查自己個戶口。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "應該事先換人民幣現金嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "換少量。現金而家嘅角色係後備，唔係主力，換太多反而要處理找續同帶返香港嘅問題。如果行程以連鎖商戶為主，一兩百蚊人民幣嘅小面額通常已經足夠應付意外。"
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- /build:jsonld -->
+</head>
+<body>
+<a class="skip-link" href="#main">跳去正文</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">hk<span>_</span>eats</a>
+    <nav class="site-nav" aria-label="主要分區">
+      <a href="../guides/index.html" aria-current="page">北上實務</a>
+      <a href="../areas/index.html">分區地圖</a>
+      <a href="../coffee/index.html">咖啡</a>
+      <a href="../trips/index.html">行程模板</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article class="wrap">
+
+<h1>港人北上支付設定：四種容器，各自的邊界</h1>
+<p class="meta-line">北上實務 · 2026-08-19</p>
+
+<p class="lede">北上畀唔到錢，好少係因為冇錢，而係因為錢擺錯咗容器。同一筆錢放喺香港錢包、內地錢包、實體卡定係現金，喺唔同場景嘅接受度可以差天共地。理解每種容器嘅邊界喺邊，比記住任何一個限額數字都有用。</p>
+
+<h2>先分清「跨境通道」同「本地錢包」</h2>
+
+<p>好多混亂源自同一個 app 有兩個唔同身分。你部電話入面嘅支付寶香港版同內地版支付寶，介面似樣，但背後係兩個獨立嘅錢包：一個結算港元、受香港監管，一個結算人民幣、受內地監管。微信亦然。</p>
+
+<p>當你喺深圳掃碼，商戶嘅收款碼係內地系統嘅碼。你用香港錢包去掃，其實係走一條「跨境通道」——系統認得你係境外錢包，即時按當日匯率折算港元扣數。呢條通道係後加嘅，所以覆蓋範圍冇內地錢包咁齊。有啲場景通道未鋪到，掃極都唔得，唔係你設定錯。</p>
+
+<p>記住呢個分別，之後所有「點解佢得我唔得」嘅情況都解釋得通。</p>
+
+<h2>容器一：香港錢包（AlipayHK／微信支付香港）</h2>
+
+<p>呢個係大部分人嘅主力。優點好明顯：唔洗開內地銀行戶口，唔洗內地手機號，實名用香港身分證就得，錢從香港銀行或信用卡增值，扣嘅係港元，唔洗事先換人民幣。</p>
+
+<p>它嘅邊界喺覆蓋率。連鎖餐飲、便利店、大型超市、正規商場基本上冇問題；越細嘅商戶、越唔正規嘅收款方式，成功率就越跌。街市檔口、路邊小店、個體戶用個人碼收錢嘅情況，境外錢包經常唔通。</p>
+
+<p>另一個邊界係「非商戶」場景：轉帳畀朋友、收紅包、部分小程序內購買，呢啲設計上就係內地錢包嘅功能，香港錢包多數做唔到。如果你嘅行程涉及同內地朋友夾錢，唔好假設可以即場過數。</p>
+
+<h2>容器二：內地錢包綁境外卡</h2>
+
+<p>如果你一年上去十幾次，或者經常要用小程序、叫車、訂內地服務，就值得行多一步：開內地版錢包，綁一張境外信用卡。實名門檻高啲，需要護照或回鄉證，通常亦要一個可以收驗證碼嘅手機號。</p>
+
+<p>換嚟嘅係接受度接近本地用戶：小程序、共享單車、部分政府與交通場景都通。代價係手續費結構——小額交易通常免費，超過一定金額會按比例收費。所以呢個容器嘅定位係「補洞」，唔係「取代」：用嚟做香港錢包做唔到嘅嘢，大額消費仍然行返其他方式。</p>
+
+<h2>容器三：實體卡</h2>
+
+<p>實體卡喺內地嘅現實同香港人直覺相反：唔係所有卡都一樣。銀聯係本地制式，POS 同 ATM 支援最廣；Visa／Mastercard 嘅接受度集中喺涉外酒店、機場、部分高端連鎖，一般食肆同零售唔應該當佢係後備方案。</p>
+
+<p>實體卡真正有用嘅場景有兩個：一係大額消費（酒店、醫療、電器），呢啲地方一定有 POS 而且錢包限額可能唔夠；二係 ATM 提款，作為現金嘅補給途徑。但提款有雙重成本——發卡行嘅海外提款費，加上匯率差價。短程行程用 ATM 提細額現金，通常唔划算。</p>
+
+<h2>容器四：現金</h2>
+
+<p>現金嘅角色已經由「主力」變成「保險」。法律上商戶唔可以拒收，但實務上你會撞到嘅係另一個問題：對方冇零錢找。收銀機入面得幾張紙幣嘅小店唔罕見。</p>
+
+<p>所以現金嘅正確用法係：帶少量小面額，唔好帶大鈔。目的唔係用嚟消費，而係喺三種電子方式全部失效嗰一刻，仍然可以埋單走人。呢種情況一年可能發生一次，但發生嗰次冇現金就好狼狽。</p>
+
+<h2>可變資料：實名門檻、限額與費用</h2>
+
+<p>以上講嘅係結構——容器點分、邊界喺邊。以下呢啲數字會隨政策同商業條款變，所以獨立存放並標明核實月份。</p>
+
+<section class="data-block" data-fresh="payment-setup">
+  <h3>四種容器：門檻與覆蓋</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>容器</th><th>實名／開通門檻</th><th>限額特性</th><th>已知缺口</th></tr></thead>
+      <tbody>
+        <tr>
+          <th scope="row">AlipayHK</th>
+          <td data-fresh-key="alipayhk.identity"></td>
+          <td data-fresh-key="alipayhk.limit"></td>
+          <td data-fresh-key="alipayhk.gap"></td>
+        </tr>
+        <tr>
+          <th scope="row">微信支付香港</th>
+          <td data-fresh-key="wechathk.identity"></td>
+          <td data-fresh-key="wechathk.limit"></td>
+          <td data-fresh-key="wechathk.gap"></td>
+        </tr>
+        <tr>
+          <th scope="row">內地錢包綁境外卡</th>
+          <td data-fresh-key="mainlandWallet.identity"></td>
+          <td data-fresh-key="mainlandWallet.limit"></td>
+          <td>需可收驗證碼的手機號</td>
+        </tr>
+        <tr>
+          <th scope="row">現金</th>
+          <td>無</td>
+          <td data-fresh-key="cash.acceptance"></td>
+          <td data-fresh-key="cash.suggestion"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h4>香港錢包已知可用場景</h4>
+  <ul data-fresh-key="alipayhk.coverage"></ul>
+  <h4>實體卡</h4>
+  <ul>
+    <li>銀聯：<span data-fresh-key="card.unionpay"></span></li>
+    <li>Visa／Mastercard：<span data-fresh-key="card.visaMaster"></span></li>
+    <li>ATM 提款：<span data-fresh-key="card.atm"></span></li>
+  </ul>
+</section>
+
+<section class="data-block" data-fresh="payment-setup">
+  <h3>匯率與手續費</h3>
+  <ul>
+    <li><span data-fresh-key="fx.note"></span></li>
+    <li><span data-fresh-key="fx.cardFee"></span></li>
+    <li><span data-fresh-key="fx.atmFee"></span></li>
+  </ul>
+</section>
+
+<div class="callout">
+  <h4>本站的資料處理方式</h4>
+  <p>上面兩個區塊嘅數值屬建站示範值，未經逐項人手覆核，實際請以各服務商當期條款為準。留意「匯率與手續費」一區刻意保留咗一個較舊嘅核實月份，用嚟示範超過六個月時嘅過時提示會實際出現喺頁面上——呢個係機制驗證，唔係疏忽。</p>
+</div>
+
+<h2>建議組合：主、備、保險三層</h2>
+
+<ol>
+  <li><strong>主：</strong>香港錢包（AlipayHK 或微信支付香港，兩個都開更穩陣，因為部分商戶只收其中一個）。</li>
+  <li><strong>備：</strong>銀聯實體卡，應付大額同錢包唔通嘅情況。</li>
+  <li><strong>保險：</strong>少量小面額人民幣現金。</li>
+</ol>
+
+<p>如果你係高頻使用者，喺「主」同「備」之間再加一層內地錢包。如果你一年上去一兩次，三層已經夠，唔需要為咗補一個好少撞到嘅洞去開內地帳戶。</p>
+
+<h2>出發前的實際檢查</h2>
+
+<ul>
+  <li>兩個香港錢包都完成實名升級，唔好等到現場先發現要驗證。</li>
+  <li>確認錢包餘額或綁定嘅信用卡未過期、未被風控。</li>
+  <li>電話有電。所有電子支付嘅共同單點故障就係部電話——帶尿袋。</li>
+  <li>知道自己張卡係咪銀聯。好多人到 POS 前一刻先發現手上得 Visa。</li>
+</ul>
+
+<section class="faq">
+  <h2>常見問題</h2>
+
+  <h3 data-faq-q>只開一個錢包夠唔夠？</h3>
+  <div data-faq-a>
+    <p>技術上夠，實際上唔建議。部分商戶只貼其中一個平台嘅收款碼，亦有商戶嘅碼對境外錢包支援唔一致。兩個都開嘅邊際成本接近零，但可以消除一大類「掃唔到」嘅情況。</p>
+  </div>
+
+  <h3 data-faq-q>掃碼失敗一般係咩原因？</h3>
+  <div data-faq-a>
+    <p>最常見係商戶用緊個人收款碼而唔係商戶碼，境外錢包唔支援；其次係該類目未開通跨境通道；再其次先至係限額或風控。所以掃唔到嘅時候，第一步應該問商戶有冇另一個收款碼，而唔係即刻查自己個戶口。</p>
+  </div>
+
+  <h3 data-faq-q>應該事先換人民幣現金嗎？</h3>
+  <div data-faq-a>
+    <p>換少量。現金而家嘅角色係後備，唔係主力，換太多反而要處理找續同帶返香港嘅問題。如果行程以連鎖商戶為主，一兩百蚊人民幣嘅小面額通常已經足夠應付意外。</p>
+  </div>
+</section>
+
+<p class="aff-note">
+  如果仲未安排內地上網（掃碼支付一定要有網），可以睇 <a data-aff="klook-china-esim"></a>。
+  以上為推廣連結，價格不受影響。
+</p>
+
+</article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>hk_eats — 北上實務、分區食飲、咖啡與行程模板。</p>
+    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份。</p>
+  </div>
+</footer>
+</body>
+</html>
