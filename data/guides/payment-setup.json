@@ -1,0 +1,64 @@
+{
+  "title": "北上支付設定 — 易耗芯資料",
+  "belongsTo": "/guides/payment-setup.html",
+  "_status": "sourced",
+  "_note": "認證審核時間、免手續費限額、超額費率、綁卡規則與風控警告，均為編輯提供之核實資料。",
+  "entries": {
+    "setup.reviewDays": {
+      "value": "認證審核約需 7 個工作天，唔係即開即用。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "setup.binding": {
+      "value": "AlipayHK 與 WeChat Pay HK 均毋須綁定內地銀行戶口，綁香港銀行卡或信用卡即可；人民幣消費自動結算為港幣。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+
+    "wechat.freeQuota": {
+      "value": "每年免手續費限額 HK$200,000。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "wechat.overFee": {
+      "value": [
+        "中銀 Visa／Mastercard 及銀行賬戶支付：超額後仍免手續費",
+        "銀聯信用卡：1%",
+        "其他支付方式：2%"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+
+    "alipay.twoSystems": {
+      "value": "香港支付寶（AlipayHK）同大陸支付寶係兩套獨立系統。內地大部分商戶支援大陸支付寶，但多數唔收 AlipayHK。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "alipayCN.bindHKCard": {
+      "value": "大陸支付寶已支援綁定香港信用卡，毋須內地銀行卡。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "alipayCN.hkCardLimit": {
+      "value": "香港 Visa／Mastercard 喺大陸支付寶只可用於消費，唔可以為餘額充值。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+
+    "risk.warnings": {
+      "value": [
+        "唔好用找換店代充值",
+        "唔好短時間內頻繁大額增值",
+        "唔好頻繁換綁多張卡"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "risk.consequence": {
+      "value": "以上行為會觸發風控，可能導致帳戶凍結。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    }
+  }
+}

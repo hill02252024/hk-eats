@@ -1,0 +1,28 @@
+{
+  "title": "手搖磨豆機 — 結構分層",
+  "belongsTo": "/coffee/grinder-guide.html",
+  "_status": "principles",
+  "_note": "本文唔涉及任何時效性數值：冇型號、冇售價、冇規格區間。呢個檔只存放各價位層級嘅結構特徵，屬機械原理陳述，所以全部標記 volatility: low。verifiedOn 記錄嘅係最後一次覆核措辭嘅月份，唔係「數據核實」。",
+  "entries": {
+    "tier.entry.traits": {
+      "value": ["多為錐刀", "單軸承或塑膠軸套定位", "下調式段位，段距偏粗"],
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "tier.mid.traits": {
+      "value": ["全金屬機身與刀盤座", "雙軸承，刀盤晃動明顯收窄", "上調或外調段位，段距足以做手沖微調"],
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "tier.high.traits": {
+      "value": ["刀盤幾何為自家設計而非公版", "公差控制到可標稱同心度", "部分機型可換刀盤"],
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "tier.boutique.traits": {
+      "value": ["小批量加工，逐台檢測", "特殊齒形，針對單一沖煮法優化", "邊際回報遞減，屬興趣支出"],
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    }
+  }
+}

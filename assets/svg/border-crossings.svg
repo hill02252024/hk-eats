@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" role="img"
+     aria-labelledby="svg-bc-title svg-bc-desc" class="diagram-svg">
+  <title id="svg-bc-title">六個深圳陸路口岸的相對地理位置與兩側接駁</title>
+  <desc id="svg-bc-desc">一條由西至東的示意圖。中央橫線代表深港邊界。線上由左至右排列六個口岸：深圳灣、皇崗、福田、羅湖、文錦渡、蓮塘。邊界線以上標示深圳側接駁方式，以下標示香港側接駁方式。羅湖與福田的方框較粗，代表香港側有鐵路直達。右下角另有港珠澳大橋的附註，方向為珠海及澳門而非深圳。服務時間不在圖中，由頁面的資料區塊獨立載入。</desc>
+
+  <g class="d-label-side">
+    <text x="16" y="46" font-size="14" font-weight="700">深圳側</text>
+    <text x="16" y="368" font-size="14" font-weight="700">香港側</text>
+    <text x="744" y="46" font-size="12" text-anchor="end">← 西　　東 →</text>
+    <text x="744" y="368" font-size="11" text-anchor="end">粗框＝香港側有鐵路直達</text>
+  </g>
+
+  <!-- 邊界 -->
+  <line class="d-border" x1="24" y1="205" x2="736" y2="205" stroke-width="2.5" stroke-dasharray="10 7"/>
+  <text class="d-border-text" x="380" y="198" font-size="11" text-anchor="middle">深 港 邊 界</text>
+
+  <!-- 深圳灣 -->
+  <g>
+    <text class="d-sz" x="86" y="86" font-size="11.5" text-anchor="middle">口岸接駁市內交通</text>
+    <text class="d-sz" x="86" y="103" font-size="11.5" text-anchor="middle">往南山、蛇口</text>
+    <line class="d-tick" x1="86" y1="118" x2="86" y2="188" stroke-width="1.5"/>
+    <rect class="d-node d-node-normal" x="30" y="188" width="112" height="34" rx="7" stroke-width="1.8"/>
+    <text class="d-node-text" x="86" y="210" font-size="14" font-weight="700" text-anchor="middle">深圳灣</text>
+    <line class="d-tick" x1="86" y1="252" x2="86" y2="288" stroke-width="1.5"/>
+    <text class="d-hk" x="86" y="304" font-size="11.5" text-anchor="middle">元朗／天水圍</text>
+    <text class="d-hk" x="86" y="321" font-size="11.5" text-anchor="middle">專綫巴士</text>
+  </g>
+
+  <!-- 皇崗 -->
+  <g>
+    <text class="d-sz" x="196" y="86" font-size="11.5" text-anchor="middle">地鐵 7 號綫</text>
+    <text class="d-sz" x="196" y="103" font-size="11.5" text-anchor="middle">皇崗口岸站</text>
+    <line class="d-tick" x1="196" y1="118" x2="196" y2="188" stroke-width="1.5"/>
+    <rect class="d-node d-node-normal" x="140" y="188" width="112" height="34" rx="7" stroke-width="1.8"/>
+    <text class="d-node-text" x="196" y="210" font-size="14" font-weight="700" text-anchor="middle">皇崗</text>
+    <line class="d-tick" x1="196" y1="252" x2="196" y2="288" stroke-width="1.5"/>
+    <text class="d-hk" x="196" y="304" font-size="11.5" text-anchor="middle">跨境巴士</text>
+    <text class="d-hk" x="196" y="321" font-size="11.5" text-anchor="middle">私家車</text>
+  </g>
+
+  <!-- 福田 -->
+  <g>
+    <text class="d-sz" x="306" y="86" font-size="11.5" text-anchor="middle">地鐵 4／10 號綫</text>
+    <text class="d-sz" x="306" y="103" font-size="11.5" text-anchor="middle">福田口岸站</text>
+    <line class="d-tick" x1="306" y1="118" x2="306" y2="188" stroke-width="1.5"/>
+    <rect class="d-node d-node-rail" x="250" y="188" width="112" height="34" rx="7" stroke-width="1.8"/>
+    <text class="d-node-text" x="306" y="210" font-size="14" font-weight="700" text-anchor="middle">福田</text>
+    <line class="d-tick" x1="306" y1="252" x2="306" y2="288" stroke-width="1.5"/>
+    <text class="d-hk d-hk-rail" x="306" y="304" font-size="11.5" font-weight="700" text-anchor="middle">東鐵綫落馬洲站</text>
+    <text class="d-hk" x="306" y="321" font-size="11.5" text-anchor="middle">步行過關</text>
+  </g>
+
+  <!-- 羅湖 -->
+  <g>
+    <text class="d-sz" x="416" y="86" font-size="11.5" text-anchor="middle">地鐵 1 號綫</text>
+    <text class="d-sz" x="416" y="103" font-size="11.5" text-anchor="middle">羅湖站、深圳站</text>
+    <line class="d-tick" x1="416" y1="118" x2="416" y2="188" stroke-width="1.5"/>
+    <rect class="d-node d-node-rail" x="360" y="188" width="112" height="34" rx="7" stroke-width="1.8"/>
+    <text class="d-node-text" x="416" y="210" font-size="14" font-weight="700" text-anchor="middle">羅湖</text>
+    <line class="d-tick" x1="416" y1="252" x2="416" y2="288" stroke-width="1.5"/>
+    <text class="d-hk d-hk-rail" x="416" y="304" font-size="11.5" font-weight="700" text-anchor="middle">東鐵綫羅湖站</text>
+    <text class="d-hk" x="416" y="321" font-size="11.5" text-anchor="middle">出閘步行過關</text>
+  </g>
+
+  <!-- 文錦渡 -->
+  <g>
+    <text class="d-sz" x="526" y="86" font-size="11.5" text-anchor="middle">口岸巴士轉乘</text>
+    <text class="d-sz" x="526" y="103" font-size="11.5" text-anchor="middle">無地鐵直達</text>
+    <line class="d-tick" x1="526" y1="118" x2="526" y2="188" stroke-width="1.5"/>
+    <rect class="d-node d-node-normal" x="470" y="188" width="112" height="34" rx="7" stroke-width="1.8"/>
+    <text class="d-node-text" x="526" y="210" font-size="14" font-weight="700" text-anchor="middle">文錦渡</text>
+    <line class="d-tick" x1="526" y1="252" x2="526" y2="288" stroke-width="1.5"/>
+    <text class="d-hk" x="526" y="304" font-size="11.5" text-anchor="middle">指定跨境巴士</text>
+    <text class="d-hk" x="526" y="321" font-size="11.5" text-anchor="middle">無鐵路直達</text>
+  </g>
+
+  <!-- 蓮塘 -->
+  <g>
+    <text class="d-sz" x="636" y="86" font-size="11.5" text-anchor="middle">地鐵 2 號綫</text>
+    <text class="d-sz" x="636" y="103" font-size="11.5" text-anchor="middle">蓮塘口岸站</text>
+    <line class="d-tick" x1="636" y1="118" x2="636" y2="188" stroke-width="1.5"/>
+    <rect class="d-node d-node-normal" x="580" y="188" width="112" height="34" rx="7" stroke-width="1.8"/>
+    <text class="d-node-text" x="636" y="210" font-size="14" font-weight="700" text-anchor="middle">蓮塘</text>
+    <line class="d-tick" x1="636" y1="252" x2="636" y2="288" stroke-width="1.5"/>
+    <text class="d-hk" x="636" y="304" font-size="11.5" text-anchor="middle">粉嶺／上水方向</text>
+    <text class="d-hk" x="636" y="321" font-size="11.5" text-anchor="middle">巴士、私家車</text>
+  </g>
+
+  <!-- 附註：港珠澳大橋 -->
+  <rect class="d-aside" x="24" y="384" width="712" height="34" rx="7" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text class="d-aside-text" x="40" y="406" font-size="11.5">附：港珠澳大橋　—　通往珠海及澳門，唔係深圳方向口岸，唔屬於上面呢條由西至東嘅排列。</text>
+</svg>

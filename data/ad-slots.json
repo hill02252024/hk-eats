@@ -1,0 +1,44 @@
+{
+  "_note": "廣告位嘅唯一定義來源。而家全部 enabled: false —— 站內冇任何廣告網絡代碼、冇 adsbygoogle.js、冇 publisher ID。呢個檔只用嚟預留版位同尺寸，令將來開通時版面唔會跳（CLS = 0）。",
+  "_howToEnable": "1) 喺下面 publisher 填入 publisher ID；2) 將要開通嘅 slot 改 enabled: true；3) 喺 js/ads.js 嘅 loadNetwork() 加入該網絡嘅載入邏輯。除此之外唔需要改任何頁面。",
+  "_widthZeroMeansFluid": "desktop / mobile 陣列格式為 [寬, 高]。寬 = 0 代表流體寬度（撐滿容器），高就係 CSS 要硬預留嘅 min-height。",
+  "publisher": null,
+  "slots": [
+    {
+      "id": "ad-article-1",
+      "network": "adsense",
+      "format": "display",
+      "placement": "文章第一個 H2 之後",
+      "desktop": [336, 280],
+      "mobile": [300, 250],
+      "enabled": false
+    },
+    {
+      "id": "ad-article-2",
+      "network": "adsense",
+      "format": "in-article",
+      "placement": "文章中段",
+      "desktop": [0, 250],
+      "mobile": [0, 250],
+      "enabled": false
+    },
+    {
+      "id": "ad-article-end",
+      "network": "adsense",
+      "format": "display",
+      "placement": "正文結尾",
+      "desktop": [336, 280],
+      "mobile": [300, 250],
+      "enabled": false
+    },
+    {
+      "id": "ad-hub-grid",
+      "network": "adsense",
+      "format": "multiplex",
+      "placement": "hub 列表之後",
+      "desktop": [0, 600],
+      "mobile": [0, 600],
+      "enabled": false
+    }
+  ]
+}

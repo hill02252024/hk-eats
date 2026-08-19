@@ -14,9 +14,20 @@
   --accent: #9a4a1f;
   --accent-fg: #ffffff;
   --warn-bg: #fff3d6;
-  --warn-line: #d9a41a;
+  --warn-line: #a87a06;
   --warn-fg: #6b4a00;
   --ok-fg: #2f6b3a;
+  --info-bg: #e8f0f7;
+  --info-line: #3d7ea6;
+  --info-fg: #17435c;
+  --diagram-panel: #ffffff;
+  --diagram-fill-2: #f1efe9;
+  --diagram-ink: #23201b;
+  --diagram-muted: #4f4941;
+  --diagram-line: #8d8577;
+  --diagram-accent: #8c4119;
+  --diagram-warn: #7a4d00;
+  --diagram-ok: #256034;
   --radius: 10px;
   --measure: 38rem;
   --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.05);
@@ -38,6 +49,17 @@
     --warn-line: #b88a25;
     --warn-fg: #f0d79a;
     --ok-fg: #7fbf8c;
+    --info-bg: #12293a;
+    --info-line: #5aa7d0;
+    --info-fg: #b8dcf2;
+    --diagram-panel: #201e17;
+    --diagram-fill-2: #100f0a;
+    --diagram-ink: #ece7dc;
+    --diagram-muted: #bcb4a3;
+    --diagram-line: #7d766a;
+    --diagram-accent: #e8a468;
+    --diagram-warn: #f2d79c;
+    --diagram-ok: #8fd09c;
     --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.35);
   }
 }
@@ -286,27 +308,11 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 }
 .freshness .verified { white-space: nowrap; }
 
-.freshness-warning {
-  display: block;
-  width: 100%;
-  background: var(--warn-bg);
-  border: 1px solid var(--warn-line);
-  border-left-width: 4px;
-  border-radius: 6px;
-  color: var(--warn-fg);
-  font-size: .88rem;
-  font-weight: 600;
-  line-height: 1.55;
-  padding: .55rem .7rem;
-  margin-top: .1rem;
-}
-
-.data-block.is-stale { border-color: var(--warn-line); }
 .data-block.is-error .freshness { color: var(--fg-muted); }
 
 /* ---------- affiliate 連結（affiliates.js 注入 href） ---------- */
 
-.aff-note {
+.affiliate-cta {
   font-size: .82rem;
   color: var(--fg-faint);
   border: 1px dashed var(--line-strong);
@@ -356,4 +362,186 @@ a[data-aff]:not([href]) {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+}
+
+/* ================================================================
+   易耗芯提示：兩件唔同嘅事，兩套唔共用嘅 class
+   .stale-warning   資料舊咗，可能已經唔啱（琥珀，警告）
+   .volatile-banner 資料啱，但正在變動，隨時要重查（藍，通知）
+   ================================================================ */
+
+/* --- 過期警告（沿用琥珀色，掛喺 .freshness 註腳入面） --- */
+.stale-warning {
+  display: block;
+  width: 100%;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-line);
+  border-left-width: 4px;
+  border-radius: 6px;
+  color: var(--warn-fg);
+  font-size: .88rem;
+  font-weight: 600;
+  line-height: 1.55;
+  padding: .55rem .7rem;
+  margin-top: .1rem;
+}
+.data-block.is-stale { border-color: var(--warn-line); }
+
+/* --- 變動中橫幅（藍色，掛喺區塊最頂，形狀同過期警告刻意唔一樣） --- */
+.volatile-banner {
+  display: block;
+  background: var(--info-bg);
+  border: 1px solid var(--info-line);
+  border-top-width: 4px;
+  border-radius: 6px;
+  color: var(--info-fg);
+  padding: .6rem .8rem .5rem;
+  margin: 0 0 1rem;
+}
+.volatile-banner-title {
+  display: block;
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  margin-bottom: .25rem;
+}
+.volatile-banner-title::before {
+  content: "◆ ";
+  color: var(--info-line);
+}
+.volatile-banner-note {
+  margin: .2rem 0 .25rem;
+  font-size: .85rem;
+  line-height: 1.6;
+  max-width: none;
+}
+.data-block.is-volatile { border-color: var(--info-line); }
+
+/* 同時中兩樣：頂藍、底琥珀，睇得出係兩件事 */
+.data-block.is-volatile.is-stale {
+  border-color: var(--info-line);
+  border-bottom-color: var(--warn-line);
+  border-bottom-width: 3px;
+}
+
+/* 個別 entry 嘅 volatility 標記，畀樣式表將來可以掛嘢 */
+[data-volatility="high"] { text-decoration: underline dotted var(--info-line); text-underline-offset: .2em; }
+
+/* ================================================================
+   SVG 圖解
+   全部顏色行 CSS 變數，深淺兩色模式各自一套；
+   零外部圖片，SVG 由 build 由 assets/svg/ 注入。
+   ================================================================ */
+
+.diagram {
+  margin: 1.6rem 0 1.8rem;
+  padding: .9rem .9rem .4rem;
+  background: var(--diagram-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.diagram > svg {
+  display: block;
+  width: 100%;
+  min-width: 34rem;
+  height: auto;
+}
+.diagram figcaption {
+  margin: .5rem .1rem .4rem;
+  font-size: .84rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  min-width: 0;
+}
+
+.diagram-svg { font-family: inherit; }
+.diagram-svg text { fill: var(--diagram-ink); }
+
+/* 共用語意 class */
+.d-section, .d-title, .d-node-text, .d-root-text,
+.d-leaf-title, .d-fallback-text, .d-hk-rail { fill: var(--diagram-ink); }
+
+.d-label-side text, .d-sz, .d-hk, .d-note,
+.d-aside-text, .d-leaf-text, .d-cond text { fill: var(--diagram-muted); }
+
+.d-border, .d-arrow, .d-gap { stroke: var(--diagram-accent); fill: none; }
+.d-border-text, .d-gap-text { fill: var(--diagram-accent); }
+
+.d-edge { stroke: var(--diagram-ink); fill: none; }
+.d-tick, .d-divider, .d-leaf-rule { stroke: var(--diagram-line); fill: none; }
+
+.d-node, .d-leaf, .d-root, .d-fallback, .d-bean, .d-burr, .d-bearing {
+  fill: var(--diagram-panel);
+  stroke: var(--diagram-ink);
+}
+.d-burr-inner { fill: var(--diagram-fill-2); }
+.d-cond rect, .d-aside, .d-body { fill: none; stroke: var(--diagram-line); }
+.d-leaf { stroke: var(--diagram-line); }
+.d-node-rail, .d-leaf-primary, .d-root { stroke: var(--diagram-accent); }
+
+.d-warn, .d-leaf-warn { fill: var(--diagram-warn); }
+.d-arrow-bad, .d-shaft-bad { stroke: var(--diagram-warn); }
+.d-ok { fill: var(--diagram-ok); }
+.d-shaft-good { stroke: var(--diagram-ok); }
+.d-shaft { fill: none; stroke-linecap: round; }
+
+/* ================================================================
+   廣告位預留
+   站內冇任何廣告網絡代碼、冇 publisher ID。
+   下面淨係「留位」：min-height 同 ad-slots.json 嘅高度一一對應，
+   scripts/build.mjs 會逐個 slot 核對，唔啱就 error。
+   enabled:false / true 兩種狀態下容器高度必須一樣 —— 所以
+   佔位框只用 outline（唔佔版面）同絕對定位嘅 ::after（唔撐高度）。
+   唔做頁頂 leaderboard，唔做 sticky anchor。
+   ================================================================ */
+
+.ad-slot {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 1.8rem auto;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+/* 手機（預設）—— 高度來自 ad-slots.json 嘅 mobile[1] */
+.ad-slot[data-ad-slot="ad-article-1"]   { min-height: 250px; max-width: 300px; }
+.ad-slot[data-ad-slot="ad-article-2"]   { min-height: 250px; }
+.ad-slot[data-ad-slot="ad-article-end"] { min-height: 250px; max-width: 300px; }
+.ad-slot[data-ad-slot="ad-hub-grid"]    { min-height: 600px; }
+
+/* 桌面 —— 高度來自 ad-slots.json 嘅 desktop[1] */
+@media (min-width: 48rem) {
+  .ad-slot[data-ad-slot="ad-article-1"]   { min-height: 280px; max-width: 336px; }
+  .ad-slot[data-ad-slot="ad-article-2"]   { min-height: 250px; }
+  .ad-slot[data-ad-slot="ad-article-end"] { min-height: 280px; max-width: 336px; }
+  .ad-slot[data-ad-slot="ad-hub-grid"]    { min-height: 600px; }
+}
+
+/* 本機開發時先睇得到嘅佔位框。
+   outline 唔佔版面、::after 絕對定位，兩者都唔會改變容器高度。 */
+.ad-slot.is-dev-placeholder {
+  outline: 1px dashed var(--line-strong);
+  outline-offset: -1px;
+  border-radius: 6px;
+}
+.ad-slot.is-dev-placeholder::after {
+  content: "廣告位 " attr(data-ad-slot) " · " attr(data-ad-format);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .78rem;
+  letter-spacing: .06em;
+  color: var(--fg-faint);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-slot { transition: none; }
 }

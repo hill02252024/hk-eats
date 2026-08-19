@@ -1,0 +1,70 @@
+{
+  "title": "深圳陸路口岸 — 易耗芯資料",
+  "belongsTo": "/guides/border-crossings.html",
+  "_status": "sourced",
+  "_note": "服務時間、刷臉通關範圍、港鐵特惠站優惠、新皇崗口岸狀態，均為編輯提供之核實資料。蓮塘／香園圍的服務時間各方寫法不一，以保安局「口岸通」公布為準。地理位置與兩側接駁屬結構性資料，標記 volatility: low。",
+  "entries": {
+    "lowu.hours":      { "value": "06:30–24:00", "verifiedOn": "2026-08", "volatility": "normal" },
+    "lowu.hkLink":     { "value": "東鐵綫羅湖站（總站，出閘步行過關）", "verifiedOn": "2026-08", "volatility": "low" },
+    "lowu.szLink":     { "value": "深圳地鐵 1 號綫羅湖站、深圳站", "verifiedOn": "2026-08", "volatility": "low" },
+
+    "futian.hours":    { "value": "06:30–22:30", "verifiedOn": "2026-08", "volatility": "normal" },
+    "futian.hkLink":   { "value": "東鐵綫落馬洲站（總站，步行過關）", "verifiedOn": "2026-08", "volatility": "low" },
+    "futian.szLink":   { "value": "深圳地鐵 4 號綫、10 號綫福田口岸站", "verifiedOn": "2026-08", "volatility": "low" },
+
+    "huanggang.hours": { "value": "24 小時", "verifiedOn": "2026-08", "volatility": "normal" },
+    "huanggang.hkLink":{ "value": "跨境巴士、過境私家車（經新田公路）", "verifiedOn": "2026-08", "volatility": "low" },
+    "huanggang.szLink":{ "value": "深圳地鐵 7 號綫皇崗口岸站", "verifiedOn": "2026-08", "volatility": "low" },
+
+    "szbay.hours":     { "value": "06:30–24:00（旅檢）", "verifiedOn": "2026-08", "volatility": "normal" },
+    "szbay.hkLink":    { "value": "元朗／天水圍方向專綫巴士、跨境直通巴", "verifiedOn": "2026-08", "volatility": "low" },
+    "szbay.szLink":    { "value": "口岸接駁市內交通，往南山、蛇口", "verifiedOn": "2026-08", "volatility": "low" },
+
+    "liantang.hours":  { "value": "07:00–22:00", "verifiedOn": "2026-08", "volatility": "normal" },
+    "liantang.hoursNote": { "value": "各方對蓮塘／香園圍服務時間的寫法唔一致，以保安局「口岸通」公布為準。", "verifiedOn": "2026-08", "volatility": "normal" },
+    "liantang.hkLink": { "value": "新界東北（粉嶺／上水方向）巴士、私家車", "verifiedOn": "2026-08", "volatility": "low" },
+    "liantang.szLink": { "value": "深圳地鐵 2 號綫蓮塘口岸站", "verifiedOn": "2026-08", "volatility": "low" },
+
+    "mankamto.hours":  { "value": "07:00–22:00", "verifiedOn": "2026-08", "volatility": "normal" },
+    "mankamto.hkLink": { "value": "指定跨境巴士路線，無鐵路直達", "verifiedOn": "2026-08", "volatility": "low" },
+    "mankamto.szLink": { "value": "口岸巴士轉乘，無地鐵直達", "verifiedOn": "2026-08", "volatility": "low" },
+
+    "hzmb.hours":      { "value": "24 小時", "verifiedOn": "2026-08", "volatility": "normal" },
+    "hzmb.direction":  { "value": "通往珠海及澳門，唔係深圳方向口岸", "verifiedOn": "2026-08", "volatility": "low" },
+
+    "policy.faceScan": {
+      "value": "2025-11-05 起，刷臉智能通關由深圳灣擴展至皇崗、羅湖、蓮塘、福田、文錦渡等口岸。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "policy.mtrRebate": {
+      "value": "成人八達通或樂悠咭經落馬洲北上，同日於深圳地鐵 4 號綫福田口岸站拍卡後再經落馬洲返港，可享 HK$3 港鐵特惠站扣減。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+
+    "huanggangNew.handover": {
+      "value": "新皇崗口岸港方口岸區已於 2026-07-31 交付香港特區管轄。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "新皇崗口岸嘅安排仲未定案：正式通關日期未公布，接駁巴士安排亦會隨啟用而改變。出行前請以官方最新公布為準。"
+    },
+    "huanggangNew.openDate": {
+      "value": "正式通關日期未公布。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "新皇崗口岸嘅安排仲未定案：正式通關日期未公布，接駁巴士安排亦會隨啟用而改變。出行前請以官方最新公布為準。"
+    },
+    "huanggangNew.buses": {
+      "value": "啟用後皇巴士取消，改由 4 條新專營巴士線接駁。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "新皇崗口岸嘅安排仲未定案：正式通關日期未公布，接駁巴士安排亦會隨啟用而改變。出行前請以官方最新公布為準。"
+    },
+    "huanggangNew.notFutian": {
+      "value": "東鐵綫落馬洲站對接嘅係福田口岸，唔係新皇崗口岸。",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    }
+  }
+}

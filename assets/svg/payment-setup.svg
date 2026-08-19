@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" role="img"
+     aria-labelledby="svg-pay-title svg-pay-desc" class="diagram-svg">
+  <title id="svg-pay-title">北上支付方式決策樹</title>
+  <desc id="svg-pay-desc">由「北上幾耐、消費幾多」出發的三分支決策樹。分支一：一年幾次、小額掃碼，選 AlipayHK 或 WeChat Pay HK，綁香港銀行卡或信用卡。分支二：經常北上、需要小程序與叫車，選大陸支付寶並綁定香港信用卡，有充值限制。分支三：大額消費或錢包唔通，用銀聯實體卡。底部提示：三條路都唔通時，靠小額現金收尾。</desc>
+
+  <!-- 根 -->
+  <rect class="d-root" x="230" y="20" width="300" height="58" rx="9" stroke-width="2.2"/>
+  <text class="d-root-text" x="380" y="45" font-size="14.5" font-weight="700" text-anchor="middle">北上幾耐？消費幾多？</text>
+  <text class="d-root-text" x="380" y="65" font-size="11.5" text-anchor="middle">先答呢條，再揀容器</text>
+
+  <!-- 主幹 -->
+  <line class="d-edge" x1="380" y1="78" x2="380" y2="106" stroke-width="2"/>
+  <line class="d-edge" x1="140" y1="106" x2="620" y2="106" stroke-width="2"/>
+  <line class="d-edge" x1="140" y1="106" x2="140" y2="140" stroke-width="2"/>
+  <line class="d-edge" x1="380" y1="106" x2="380" y2="140" stroke-width="2"/>
+  <line class="d-edge" x1="620" y1="106" x2="620" y2="140" stroke-width="2"/>
+
+  <!-- 分支條件 -->
+  <g class="d-cond">
+    <rect x="26" y="140" width="228" height="46" rx="7" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="140" y="161" font-size="11.5" text-anchor="middle">一年上去幾次</text>
+    <text x="140" y="178" font-size="11.5" text-anchor="middle">主要係連鎖商戶小額掃碼</text>
+
+    <rect x="266" y="140" width="228" height="46" rx="7" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="380" y="161" font-size="11.5" text-anchor="middle">經常北上</text>
+    <text x="380" y="178" font-size="11.5" text-anchor="middle">要用小程序、叫車、街舖</text>
+
+    <rect x="506" y="140" width="228" height="46" rx="7" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="620" y="161" font-size="11.5" text-anchor="middle">大額消費</text>
+    <text x="620" y="178" font-size="11.5" text-anchor="middle">或者掃碼全部唔通</text>
+  </g>
+
+  <line class="d-edge" x1="140" y1="186" x2="140" y2="212" stroke-width="2"/>
+  <line class="d-edge" x1="380" y1="186" x2="380" y2="212" stroke-width="2"/>
+  <line class="d-edge" x1="620" y1="186" x2="620" y2="212" stroke-width="2"/>
+
+  <!-- 結果一 -->
+  <rect class="d-leaf d-leaf-primary" x="26" y="212" width="228" height="132" rx="9" stroke-width="2.2"/>
+  <text class="d-leaf-title" x="140" y="238" font-size="14" font-weight="700" text-anchor="middle">AlipayHK</text>
+  <text class="d-leaf-title" x="140" y="257" font-size="14" font-weight="700" text-anchor="middle">WeChat Pay HK</text>
+  <line class="d-leaf-rule" x1="46" y1="270" x2="234" y2="270" stroke-width="1"/>
+  <text class="d-leaf-text" x="140" y="288" font-size="11" text-anchor="middle">綁香港銀行卡或信用卡</text>
+  <text class="d-leaf-text" x="140" y="305" font-size="11" text-anchor="middle">毋須內地銀行戶口</text>
+  <text class="d-leaf-text" x="140" y="322" font-size="11" text-anchor="middle">人民幣自動結算成港幣</text>
+  <text class="d-leaf-warn" x="140" y="339" font-size="11" font-weight="700" text-anchor="middle">開通要等審核，唔係即用</text>
+
+  <!-- 結果二 -->
+  <rect class="d-leaf d-leaf-primary" x="266" y="212" width="228" height="132" rx="9" stroke-width="2.2"/>
+  <text class="d-leaf-title" x="380" y="238" font-size="14" font-weight="700" text-anchor="middle">大陸支付寶</text>
+  <text class="d-leaf-title" x="380" y="257" font-size="12" text-anchor="middle">（同 AlipayHK 係兩套系統）</text>
+  <line class="d-leaf-rule" x1="286" y1="270" x2="474" y2="270" stroke-width="1"/>
+  <text class="d-leaf-text" x="380" y="288" font-size="11" text-anchor="middle">可綁香港信用卡</text>
+  <text class="d-leaf-text" x="380" y="305" font-size="11" text-anchor="middle">毋須內地銀行卡</text>
+  <text class="d-leaf-warn" x="380" y="322" font-size="11" font-weight="700" text-anchor="middle">綁卡有充值限制</text>
+  <text class="d-leaf-warn" x="380" y="339" font-size="11" font-weight="700" text-anchor="middle">（詳情見下方資料區塊）</text>
+
+  <!-- 結果三 -->
+  <rect class="d-leaf" x="506" y="212" width="228" height="132" rx="9" stroke-width="1.8"/>
+  <text class="d-leaf-title" x="620" y="238" font-size="14" font-weight="700" text-anchor="middle">銀聯實體卡</text>
+  <text class="d-leaf-title" x="620" y="257" font-size="12" text-anchor="middle">（POS 與 ATM）</text>
+  <line class="d-leaf-rule" x1="526" y1="270" x2="714" y2="270" stroke-width="1"/>
+  <text class="d-leaf-text" x="620" y="288" font-size="11" text-anchor="middle">大額、酒店、醫療</text>
+  <text class="d-leaf-text" x="620" y="305" font-size="11" text-anchor="middle">錢包限額唔夠時用</text>
+  <text class="d-leaf-text" x="620" y="322" font-size="11" text-anchor="middle">Visa／Master 接受度低</text>
+  <text class="d-leaf-text" x="620" y="339" font-size="11" text-anchor="middle">唔應該當後備</text>
+
+  <!-- 收尾 -->
+  <line class="d-edge" x1="140" y1="344" x2="140" y2="378" stroke-width="2"/>
+  <line class="d-edge" x1="380" y1="344" x2="380" y2="378" stroke-width="2"/>
+  <line class="d-edge" x1="620" y1="344" x2="620" y2="378" stroke-width="2"/>
+  <line class="d-edge" x1="140" y1="378" x2="620" y2="378" stroke-width="2"/>
+  <line class="d-edge" x1="380" y1="378" x2="380" y2="396" stroke-width="2"/>
+
+  <rect class="d-fallback" x="180" y="396" width="400" height="46" rx="9" stroke-width="2"/>
+  <text class="d-fallback-text" x="380" y="417" font-size="12.5" font-weight="700" text-anchor="middle">三條路都唔通 → 小額人民幣現金</text>
+  <text class="d-fallback-text" x="380" y="434" font-size="11" text-anchor="middle">帶細銀紙，唔好帶大鈔 —— 佢係保險，唔係主力</text>
+</svg>

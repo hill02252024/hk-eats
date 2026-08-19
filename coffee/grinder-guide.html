@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="../css/main.css">
 <script src="../js/freshness.js" defer></script>
 <script src="../js/affiliates.js" defer></script>
+<script src="../js/ads.js" defer></script>
 <!-- build:jsonld -->
 <script type="application/ld+json">
 {
@@ -148,6 +149,121 @@
 
 <p>所以評價一部磨豆機，實際上係評價佢「令粒徑分佈收窄」嘅能力。以下所有結構分別，最終都係服務呢一件事。</p>
 
+<p class="affiliate-cta">
+  想睇市面上有咩選擇，可以由 <a data-aff="amazon-hand-grinder"></a> 開始，
+  用下面嘅結構準則自己過濾。以上為推廣連結，價格不受影響。
+</p>
+
+<div class="ad-slot" data-ad-slot="ad-article-1"></div>
+
+<figure class="diagram" data-svg="grinder-guide">
+<!-- build:svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" role="img"
+     aria-labelledby="svg-gr-title svg-gr-desc" class="diagram-svg">
+  <title id="svg-gr-title">錐刀與平刀剖面對比，以及定位機構的差別</title>
+  <desc id="svg-gr-desc">上半部為兩種刀盤的剖面示意。左邊錐刀：一個圓錐體轉於中空錐座之中，豆由頂部靠重力向下帶，通道逐漸收窄，所需扭力較細。右邊平刀：兩塊平行圓盤，豆由中心入，被離心力甩向外緣，於邊緣最窄處排出，所需扭力較大。下半部為定位機構對比：單軸承的中軸受力時會偏擺，令刀盤間隙時闊時窄；雙軸承上下分置，中軸維持同心，間隙穩定。</desc>
+
+  <!-- ================= 上半：刀盤剖面 ================= -->
+  <text class="d-section" x="24" y="30" font-size="14" font-weight="700">一、刀盤剖面：豆點樣被帶入收窄通道</text>
+
+  <!-- 左：錐刀 -->
+  <g>
+    <text class="d-title" x="190" y="60" font-size="13.5" font-weight="700" text-anchor="middle">錐刀（conical）</text>
+
+    <!-- 豆與落下方向 -->
+    <circle class="d-bean" cx="164" cy="88" r="7" stroke-width="1.4"/>
+    <circle class="d-bean" cx="190" cy="80" r="6" stroke-width="1.4"/>
+    <circle class="d-bean" cx="216" cy="88" r="7" stroke-width="1.4"/>
+    <path class="d-arrow" d="M190 100 L190 118" stroke-width="2"/>
+    <path class="d-arrow" d="M184 112 L190 120 L196 112" stroke-width="2" fill="none"/>
+    <text class="d-note" x="252" y="96" font-size="11">重力幫手</text>
+
+    <!-- 錐座（外環）左右兩片 -->
+    <path class="d-burr" d="M96 128 L146 128 L176 258 L146 268 Z" stroke-width="1.8"/>
+    <path class="d-burr" d="M284 128 L234 128 L204 258 L234 268 Z" stroke-width="1.8"/>
+    <!-- 內錐 -->
+    <path class="d-burr d-burr-inner" d="M190 132 L200 250 L180 250 Z" stroke-width="1.8"/>
+    <!-- 收窄通道標示 -->
+    <path class="d-gap" d="M176 258 L204 258" stroke-width="2.5"/>
+    <text class="d-gap-text" x="190" y="286" font-size="11" text-anchor="middle">出口間隙</text>
+    <text class="d-note" x="190" y="304" font-size="11" text-anchor="middle">＝ 決定粗細嘅唯一變數</text>
+
+    <!-- 通道收窄提示 -->
+    <text class="d-note" x="72" y="196" font-size="11" text-anchor="middle">通道</text>
+    <text class="d-note" x="72" y="212" font-size="11" text-anchor="middle">逐漸收窄</text>
+    <path class="d-tick" d="M100 196 L138 196" stroke-width="1.4" stroke-dasharray="4 3"/>
+  </g>
+
+  <!-- 分隔 -->
+  <line class="d-divider" x1="380" y1="52" x2="380" y2="312" stroke-width="1.2" stroke-dasharray="6 5"/>
+
+  <!-- 右：平刀 -->
+  <g>
+    <text class="d-title" x="570" y="60" font-size="13.5" font-weight="700" text-anchor="middle">平刀（flat）</text>
+
+    <circle class="d-bean" cx="570" cy="84" r="7" stroke-width="1.4"/>
+    <path class="d-arrow" d="M570 96 L570 138" stroke-width="2"/>
+    <path class="d-arrow" d="M564 132 L570 140 L576 132" stroke-width="2" fill="none"/>
+    <text class="d-note" x="596" y="112" font-size="11">由中心入</text>
+
+    <!-- 上盤 -->
+    <rect class="d-burr" x="440" y="146" width="110" height="26" rx="3" stroke-width="1.8"/>
+    <rect class="d-burr" x="590" y="146" width="110" height="26" rx="3" stroke-width="1.8"/>
+    <!-- 下盤 -->
+    <rect class="d-burr d-burr-inner" x="440" y="196" width="110" height="26" rx="3" stroke-width="1.8"/>
+    <rect class="d-burr d-burr-inner" x="590" y="196" width="110" height="26" rx="3" stroke-width="1.8"/>
+
+    <!-- 離心方向 -->
+    <path class="d-arrow" d="M556 184 L452 184" stroke-width="2"/>
+    <path class="d-arrow" d="M460 178 L450 184 L460 190" stroke-width="2" fill="none"/>
+    <path class="d-arrow" d="M584 184 L688 184" stroke-width="2"/>
+    <path class="d-arrow" d="M680 178 L690 184 L680 190" stroke-width="2" fill="none"/>
+    <text class="d-note" x="570" y="188" font-size="11" text-anchor="middle">離心力</text>
+
+    <!-- 邊緣最窄 -->
+    <path class="d-gap" d="M440 176 L440 192" stroke-width="2.5"/>
+    <path class="d-gap" d="M700 176 L700 192" stroke-width="2.5"/>
+    <text class="d-gap-text" x="570" y="252" font-size="11" text-anchor="middle">最窄處喺外緣</text>
+    <text class="d-note" x="570" y="270" font-size="11" text-anchor="middle">豆要行完固定寬度先出得嚟</text>
+    <text class="d-note" x="570" y="292" font-size="11" text-anchor="middle">→ 粒徑分佈較集中，但扭力大好多</text>
+  </g>
+
+  <!-- ================= 下半：定位機構 ================= -->
+  <line class="d-divider" x1="24" y1="332" x2="736" y2="332" stroke-width="1.2"/>
+  <text class="d-section" x="24" y="358" font-size="14" font-weight="700">二、定位機構：同一副刀盤，晃唔晃決定粒徑分佈闊唔闊</text>
+
+  <!-- 單軸承 -->
+  <g>
+    <text class="d-title" x="190" y="386" font-size="12.5" font-weight="700" text-anchor="middle">單軸承／塑膠軸套</text>
+    <!-- 機身 -->
+    <rect class="d-body" x="96" y="396" width="188" height="58" rx="6" stroke-width="1.6"/>
+    <!-- 中軸（傾斜） -->
+    <path class="d-shaft d-shaft-bad" d="M190 396 L204 454" stroke-width="3"/>
+    <!-- 軸承 -->
+    <circle class="d-bearing" cx="193" cy="410" r="7" stroke-width="1.8"/>
+    <!-- 偏擺箭頭 -->
+    <path class="d-arrow d-arrow-bad" d="M214 430 L232 424" stroke-width="2"/>
+    <path class="d-arrow d-arrow-bad" d="M214 442 L232 448" stroke-width="2"/>
+    <text class="d-warn" x="300" y="430" font-size="11">受力偏擺</text>
+    <text class="d-warn" x="300" y="447" font-size="11">間隙時闊時窄</text>
+  </g>
+
+  <!-- 雙軸承 -->
+  <g>
+    <text class="d-title" x="570" y="386" font-size="12.5" font-weight="700" text-anchor="middle">雙軸承，上下分置</text>
+    <rect class="d-body" x="476" y="396" width="188" height="58" rx="6" stroke-width="1.6"/>
+    <path class="d-shaft d-shaft-good" d="M570 396 L570 454" stroke-width="3"/>
+    <circle class="d-bearing" cx="570" cy="408" r="7" stroke-width="1.8"/>
+    <circle class="d-bearing" cx="570" cy="442" r="7" stroke-width="1.8"/>
+    <text class="d-ok" x="680" y="430" font-size="11">維持同心</text>
+    <text class="d-ok" x="680" y="447" font-size="11">間隙穩定</text>
+  </g>
+</svg>
+<!-- /build:svg -->
+
+<figcaption>上半：兩種刀盤嘅剖面。錐刀靠重力把豆帶入逐漸收窄嘅通道，扭力細，所以手搖機多數用佢；平刀靠離心力把豆甩向外緣，粒徑分佈較集中但費力好多。下半：同一副刀盤，單軸承受力偏擺會令間隙時闊時窄，雙軸承上下分置先維持到同心。</figcaption>
+</figure>
+
 <h2>一、刀盤幾何：錐刀與平刀</h2>
 
 <p><strong>錐刀</strong>係一個圓錐體轉喺一個中空錐座裡面。豆由上面入，靠重力同螺旋齒一路向下帶，通道逐漸收窄。因為有重力幫手，所需扭力細，所以絕大部分手搖機用錐刀——用手都轉得郁。</p>
@@ -176,6 +292,8 @@
 
 <p><strong>段位與段距。</strong>段位係調節嘅分辨率。段距太粗，你想微調萃取但每一段都跳過咗頭；段距太細而定位唔穩，段數就變成假精度。所以段位嘅價值要同定位剛性一齊睇，唔可以單獨比較段數。</p>
 
+<div class="ad-slot" data-ad-slot="ad-article-2"></div>
+
 <h2>四、公差：睇唔到但你飲得出</h2>
 
 <p>同一個設計，用唔同精度嘅工序做出嚟，成品差好遠。公差控制得好嘅機，每一台嘅刀盤同心度都接近設計值；控制得差嘅，同型號兩台機表現可以唔一樣。呢個就係點解有啲牌子會標稱同心度數值，而平價機從來唔提。</p>
@@ -184,48 +302,42 @@
 
 <h2>五、價位分層的邏輯</h2>
 
-<p>下面呢個表講嘅係「每個層級主要買緊咩」。層級嘅結構性邏輯唔會變，但價位帶會隨匯率同市場浮動，所以價錢由資料檔獨立載入。</p>
+<p>下面呢個表講嘅係「每個層級主要買緊咩」。呢篇文由頭到尾唔會出現型號同售價：型號會停產、售價會隨匯率同市場浮動，但下面呢啲結構關係唔會。你識得判斷結構，就唔需要每年重新睇一次推薦清單。</p>
 
-<section class="data-block" data-fresh="grinder-guide">
-  <h3>四個層級</h3>
+<section class="data-block" data-fresh="coffee/grinder-guide">
+  <h3>四個層級各自買緊咩</h3>
   <div class="table-scroll">
     <table>
-      <thead><tr><th>層級</th><th>價位帶</th><th>典型結構特徵</th></tr></thead>
+      <thead><tr><th>層級</th><th>主要買緊</th><th>典型結構特徵</th></tr></thead>
       <tbody>
         <tr>
-          <th scope="row">入門<br><small>材料成本主導</small></th>
-          <td data-fresh-key="tier.entry.price"></td>
+          <th scope="row">入門</th>
+          <td>材料成本</td>
           <td><ul data-fresh-key="tier.entry.traits"></ul></td>
         </tr>
         <tr>
-          <th scope="row">中階<br><small>定位穩定性主導</small></th>
-          <td data-fresh-key="tier.mid.price"></td>
+          <th scope="row">中階</th>
+          <td>定位穩定性</td>
           <td><ul data-fresh-key="tier.mid.traits"></ul></td>
         </tr>
         <tr>
-          <th scope="row">高階<br><small>幾何與公差主導</small></th>
-          <td data-fresh-key="tier.high.price"></td>
+          <th scope="row">高階</th>
+          <td>刀盤幾何與公差</td>
           <td><ul data-fresh-key="tier.high.traits"></ul></td>
         </tr>
         <tr>
-          <th scope="row">發燒<br><small>小批量與特化</small></th>
-          <td data-fresh-key="tier.boutique.price"></td>
+          <th scope="row">發燒</th>
+          <td>小批量製造與特化</td>
           <td><ul data-fresh-key="tier.boutique.traits"></ul></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <h4>常見規格區間</h4>
-  <ul>
-    <li>刀盤直徑：<span data-fresh-key="spec.burrDia"></span></li>
-    <li>段距與段數：<span data-fresh-key="spec.clickRange"></span></li>
-    <li>研磨速度：<span data-fresh-key="spec.throughput"></span></li>
-  </ul>
 </section>
 
 <div class="callout">
   <h4>本站的資料處理方式</h4>
-  <p>本文刻意唔寫任何具體型號同售價：型號會停產、價錢會變，但上面講嘅機械原理唔會。價位帶同規格區間屬建站示範值，未經逐項覆核，只作分層感覺參考。</p>
+  <p>呢一篇冇「易耗芯」可言——佢冇時效性數值。上面表格入面嘅內容係機械結構陳述，所以喺資料檔入面全部標記為低變動（十二個月覆核一次），而資料檔嘅狀態標示係「原理」而唔係「已核實數據」。呢個分別好重要：本站唔會將一段推理包裝成一項被核實過嘅事實。</p>
 </div>
 
 <p>由入門去中階，回報最大——你買緊嘅係定位剛性，直接令粒徑分佈收窄，飲得出。由中階去高階，回報仍然明顯但開始收窄——你買緊刀盤幾何同公差。由高階去發燒，就已經係邊際回報遞減，屬於興趣支出，唔應該用「值唔值」去衡量。</p>
@@ -272,10 +384,7 @@
   </div>
 </section>
 
-<p class="aff-note">
-  想睇市面上有咩選擇，可以由 <a data-aff="amazon-hand-grinder"></a> 開始，
-  用上面嘅結構準則自己過濾。以上為推廣連結，價格不受影響。
-</p>
+<div class="ad-slot" data-ad-slot="ad-article-end"></div>
 
 </article>
 </main>
@@ -283,7 +392,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <p>hk_eats — 北上實務、分區食飲、咖啡與行程模板。</p>
-    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份。</p>
+    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份與變動速度。</p>
   </div>
 </footer>
 </body>
