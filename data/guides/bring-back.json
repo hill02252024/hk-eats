@@ -2,7 +2,7 @@
   "title": "帶咩返香港 — 易耗芯資料",
   "belongsTo": "/guides/bring-back.html",
   "_status": "verified",
-  "_note": "本檔嘅數值由編輯提供並核實（verifiedOn 2026-08）。全部標記 volatility: normal —— 呢啲係法定數字，會修訂，六個月冇覆核就應該當佢有機會過時。唯一例外係 penalty.general：搜到嘅罰則數字互相矛盾，所以刻意保持未核實，正文亦唔會寫任何金額或刑期，改為指向海關官方頁。",
+  "_note": "本檔嘅數值由編輯提供並核實（verifiedOn 2026-08）。全部標記 volatility: normal —— 呢啲係法定數字，會修訂，六個月冇覆核就應該當佢有機會過時。penalty.general 已由未核實改為有值，但按編輯指示唔寫任何金額或刑期，只寫方向並指向海關官方頁。",
   "entries": {
     "rule.24hour": {
       "value": "持香港身份證者必須離港不少於 24 小時，先享有酒類及煙草免稅額。即日來回深圳等於零免稅額。",
@@ -11,6 +11,11 @@
     },
     "duty.alcohol": {
       "value": "年滿 18 歲可免稅帶 1 升酒精濃度以量計多於 30% 的飲用酒類自用；持香港身份證者必須離港不少於 24 小時才享此豁免。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "duty.alcoholLow": {
+      "value": "酒精濃度不多於 30% 的飲用酒類屬零稅率貨品，攜帶數量不受限制。",
       "verifiedOn": "2026-08",
       "volatility": "normal"
     },
@@ -30,7 +35,7 @@
       "volatility": "normal"
     },
     "duty.dutiableList": {
-      "value": "應課稅品指酒類、煙草、香煙及雪茄。跨境司機（包括港車北上、粵車南下）不享免稅優惠。",
+      "value": "香港應課稅品為酒類、煙草、碳氫油及甲醇四類；旅客免稅優惠只涉及酒類同煙草。跨境司機（含港車北上、粵車南下）不享免稅優惠。",
       "verifiedOn": "2026-08",
       "volatility": "normal"
     },
@@ -65,7 +70,8 @@
       "volatility": "normal"
     },
     "penalty.general": {
-      "needsVerify": "未申報應課稅品或違禁品嘅一般罰則。搜到嘅金額同刑期互相矛盾，未能核實，所以本站唔寫任何數字，正文改為指向海關官方頁。",
+      "value": "未申報可遭檢控或罰款，實際罰則按物品類別由不同法例規管，詳見海關官方頁。",
+      "verifiedOn": "2026-08",
       "volatility": "normal"
     }
   }

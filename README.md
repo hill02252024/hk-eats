@@ -1,4 +1,29 @@
-# hk_eats
+# 歎世界（repo: hk_eats）
+
+> 顯示層品牌係「**歎世界**」，副題「**香港出發的食飲與旅行指南**」。
+> 目錄名、repo 名、`SITE_ORIGIN` 入面嘅 `hk_eats` 係基建標識，**唔會改**，
+> 亦唔會喺任何用戶或者搜尋引擎見到嘅位置出現。
+
+## 品牌定位（寫新文之前睇一次）
+
+本站嘅角度係**「用香港人嘅尺，量外面嘅世界」**。
+
+比較基準永遠由香港出發：
+
+- **價格**同旺角比
+- **咖啡**同中環比
+- **時間感**用港鐵同過關計
+
+寫任何一篇新文，都應該問一句：呢個判斷，一個香港讀者可以用佢自己嘅
+日常經驗接得住嗎？接唔住就要補一個香港側嘅參照點，唔好用當地標準
+自說自話。
+
+品牌名**刻意唔綁死地區**——「歎世界」冇講明係邊個世界，所以將來加
+日本、台灣或者其他目的地都唔使改名、唔使重建 URL、唔使重新建立品牌認知。
+
+**現階段範圍：北上、香港本地、咖啡。**超出呢三樣嘅題材，先確認佢
+接唔接得返上面條尺，再決定要唔要開新分區。
+
 
 純靜態繁體中文網站，部署目標為 GitHub Pages。無框架、無 npm 依賴，
 只有幾個用 Node 內建模組寫嘅 script。
@@ -89,7 +114,7 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 
 | 編號 | 檢查 |
 |---|---|
-| E1 | 外部連結白名單：任何指向站外嘅 `<a href>` 都係 error，除非 host 喺 `EXTERNAL_ALLOWLIST`。白名單網域帶追蹤參數一樣攔。 |
+| E1 | 外部連結白名單：任何指向站外嘅 `<a href>` 都係 error，除非 host 喺 `EXTERNAL_ALLOWLIST`。白名單網域帶追蹤參數一樣攔。另外**必須係 https**，而且**路徑唔可以係空或者 `/`**——要連去具體官方頁，唔准退返根網域。 |
 | E2 | `<img src="http…">`、`srcset` 含外部網址、CSS `url(http…)` |
 | E3 | 廣告網絡代碼（`adsbygoogle` / `googlesyndication` / `ca-pub-` / `data-ad-client`）出現喺可執行碼 |
 | E4 | 同一頁嘅第一個 `.ad-slot` 排喺第一個 `.affiliate-cta` 之前 |
@@ -99,6 +124,7 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 | E8 | `hreflang` 唔係 zh-HK、連結指向 `/en/`、或者 `<html lang>` 唔係 zh-HK |
 | E9 | 孤兒頁（冇任何頁連入）、連去唔存在嘅頁、由首頁去唔到、麵包屑錨點缺失 |
 | E10 | 同一頁有重複 `id`、或者有 `<h2>` 冇 `id`（會令錨點目錄斷鏈） |
+| E11 | 頁面冇 `<title>` 或者冇 `</head>`（`<title>` 同 Open Graph 注入唔到） |
 
 警告（唔會 exit 1）：
 
@@ -109,6 +135,7 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 | W7 | 待核實標記（逐個列出，同時掃 HTML 同 data） |
 | W8 | cluster 冇用含 pillar 關鍵字嘅 anchor、喺上半部連返 pillar；正文內連唔喺 3–5 條 |
 | W9 | 文章日期行冇「最後更新：」前綴，或者日期同 `jsonld:dateModified` 唔一致 |
+| W10 | cluster 頁嘅中文字數超過所屬 pillar（見下面「幾時要把 cluster 升格」） |
 
 ## 點樣加一篇新文章
 
@@ -300,6 +327,22 @@ build 會由路徑同 `SECTIONS` 表生成可見麵包屑同 `BreadcrumbList`
 首頁嘅「全站資料最後更新」亦係 build 生成：放一個 `<!-- lastupdate -->`
 錨點，build 會填入全站所有 `data/**/*.json` 之中最新嗰個 `verifiedOn`。
 
+### 11. `<title>` 同 Open Graph（唔使寫，build 會覆蓋）
+
+`<title>` 由 build 統一生成，格式固定：
+
+- 首頁 → `歎世界 — 香港出發的食飲與旅行指南`
+- 內頁 → `{jsonld:headline} — 歎世界`
+
+Open Graph（`og:site_name` / `og:title` / `og:description` / `og:type` /
+`og:url` / `og:locale`）同樣由 build 注入 `<!-- build:og -->` 區塊。
+品牌字串只喺 `scripts/build.mjs` 頂部嘅 `SITE_NAME` 同 `SITE_TAGLINE`
+定義一次，JSON-LD 嘅 `publisher.name` 同首頁嘅 `WebSite.name` 都由佢哋讀，
+所以改品牌名只需要改嗰兩行。
+
+頁面**仍然要有**一個 `<title>` 標籤（內容係咩都得，build 會覆蓋），
+同一個 `</head>`，否則出 E11。
+
 ### 10. 跑 build
 
 ```sh
@@ -321,6 +364,49 @@ node scripts/build.mjs
 1440px 時 wrap 左右留白各 352px，2560px 時各 912px，
 內容框 696px，段落／標題／清單／資料塊／圖解嘅左右偏移全部 0.00px。
 廣告位刻意固定闊度並置中，所以驗嘅係左右偏移相等而唔係貼齊。
+
+## 幾時要把 cluster 升格成子 pillar
+
+Pillar 應該係一個分區入面最高層、最闊嘅一頁。當某篇 cluster 寫到比
+pillar 仲大，兩者就會開始爭同一批關鍵字，而且讀者會分唔清邊頁先係入口。
+
+### 觸發條件
+
+主要訊號（build 會報 **W10**）：
+
+- **字數超過所屬 pillar。**呢個係硬訊號，build 每次都會列出超出幾多同幾多 %。
+
+輔助訊號（要自己判斷）：
+
+- `<h2>` 數目接近或者超過 pillar（例如 pillar 9 個、cluster 16 個）。
+- 單頁明顯涵蓋咗多過一個獨立搜尋意圖（例如同一篇入面又講免稅額、
+  又講許可證、又講出境限制，三者根本唔會同一個人同一時間搵）。
+- 內連入度高過同分區其他 cluster，即係佢實際已經扮緊入口。
+
+**超出 10–20% 唔使急。**呢個級數只代表 pillar 寫得薄咗，通常補闊
+pillar 就解決。真正要考慮升格嘅係**超出 50% 以上**，或者硬訊號加埋
+兩個輔助訊號同時成立。
+
+### 做法
+
+1. 開一個新目錄，例如 `guides/bring-back/`，將原文變成 `index.html`
+   做子 pillar，只保留框架同判斷邏輯。
+2. 將原文按**搜尋意圖**拆成 2–3 篇 cluster，唔好按段落長度拆。
+3. 喺 `scripts/build.mjs` 嘅 `SECTIONS` 加入新層。
+   **注意：現時嘅麵包屑同 `breadcrumbTrail()` 只支援一層分區**，
+   升格之前要先擴充佢哋支援兩層，否則麵包屑會斷。
+4. **舊 URL 唔好刪。**`guides/bring-back.html` 應該保留並轉為指向
+   新子 pillar 嘅入口，避免斷內連同外部連結。
+5. 更新首頁同上層 pillar 嘅 `.cluster-list`。
+6. 跑 `node scripts/build.mjs`，確認孤兒 0 個、最深 ≤ 3 click、
+   W8（cluster → pillar 內連）全部合格。
+
+### 而家嘅狀態
+
+`guides/bring-back.html` 已經 3,000 字以上、16 個 `<h2>`，係全站最大嘅
+cluster，超出所屬 pillar 七成以上。**暫時唔拆**——因為佢嘅內容係一條
+連貫嘅決策鏈（分類 → 免稅額 → 許可證 → 罰則），拆開會令讀者要跳頁先
+答到一條問題。但佢係第一個要盯住嘅候選，下次再加內容就應該升格。
 
 ## 廣告位：而家係咩狀態
 

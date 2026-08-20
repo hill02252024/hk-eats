@@ -314,7 +314,8 @@ try {
   console.log(`  H1: ${home.h1}`);
   console.log(`  副標: ${home.subtitle}`);
   console.log(`  ${home.lastUpdate}`);
-  say(home.h1 === "港深食飲指南", "首頁 H1 已改", home.h1);
+  say(home.h1 === "歎世界", "首頁 H1 = 品牌名", home.h1);
+  say(home.subtitle === "香港出發的食飲與旅行指南", "首頁副題 = 品牌副題", home.subtitle);
   say(!!home.subtitle, "首頁有副標題");
   say(/最後更新：\d{4}-\d{2}/.test(home.lastUpdate || ""), "首頁有全站最後更新日期", home.lastUpdate);
   say(!home.hasOldSection, "「點解要分開常青同易耗」已搬離首頁");

@@ -36,7 +36,10 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://example.github.io/hk_eats").replace(/\/+$/, "");
-const SITE_NAME = "hk_eats";
+/* 顯示層品牌。目錄名／repo 名／SITE_ORIGIN 入面嘅 hk_eats 係基建標識，
+ * 唔喺顯示層，所以唔改。 */
+const SITE_NAME = "歎世界";
+const SITE_TAGLINE = "香港出發的食飲與旅行指南";
 const SITE_LANG = "zh-HK";
 const SITE_HOST = (() => { try { return new URL(SITE_ORIGIN).host; } catch { return ""; } })();
 
@@ -153,6 +156,17 @@ function checkExternalLinks(file, text) {
     } catch {
       err(`E1 ${r}:${lineOf(text, m.index)} 解析唔到嘅絕對連結「${href.slice(0, 70)}」`);
       continue;
+    }
+    let parsed;
+    try { parsed = new URL(href.startsWith("//") ? "https:" + href : href); } catch { parsed = null; }
+    if (parsed && parsed.protocol !== "https:") {
+      err(`E1 ${r}:${lineOf(text, m.index)} 外部連結唔係 https（${href.slice(0, 70)}）`);
+    }
+    if (parsed && (parsed.pathname === "" || parsed.pathname === "/")) {
+      err(
+        `E1 ${r}:${lineOf(text, m.index)} 外部連結指向根網域（${href.slice(0, 70)}）→ ` +
+        `要連去具體嘅官方頁面，唔好淨係連個網域`
+      );
     }
     if (!hostAllowed(host)) {
       err(
@@ -437,6 +451,37 @@ function breadcrumbLd(trail) {
 }
 
 /* ------------------------------------------------------------------ */
+/* <title> 同 Open Graph：由 build 統一生成，唔喺頁面手寫              */
+/* ------------------------------------------------------------------ */
+
+const OG_START = "<!-- build:og -->";
+const OG_END = "<!-- /build:og -->";
+const OG_BLOCK_RE = /[ \t]*<!-- build:og -->[\s\S]*?<!-- \/build:og -->\n?/g;
+
+function pageTitle(relPath, metas, currentTitle) {
+  if (relPath === "index.html") return `${SITE_NAME} — ${SITE_TAGLINE}`;
+  const head = metas["jsonld:headline"] ||
+               (currentTitle || "").replace(new RegExp(`\\s*—\\s*${SITE_NAME}$`), "").trim() ||
+               relPath;
+  return `${head} — ${SITE_NAME}`;
+}
+
+function renderOg(relPath, metas, title) {
+  const url = SITE_ORIGIN + canonicalPath(relPath);
+  const desc = metas["jsonld:description"] || metas["description"] || SITE_TAGLINE;
+  const type = relPath === "index.html" ? "website" : "article";
+  const lines = [
+    `<meta property="og:site_name" content="${esc(SITE_NAME)}">`,
+    `<meta property="og:title" content="${esc(title)}">`,
+    `<meta property="og:description" content="${esc(desc)}">`,
+    `<meta property="og:type" content="${type}">`,
+    `<meta property="og:url" content="${esc(url)}">`,
+    `<meta property="og:locale" content="zh_HK">`,
+  ];
+  return OG_START + "\n" + lines.join("\n") + "\n" + OG_END + "\n";
+}
+
+/* ------------------------------------------------------------------ */
 /* 錨點目錄（TOC）+ h2 id                                               */
 /* ------------------------------------------------------------------ */
 
@@ -630,6 +675,17 @@ function buildGraph(relPath, html, metas) {
   // 咁可見麵包屑同 BreadcrumbList 一定一致。
   const trail = breadcrumbTrail(relPath, metas);
   if (trail) graph.push(breadcrumbLd(trail));
+
+  if (relPath === "index.html") {
+    graph.push({
+      "@type": "WebSite",
+      name: SITE_NAME,
+      alternateName: SITE_TAGLINE,
+      url: SITE_ORIGIN + "/",
+      inLanguage: SITE_LANG,
+      publisher,
+    });
+  }
 
   for (const type of types) {
     if (type === "Article") {
@@ -915,6 +971,40 @@ function checkPillarLinks(pageList) {
 }
 
 /* ------------------------------------------------------------------ */
+/* W10 cluster 體量超過所屬 pillar                                      */
+/* ------------------------------------------------------------------ */
+
+/* Pillar 應該係一個分區入面最高層、最闊嘅一頁。如果某篇 cluster 寫到
+ * 比 pillar 仲長，兩者就會開始爭同一批關鍵字，而且讀者會分唔清邊頁
+ * 先係入口。呢個時候應該考慮將該 cluster 升格成子 pillar（做法見 README）。 */
+function checkClusterVsPillar(pageList) {
+  const bySection = new Map();
+  for (const p of pageList) {
+    const parts = p.relPath.split("/");
+    if (parts.length < 2 || !SECTIONS[parts[0]]) continue;
+    if (!bySection.has(parts[0])) bySection.set(parts[0], { pillar: null, clusters: [] });
+    const bucket = bySection.get(parts[0]);
+    if (parts[1] === "index.html") bucket.pillar = p;
+    else bucket.clusters.push(p);
+  }
+  const over = [];
+  for (const [section, { pillar, clusters }] of bySection) {
+    if (!pillar) continue;
+    for (const c of clusters) {
+      if (c.chars > pillar.chars) {
+        over.push({ relPath: c.relPath, chars: c.chars, pillarChars: pillar.chars, section });
+        warn(
+          `W10 ${c.relPath}: ${c.chars} 字，超過所屬 pillar ${section}/index.html 嘅 ${pillar.chars} 字` +
+          `（多 ${c.chars - pillar.chars} 字，${Math.round((c.chars / pillar.chars - 1) * 100)}%）` +
+          `→ 考慮升格成子 pillar，或者將 pillar 寫闊啲`
+        );
+      }
+    }
+  }
+  return over;
+}
+
+/* ------------------------------------------------------------------ */
 /* W7 未核實標記                                                        */
 /* ------------------------------------------------------------------ */
 
@@ -1006,6 +1096,7 @@ const pages = [];
 let svgCount = 0;
 let bcCount = 0;
 let tocCount = 0;
+let ogCount = 0;
 const tocPages = [];
 const latestUpdate = latestVerifiedOn();
 for (const file of htmlFiles) {
@@ -1019,6 +1110,28 @@ for (const file of htmlFiles) {
 
   html = html.replace(LD_BLOCK_RE, "");
   const metas = readMetas(html);
+
+  // <title> 同 OG：統一由品牌常數生成，唔靠頁面手寫
+  const curTitle = (/<title>([\s\S]*?)<\/title>/i.exec(html) || [])[1];
+  const title = pageTitle(relPath, metas, curTitle);
+  if (/<title>[\s\S]*?<\/title>/i.test(html)) {
+    html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(title)}</title>`);
+  } else {
+    err(`E11 ${relPath}: 冇 <title>`);
+  }
+  {
+    const og = renderOg(relPath, metas, title);
+    if (OG_BLOCK_RE.test(html)) {
+      OG_BLOCK_RE.lastIndex = 0;
+      html = html.replace(OG_BLOCK_RE, og);
+    } else if (/<\/head>/i.test(html)) {
+      html = html.replace(/<\/head>/i, og + "</head>");
+    } else {
+      err(`E11 ${relPath}: 搵唔到 </head>，注入唔到 Open Graph`);
+    }
+    OG_BLOCK_RE.lastIndex = 0;
+    ogCount++;
+  }
 
   // h2 id（全部頁都要，TOC 只加喺分區內、夠長嘅文）
   const idRes = ensureH2Ids(relPath, html);
@@ -1075,9 +1188,10 @@ for (const file of htmlFiles) {
   }
 
   if (html !== before) fs.writeFileSync(file, html, "utf8");
-  pages.push({ relPath, metas, injected, html });
+  pages.push({ relPath, metas, injected, html, chars, title });
 }
 console.log(`[4/8] SVG ${svgCount} 張；麵包屑 ${bcCount} 頁；目錄 ${tocCount} 頁；JSON-LD ${pages.filter((p) => p.injected).length}/${pages.length} 頁`);
+console.log(`      <title> + Open Graph：${ogCount} 頁（品牌「${SITE_NAME}」）`);
 console.log(`      全站最新 verifiedOn：${latestUpdate || "（冇）"}`);
 
 for (const { relPath, html } of pages) checkUniqueIds(relPath, html);
@@ -1107,6 +1221,9 @@ console.log(`[6/8] 內連結構：${pages.length} 頁，孤兒 ${linkStats.orpha
 
 const pillarLinks = checkPillarLinks(pages);
 console.log(`      cluster → pillar 內連：${pillarLinks.filter((r) => r.ok).length}/${pillarLinks.length} 篇合格`);
+
+const overSized = checkClusterVsPillar(pages);
+console.log(`      cluster 體量 vs pillar：${overSized.length} 頁超出`);
 
 const nv = collectNeedsVerify(pages);
 console.log(`[7/8] 待核實標記：${nv.length} 個（HTML ${nv.filter((x) => x.kind === "HTML").length} / data ${nv.filter((x) => x.kind === "data").length}）`);
