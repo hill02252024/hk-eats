@@ -51,7 +51,7 @@ const SECTIONS = {
   guides: { pillar: "港人北上完整指南", nav: "北上實務" },
   areas:  { pillar: "港深食飲地圖",     nav: "分區地圖" },
   coffee: { pillar: "港深咖啡入門",     nav: "咖啡" },
-  trips:  { pillar: "香港出發行程設計", nav: "行程模板" },
+  trips:  { pillar: "北上行程",         nav: "北上行程" },
 };
 
 /* /en/ 係預留目錄，本次唔填內容，亦唔對外宣告。 */
@@ -839,6 +839,75 @@ function checkPageData(relPath, html) {
 }
 
 /* ------------------------------------------------------------------ */
+/* E14 顯示層一致性：nav 同 footer 唔准行開                             */
+/* ------------------------------------------------------------------ */
+
+/* 呢條係由一次真實失手嚟嘅：trips/trip-tools.html 用咗一個喺品牌更名
+ * 之前寫嘅頁面模板，結果 footer 留低咗舊品牌名，而當時嘅殘留掃描
+ * 早過新頁存在，所以掃唔到。人手掃描擋唔住「之後先出現」嘅檔案，
+ * 只有每次 build 都行嘅檢查先擋得住。 */
+const LEGACY_DISPLAY_STRINGS = ["hk_eats", "港深食飲指南", "香港出發行程設計", "行程模板"];
+
+function checkDisplayConsistency(relPath, html) {
+  // nav：四條分區連結嘅文字必須等於 SECTIONS 定義嘅 nav 名
+  const navM = /<nav class="site-nav"[^>]*>([\s\S]*?)<\/nav>/i.exec(html);
+  if (!navM) {
+    err(`E14 ${relPath}: 搵唔到 site-nav`);
+  } else {
+    const re = /<a\b[^>]*href="[^"]*\/([a-z-]+)\/index\.html"[^>]*>([\s\S]*?)<\/a>/gi;
+    let m, seen = 0;
+    while ((m = re.exec(navM[1]))) {
+      const sec = SECTIONS[m[1]];
+      if (!sec) continue;
+      seen++;
+      const text = stripTags(m[2]);
+      if (text !== sec.nav) {
+        err(`E14 ${relPath}: nav 入面「${m[1]}」寫住「${text}」，SECTIONS 定義係「${sec.nav}」`);
+      }
+    }
+    if (seen !== Object.keys(SECTIONS).length) {
+      err(`E14 ${relPath}: nav 只有 ${seen} 條分區連結，預期 ${Object.keys(SECTIONS).length} 條`);
+    }
+  }
+
+  // footer：一定要有品牌名
+  const footM = /<footer class="site-footer"[^>]*>([\s\S]*?)<\/footer>/i.exec(html);
+  if (!footM) {
+    err(`E14 ${relPath}: 搵唔到 site-footer`);
+  } else if (!footM[1].includes(SITE_NAME)) {
+    err(`E14 ${relPath}: footer 冇品牌名「${SITE_NAME}」`);
+  }
+
+  // 舊顯示字串：掃描前剝走 build 生成區塊同 SITE_ORIGIN
+  // （SITE_ORIGIN 入面嘅 repo 名唔算顯示層）
+  const cleaned = html
+    .replace(OG_BLOCK_RE, "")
+    .replace(LD_BLOCK_RE, "")
+    .split(SITE_ORIGIN).join("");
+  OG_BLOCK_RE.lastIndex = 0;
+  LD_BLOCK_RE.lastIndex = 0;
+
+  for (const legacy of LEGACY_DISPLAY_STRINGS) {
+    // 「行程模板」喺正文入面可以係合法用詞（模板呢個概念保留），
+    // 所以只喺顯示槽位（nav / h1 / title / meta-line / footer）先算違規。
+    const slots = [
+      [/<title>([\s\S]*?)<\/title>/i, "<title>"],
+      [/<h1[^>]*>([\s\S]*?)<\/h1>/i, "<h1>"],
+      [/<p class="meta-line">([\s\S]*?)<\/p>/i, ".meta-line"],
+      [/<nav class="site-nav"[^>]*>([\s\S]*?)<\/nav>/i, "site-nav"],
+      [/<footer class="site-footer"[^>]*>([\s\S]*?)<\/footer>/i, "site-footer"],
+      [/<nav class="breadcrumb"[^>]*>([\s\S]*?)<\/nav>/i, "breadcrumb"],
+    ];
+    for (const [re, name] of slots) {
+      const hit = re.exec(cleaned);
+      if (hit && hit[1].includes(legacy)) {
+        err(`E14 ${relPath}: ${name} 仲有舊顯示字串「${legacy}」`);
+      }
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* E13 利益披露：HTML 同 data 唔准行開                                  */
 /* ------------------------------------------------------------------ */
 
@@ -1304,6 +1373,7 @@ for (const { relPath, html } of pages) {
   checkUniqueIds(relPath, html);
   checkNoHardcodedOrigin(relPath, html);
   checkDisclosure(relPath, html);
+  checkDisplayConsistency(relPath, html);
 }
 
 /* W9：文章頭嘅日期要用「最後更新：」而且同 jsonld:dateModified 一致 */

@@ -766,3 +766,59 @@ h2[id] { scroll-margin-top: 4.5rem; }
   margin: 0 0 .55rem;
 }
 .callout-disclosure strong { color: var(--fg); }
+
+/* ================================================================
+   App 卡片
+   刻意做得克制：三行，唔係產品頁。
+   規則（同時寫喺 README）：唔列功能清單、唔寫版本號、唔寫評分、
+   唔用宣傳語氣。佢嘅角色係「講到呢個環節順帶提」，
+   所以視覺上要細過正文標題，唔可以搶戲。
+   ================================================================ */
+
+.app-card {
+  margin: 1.2rem 0 1.6rem;
+  padding: .85rem 1rem .9rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-strong);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.app-card .app-name {
+  margin: 0 0 .5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  max-width: none;
+}
+.app-card dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .3rem .8rem;
+  align-items: baseline;
+}
+.app-card dt {
+  margin: 0;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--fg-faint);
+  white-space: nowrap;
+  padding-top: .12rem;
+}
+.app-card dd {
+  margin: 0;
+  font-size: .92rem;
+  line-height: 1.65;
+  color: var(--fg);
+  max-width: none;
+}
+.app-card .freshness {
+  margin: .6rem 0 0;
+  padding-top: .45rem;
+  font-size: .78rem;
+}
+@media (max-width: 26rem) {
+  .app-card dl { grid-template-columns: 1fr; gap: .1rem; }
+  .app-card dt { padding-top: .35rem; }
+}
