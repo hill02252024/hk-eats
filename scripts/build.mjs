@@ -41,6 +41,7 @@ const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://example.github.io/hk_ea
 const SITE_NAME = "歎世界";
 const SITE_TAGLINE = "香港出發的食飲與旅行指南";
 const SITE_LANG = "zh-HK";
+const LEGACY_DISPLAY_STRINGS = ["hk_eats", "港深食飲指南", "香港出發行程設計", "行程模板"];
 const SITE_HOST = (() => { try { return new URL(SITE_ORIGIN).host; } catch { return ""; } })();
 
 const SKIP_DIRS = new Set([".git", "node_modules", "scripts", ".github", "assets"]);
@@ -471,6 +472,50 @@ function pageTitle(relPath, metas, currentTitle) {
   return `${head} — ${SITE_NAME}`;
 }
 
+/* 品牌位（nav 左上角）由 SITE_NAME 生成，中間一個字上 accent 色。
+ * 唔靠頁面手寫 —— 手寫嘅版本會跟住舊模板一路複製落去。 */
+function brandMarkup() {
+  const chars = [...SITE_NAME];
+  if (chars.length < 3) return esc(SITE_NAME);
+  const mid = Math.floor(chars.length / 2);
+  return esc(chars.slice(0, mid).join("")) +
+         "<span>" + esc(chars[mid]) + "</span>" +
+         esc(chars.slice(mid + 1).join(""));
+}
+
+/* 注意次序：先驗「檔案入面原本寫住咩」，再正規化。
+ * 如果掉轉做，build 會靜靜咁修好然後檢查永遠 pass —— 咁個檢查就等於冇。
+ * 而家嘅行為係：發現 drift → 報 error（exit 1）＋ 同時修好輸出，
+ * 令你知道發生過，而唔係下次先發現。 */
+function injectBrand(relPath, html) {
+  const re = /(<a class="brand"[^>]*>)([\s\S]*?)(<\/a>)/i;
+  const m = re.exec(html);
+  if (!m) {
+    err(`E14 ${relPath}: 搵唔到 <a class="brand">，品牌位注入唔到`);
+    return html;
+  }
+  const authored = stripTags(m[2]).replace(/\s+/g, "");
+  if (authored !== SITE_NAME) {
+    err(
+      `E14 ${relPath}: nav 品牌位原本寫住「${authored}」，唔等於 SITE_NAME「${SITE_NAME}」` +
+      `（已同時正規化輸出，但請修返個來源）`
+    );
+  }
+  return html.replace(re, (_all, open, _inner, close) => open + brandMarkup() + close);
+}
+
+/* <title> 由 build 生成，所以驗生成後嘅版本係廢話。真正要驗嘅係
+ * 「作者原本寫咗咩」——入面唔應該有舊品牌字串。 */
+function checkAuthoredTitle(relPath, currentTitle) {
+  if (!currentTitle) return;
+  const plain = stripTags(currentTitle).replace(/\s+/g, "");
+  for (const legacy of LEGACY_DISPLAY_STRINGS) {
+    if (plain.includes(legacy)) {
+      err(`E14 ${relPath}: <title> 原本寫住舊字串「${legacy}」（「${plain}」）`);
+    }
+  }
+}
+
 function renderOg(relPath, metas, title) {
   const url = SITE_ORIGIN + canonicalPath(relPath);
   const desc = metas["jsonld:description"] || metas["description"] || SITE_TAGLINE;
@@ -846,8 +891,6 @@ function checkPageData(relPath, html) {
  * 之前寫嘅頁面模板，結果 footer 留低咗舊品牌名，而當時嘅殘留掃描
  * 早過新頁存在，所以掃唔到。人手掃描擋唔住「之後先出現」嘅檔案，
  * 只有每次 build 都行嘅檢查先擋得住。 */
-const LEGACY_DISPLAY_STRINGS = ["hk_eats", "港深食飲指南", "香港出發行程設計", "行程模板"];
-
 function checkDisplayConsistency(relPath, html) {
   // nav：四條分區連結嘅文字必須等於 SECTIONS 定義嘅 nav 名
   const navM = /<nav class="site-nav"[^>]*>([\s\S]*?)<\/nav>/i.exec(html);
@@ -870,12 +913,33 @@ function checkDisplayConsistency(relPath, html) {
     }
   }
 
-  // footer：一定要有品牌名
+  // ---- 三個品牌槽位：nav 品牌位、footer、<title> ----
+  // 全部要剝走 tag 先比對。品牌位個 markup 係「歎<span>世</span>界」，
+  // 直接喺原始 HTML 搵字串係搵唔到嘅 —— 上一輪就係死喺呢度。
+  const brandM = /<a class="brand"[^>]*>([\s\S]*?)<\/a>/i.exec(html);
+  if (!brandM) {
+    err(`E14 ${relPath}: 搵唔到 nav 品牌位 <a class="brand">`);
+  } else {
+    // 第二道：驗最終輸出。injectBrand 已經驗過來源，呢度係防止
+    // 注入本身出錯（例如 regex 撞唔到預期嘅 markup）。
+    const got = stripTags(brandM[1]).replace(/\s+/g, "");
+    if (got !== SITE_NAME) {
+      err(`E14 ${relPath}: 注入後嘅 nav 品牌位仍然係「${got}」，唔等於「${SITE_NAME}」`);
+    }
+  }
+
   const footM = /<footer class="site-footer"[^>]*>([\s\S]*?)<\/footer>/i.exec(html);
   if (!footM) {
     err(`E14 ${relPath}: 搵唔到 site-footer`);
-  } else if (!footM[1].includes(SITE_NAME)) {
+  } else if (!stripTags(footM[1]).includes(SITE_NAME)) {
     err(`E14 ${relPath}: footer 冇品牌名「${SITE_NAME}」`);
+  }
+
+  const titleM = /<title>([\s\S]*?)<\/title>/i.exec(html);
+  if (!titleM) {
+    err(`E14 ${relPath}: 冇 <title>`);
+  } else if (!stripTags(titleM[1]).includes(SITE_NAME)) {
+    err(`E14 ${relPath}: <title>「${stripTags(titleM[1])}」冇品牌名「${SITE_NAME}」`);
   }
 
   // 舊顯示字串：掃描前剝走 build 生成區塊同 SITE_ORIGIN
@@ -900,7 +964,9 @@ function checkDisplayConsistency(relPath, html) {
     ];
     for (const [re, name] of slots) {
       const hit = re.exec(cleaned);
-      if (hit && hit[1].includes(legacy)) {
+      // 一定要剝走 tag 先比對：「hk<span>_</span>eats」渲染出嚟係
+      // 「hk_eats」，但喺原始 HTML 入面呢七個字元從來冇連續出現過。
+      if (hit && stripTags(hit[1]).replace(/\s+/g, "").includes(legacy)) {
         err(`E14 ${relPath}: ${name} 仲有舊顯示字串「${legacy}」`);
       }
     }
@@ -1126,6 +1192,29 @@ function checkPillarLinks(pageList) {
 }
 
 /* ------------------------------------------------------------------ */
+/* W13 H1 唔可以同分區名一模一樣                                        */
+/* ------------------------------------------------------------------ */
+
+/* Pillar 頁上面會連續出現三行同一個詞：nav 標籤、麵包屑最後一格、H1。
+ * 三行一樣睇落似出錯，而且 H1 係全頁最大嗰個承諾位 —— 佢應該講一句嘢
+ * （「北上行程點排」），唔係重複一個標籤（「北上行程」）。
+ * 分區名要對上搜尋意圖，H1 要接住嗰個意圖再答多一步。 */
+function checkH1NotSectionName(pageList) {
+  for (const { relPath, html } of pageList) {
+    const parts = relPath.split("/");
+    if (parts.length < 2) continue;
+    const sec = SECTIONS[parts[0]];
+    if (!sec) continue;
+    const m = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html);
+    if (!m) continue;
+    const h1 = stripTags(m[1]).replace(/\s+/g, "");
+    if (h1 === sec.pillar) {
+      warn(`W13 ${relPath}: H1「${h1}」同分區名一模一樣 —— H1 應該係一句，唔係一個標籤`);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* W10 cluster 體量超過所屬 pillar                                      */
 /* ------------------------------------------------------------------ */
 
@@ -1286,8 +1375,12 @@ for (const file of htmlFiles) {
   html = html.replace(LD_BLOCK_RE, "");
   const metas = readMetas(html);
 
+  // 品牌位：由 SITE_NAME 生成
+  html = injectBrand(relPath, html);
+
   // <title> 同 OG：統一由品牌常數生成，唔靠頁面手寫
   const curTitle = (/<title>([\s\S]*?)<\/title>/i.exec(html) || [])[1];
+  checkAuthoredTitle(relPath, curTitle);
   const title = pageTitle(relPath, metas, curTitle);
   if (/<title>[\s\S]*?<\/title>/i.test(html)) {
     html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(title)}</title>`);
@@ -1402,6 +1495,7 @@ console.log(`[6/8] 內連結構：${pages.length} 頁，孤兒 ${linkStats.orpha
 const pillarLinks = checkPillarLinks(pages);
 console.log(`      cluster → pillar 內連：${pillarLinks.filter((r) => r.ok).length}/${pillarLinks.length} 篇合格`);
 
+checkH1NotSectionName(pages);
 const overSized = checkClusterVsPillar(pages);
 console.log(`      cluster 體量 vs pillar：${overSized.length} 頁超出`);
 
