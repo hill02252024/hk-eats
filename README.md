@@ -120,6 +120,28 @@ node scripts/browser-check.mjs    # 真無頭 Chrome：量 computed 值同實際
 SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署前
 ```
 
+### 外部連結白名單
+
+站外連結預設一律 error。放行名單喺 `scripts/build.mjs` 嘅
+`EXTERNAL_ALLOWLIST`：
+
+| 類型 | 網域 | 用途 |
+|---|---|---|
+| 尾綴 | `.gov.hk`、`.gov.cn` | 政府官方來源 |
+| 精確 | `www.mtr.com.hk` | 港鐵接駁／特惠站官方說明 |
+| 精確 | `www.openstreetmap.org` | 地圖參考 |
+| 精確 | `schema.org`、`www.w3.org` | 結構化資料詞彙、SVG namespace |
+| 精確 | `apps.apple.com`、`play.google.com` | 官方 app 商店 |
+
+**加入白名單唔等於已經有連結。**`apps.apple.com` 同 `play.google.com`
+係預留畀 `data/trips/trip-tools.json` 嘅 `apps.storeLinks`——該項而家
+仲係 `needsVerify`，所以站內一條商店連結都冇。白名單先開定，
+等資料補齊即刻用得。
+
+放行咗嘅網域仍然要守其餘規則：必須 https、路徑唔可以係空或者 `/`、
+唔准帶追蹤參數。affiliate 連結永遠唔會經白名單——佢哋只可以由
+`js/affiliates.js` 喺 runtime 由 `data/affiliates.json` 注入。
+
 ### SITE_ORIGIN：全站絕對 URL 嘅唯一來源
 
 `SITE_ORIGIN` 係全站**所有**絕對 URL 嘅唯一來源，一共 115 處：

@@ -82,6 +82,11 @@ const EXTERNAL_ALLOWLIST = {
     "www.openstreetmap.org", // 地圖參考
     "schema.org",            // 結構化資料詞彙
     "www.w3.org",            // SVG／XML namespace
+    // 官方 app 商店。預留畀 trips/trip-tools 嘅 apps.storeLinks —— 該項
+    // 目前仲係 needsVerify，所以站內暫時一條商店連結都冇；白名單
+    // 先開定，等資料補齊即刻用得。呢兩個網域係商店官方頁，唔帶佣金。
+    "apps.apple.com",        // App Store
+    "play.google.com",       // Google Play
   ],
 };
 

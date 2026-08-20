@@ -730,3 +730,39 @@ h2[id] { scroll-margin-top: 4.5rem; }
   margin: .9rem 0 .8rem;
 }
 .callout-alert strong { color: inherit; }
+
+/* ================================================================
+   利益披露 callout
+   用喺「本站作者係呢個 app 嘅開發者」呢類聲明。
+   刻意同 .callout（灰）、.callout-alert（琥珀）都唔同：
+   披露唔係警告，亦唔係補充說明，佢係一個身分聲明，
+   所以要一眼睇得出係另一種東西，唔可以埋喺正文段落入面。
+   ================================================================ */
+
+.callout-disclosure {
+  position: relative;
+  background: var(--bg-raised);
+  border: 2px solid var(--fg-muted);
+  border-left-width: 6px;
+  border-radius: var(--radius);
+  padding: .95rem 1.1rem .85rem;
+  margin: 1.8rem 0;
+  box-shadow: var(--shadow);
+}
+.callout-disclosure > *:first-child { margin-top: 0; }
+.callout-disclosure > *:last-child { margin-bottom: 0; }
+.callout-disclosure p { max-width: none; }
+
+.callout-disclosure .disclosure-label {
+  display: inline-block;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bg-raised);
+  background: var(--fg-muted);
+  border-radius: 3px;
+  padding: .12rem .5rem .16rem;
+  margin: 0 0 .55rem;
+}
+.callout-disclosure strong { color: var(--fg); }
