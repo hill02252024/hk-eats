@@ -137,6 +137,8 @@ node scripts/check-contrast.mjs   # WCAG 對比度量度（深／淺兩套）
 node scripts/check-ads-cls.mjs    # 靜態證明廣告位兩態高度一致
 node scripts/browser-check.mjs    # 真無頭 Chrome：量 computed 值同實際 hydration
 
+SITE_ORIGIN=https://實際域名 node scripts/build.mjs --publish   # 發布前必跑
+
 SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署前
 ```
 
@@ -222,6 +224,8 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | E11 | 頁面冇 `<title>` 或者冇 `</head>`（`<title>` 同 Open Graph 注入唔到） |
 | E12 | 寫死咗絕對網址：站內絕對 URL（換網域唔會跟住變）或者唔喺白名單嘅外部網址 |
 | E13 | 利益披露文字喺 HTML 同 data 之間唔一致，或者 data 有披露聲明但頁面冇 `.callout-disclosure` |
+| E15 | **（只喺 `--publish`）**頁面仲會渲染 `{{NEEDS_VERIFY}}` 標記 |
+| E16 | **（只喺 `--publish`）**`SITE_ORIGIN` 仲係佔位網域 |
 | E14 | 顯示層走樣：**nav 品牌位／footer／`<title>` 三個品牌槽位**同 `SITE_NAME` 唔一致、nav 分區名同 `SECTIONS` 唔一致、nav 少咗分區連結、或者顯示槽位仲有舊字串 |
 
 警告（唔會 exit 1）：
@@ -312,6 +316,32 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 
 `_status` 係畀人睇嘅標籤，唔影響邏輯：`sourced`（有來源核實）、
 `principles`（純原理，冇時效性）、`unverified`（未核實）、`mixed`。
+
+### 發布前：一個標記都唔可以剩
+
+`{{NEEDS_VERIFY}}` 係**內部施工標記，唔應該出街**。佢嘅角色係施工期間
+令空位可見同可追蹤，唔係一個對讀者有意義嘅內容。
+
+所以有兩條硬規則：
+
+1. **發布前任何頁面唔可以殘留 `{{NEEDS_VERIFY}}`。**
+2. **唔可以有內容去解釋呢個標記存在。**如果你發現自己想寫一段
+   「點解呢度係空嘅」，正確做法係填實佢，唔係解釋佢。
+   （`trips/trip-tools.html` 就試過有一條 FAQ 專門解釋卡片入面
+   「同其他有咩唔同」點解係空 —— 嗰條 FAQ 本身就係「標記出咗街」
+   嘅症狀，已經整條刪走。）
+
+跑 `node scripts/build.mjs --publish` 檢查。呢個模式會：
+
+- **E15** —— 逐頁解析佢引用嘅 `data-fresh-key`，對返 data；
+  只要有一個 entry 帶 `needsVerify`，該頁就 error。
+  （標記喺 HTML 原始碼入面係唔存在嘅 —— 頁面只寫 `data-fresh-key`，
+  標記係 `freshness.js` 喺 runtime 渲染出嚟，所以淨係 grep HTML 搵唔到。
+  E15 同時亦掃埋 HTML 入面手寫嘅字面標記。）
+- **E16** —— `SITE_ORIGIN` 仲係佔位網域就 error。W11 本身就寫住
+  「唔好發布」，一個發布模式冇理由當佢冇到。
+
+**平時 build 唔受影響** —— 施工中有標記係正常，日常只會見到 W7 列表。
 
 ### 未核實嘅資料：寧願留白，唔好作
 

@@ -35,6 +35,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+/* 發布模式：node scripts/build.mjs --publish
+ * 平時 build 唔受影響 —— 施工中有待核實標記係正常。發布前先跑呢個模式，
+ * 任何一頁仲有標記就唔應該出街。 */
+const PUBLISH = process.argv.includes("--publish");
+
 const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://example.github.io/hk_eats").replace(/\/+$/, "");
 /* 顯示層品牌。目錄名／repo 名／SITE_ORIGIN 入面嘅 hk_eats 係基建標識，
  * 唔喺顯示層，所以唔改。 */
@@ -1192,6 +1197,71 @@ function checkPillarLinks(pageList) {
 }
 
 /* ------------------------------------------------------------------ */
+/* E15 / E16 發布守衛（只喺 --publish 模式生效）                        */
+/* ------------------------------------------------------------------ */
+
+/* {{NEEDS_VERIFY}} 係內部施工標記，唔應該出街。
+ * 難處係佢喺 HTML 原始碼入面唔存在 —— 頁面只寫 data-fresh-key，
+ * 標記係 freshness.js 喺 runtime 由 JSON 嘅 needsVerify 渲染出嚟。
+ * 所以要逐頁解析佢引用嘅 key，再對返 data，先知邊頁會出標記。
+ * 順便都掃埋 HTML 入面直接手寫嘅字面標記。 */
+function checkPublishReady(pageList) {
+  if (!PUBLISH) return { pages: [], total: 0 };
+
+  const offenders = [];
+  for (const { relPath, html } of pageList) {
+    const files = new Set();
+    let m;
+    const fre = /data-fresh=["']([^"']+)["']/gi;
+    while ((m = fre.exec(html))) files.add(m[1]);
+
+    const keys = new Set();
+    const kre = /data-fresh-key=["']([^"']+)["']/gi;
+    while ((m = kre.exec(html))) keys.add(m[1]);
+
+    const found = [];
+    for (const name of files) {
+      const doc = loadData(name);
+      if (!doc) continue;
+      for (const [key, entry] of Object.entries(doc.entries || {})) {
+        if (keys.has(key) && entry && entry.needsVerify) {
+          found.push({ key, from: `data/${name}.json`, what: entry.needsVerify });
+        }
+      }
+    }
+
+    NEEDS_VERIFY_RE.lastIndex = 0;
+    while ((m = NEEDS_VERIFY_RE.exec(html))) {
+      found.push({ key: "（HTML 字面）", from: `${relPath}:${lineOf(html, m.index)}`, what: m[1].trim() });
+    }
+
+    if (found.length) {
+      offenders.push({ relPath, found });
+      err(
+        `E15 ${relPath}: 仲有 ${found.length} 個待核實標記會渲染出街 —— ` +
+        found.map((f) => f.key).join("、")
+      );
+    }
+  }
+  return { pages: offenders, total: offenders.reduce((n, o) => n + o.found.length, 0) };
+}
+
+/* 附帶（超出原本要求，但同一個道理）：SITE_ORIGIN 仲係佔位網域嗰陣，
+ * sitemap、robots、og:url、JSON-LD 全部會指去唔存在嘅網域。
+ * W11 本身就寫住「唔好發布」—— 一個發布模式冇理由當佢冇到。 */
+function checkPublishOrigin() {
+  if (!PUBLISH) return false;
+  if (SITE_ORIGIN.toLowerCase().includes("example.")) {
+    err(
+      `E16 SITE_ORIGIN 仲係佔位網域「${SITE_ORIGIN}」，唔可以發布。` +
+      `跑：SITE_ORIGIN=https://你嘅網域 node scripts/build.mjs --publish`
+    );
+    return true;
+  }
+  return false;
+}
+
+/* ------------------------------------------------------------------ */
 /* W13 H1 唔可以同分區名一模一樣                                        */
 /* ------------------------------------------------------------------ */
 
@@ -1322,7 +1392,7 @@ function writeRobots() {
 /* 主流程                                                               */
 /* ------------------------------------------------------------------ */
 
-console.log(`hk_eats build — root ${ROOT}`);
+console.log(`hk_eats build — root ${ROOT}${PUBLISH ? "  [發布模式 --publish]" : ""}`);
 console.log(`SITE_ORIGIN = ${SITE_ORIGIN}${process.env.SITE_ORIGIN ? "" : "（預設值，未由環境變數設定）"}`);
 
 /* SITE_ORIGIN 係全站絕對 URL 嘅唯一來源：sitemap 嘅 <loc>、robots 嘅
@@ -1500,6 +1570,11 @@ const overSized = checkClusterVsPillar(pages);
 console.log(`      cluster 體量 vs pillar：${overSized.length} 頁超出`);
 
 const nv = collectNeedsVerify(pages);
+const pub = checkPublishReady(pages);
+checkPublishOrigin();
+if (PUBLISH) {
+  console.log(`      發布守衛：${pub.pages.length} 頁仲有待核實標記（共 ${pub.total} 個）`);
+}
 console.log(`[7/8] 待核實標記：${nv.length} 個（HTML ${nv.filter((x) => x.kind === "HTML").length} / data ${nv.filter((x) => x.kind === "data").length}）`);
 
 const sitemapPages = pages.filter((p) => !RESERVED_DIRS.has(p.relPath.split("/")[0]));
