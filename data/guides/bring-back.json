@@ -1,44 +1,72 @@
 {
   "title": "帶咩返香港 — 易耗芯資料",
   "belongsTo": "/guides/bring-back.html",
-  "_status": "unverified",
-  "_note": "香港入境嘅免稅額、申報門檻同許可證要求全部係法定數字，會修訂，而且寫錯嘅後果係讀者被罰。編輯冇提供核實數值，所以呢度一項都唔填，全部用 needsVerify 標記，由頁面顯示待核實。正文只寫類別邏輯，唔寫數。",
+  "_status": "verified",
+  "_note": "本檔嘅數值由編輯提供並核實（verifiedOn 2026-08）。全部標記 volatility: normal —— 呢啲係法定數字，會修訂，六個月冇覆核就應該當佢有機會過時。唯一例外係 penalty.general：搜到嘅罰則數字互相矛盾，所以刻意保持未核實，正文亦唔會寫任何金額或刑期，改為指向海關官方頁。",
   "entries": {
+    "rule.24hour": {
+      "value": "持香港身份證者必須離港不少於 24 小時，先享有酒類及煙草免稅額。即日來回深圳等於零免稅額。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
     "duty.alcohol": {
-      "needsVerify": "香港入境旅客嘅酒類免稅限額（數量、酒精濃度門檻、年齡限制）",
+      "value": "年滿 18 歲可免稅帶 1 升酒精濃度以量計多於 30% 的飲用酒類自用；持香港身份證者必須離港不少於 24 小時才享此豁免。",
+      "verifiedOn": "2026-08",
       "volatility": "normal"
     },
     "duty.tobacco": {
-      "needsVerify": "香港入境旅客嘅煙草製品免稅限額（香煙／雪茄／煙絲各自數量）",
+      "value": [
+        "19 支香煙；或",
+        "1 支雪茄（多於 1 支則總重不超過 25 克）；或",
+        "25 克其他製成煙草",
+        "同樣受 24 小時規則限制"
+      ],
+      "verifiedOn": "2026-08",
       "volatility": "normal"
     },
     "duty.ageLimit": {
-      "needsVerify": "享有煙酒免稅優惠嘅最低年齡",
-      "volatility": "low"
+      "value": "18 歲（嬰幼兒配方粉出境豁免係 16 歲，兩者唔同，要分開睇）",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
     },
     "duty.dutiableList": {
-      "needsVerify": "香港四類應課稅品嘅完整清單",
-      "volatility": "low"
+      "value": "應課稅品指酒類、煙草、香煙及雪茄。跨境司機（包括港車北上、粵車南下）不享免稅優惠。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
     },
     "declare.cash": {
-      "needsVerify": "大額現金或不記名票據嘅申報門檻金額",
+      "value": "第 629 章：現金類物品總值高於港幣 12 萬元或等值外幣，須用紅通道申報。",
+      "verifiedOn": "2026-08",
       "volatility": "normal"
     },
     "permit.meat": {
-      "needsVerify": "肉類及家禽製品入境嘅重量上限同許可證要求",
+      "value": "個人行李內不超過 15 公斤冷藏／冷凍肉類及家禽，作自用或禮品可免申領進口許可證，但仍須附第 132AK 章嘅官方證明書；而發證實體一般只向食物業人士簽發作商業用途。違例最高罰款 5 萬元及監禁 6 個月。",
+      "verifiedOn": "2026-08",
       "volatility": "normal"
     },
     "permit.plant": {
-      "needsVerify": "植物、種子、鮮果入境嘅許可證要求",
+      "value": "第 207 章須漁護署進口証，但在香港以外的中國地方生產並由該等地方進口的植物不受此限；其他國家的切花及供食用蔬果亦不受此限。",
+      "verifiedOn": "2026-08",
       "volatility": "normal"
     },
     "permit.medicine": {
-      "needsVerify": "個人自用藥物（尤其含受管制成分）嘅入境數量同處方要求",
+      "value": "個人隨身行李內合理自用可豁免許可證；屬危險藥物、抗生素或第一部毒藥（第 134／137／138 章）則須醫生處方。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "formula.powder": {
+      "value": "攜帶 36 個月以下嬰幼兒配方粉出境而無出口許可證屬違法，最高罰款 50 萬元及監禁 2 年；年滿 16 歲旅客如過去 24 小時內不曾出境可獲豁免，每人不超過 1.8 公斤（約兩罐）。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "smoking.alternative": {
+      "value": "進口另類吸煙產品（電子煙、加熱煙、草本煙及其器具、零件、配件、煙油）屬違法，最高罰款 5 萬元及監禁 6 個月。",
+      "verifiedOn": "2026-08",
       "volatility": "normal"
     },
     "penalty.general": {
-      "needsVerify": "未申報應課稅品或違禁品嘅法定後果",
-      "volatility": "low"
+      "needsVerify": "未申報應課稅品或違禁品嘅一般罰則。搜到嘅金額同刑期互相矛盾，未能核實，所以本站唔寫任何數字，正文改為指向海關官方頁。",
+      "volatility": "normal"
     }
   }
 }

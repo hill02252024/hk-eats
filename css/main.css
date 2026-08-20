@@ -640,3 +640,93 @@ a[data-aff]:not([href]) {
 
 /* 正文入面連去其他文章嘅內連，睇得出係內部導覽 */
 .wrap a[href$=".html"]:not(.card):not(.brand) { text-underline-offset: .2em; }
+
+/* ================================================================
+   首頁副標題
+   ================================================================ */
+
+.site-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--fg-muted);
+  margin: -.3rem 0 .6rem;
+  max-width: none;
+}
+
+/* ================================================================
+   錨點目錄
+   ================================================================ */
+
+.toc {
+  margin: 1.4rem 0 1.8rem;
+  padding: .85rem 1rem .9rem;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.toc-title {
+  margin: 0 0 .5rem;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  max-width: none;
+}
+.toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: toc;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .05rem .9rem;
+}
+@media (min-width: 34rem) {
+  .toc ol { grid-template-columns: 1fr 1fr; }
+}
+.toc li {
+  margin: 0;
+  max-width: none;
+  counter-increment: toc;
+  font-size: .89rem;
+  line-height: 1.55;
+  padding: .12rem 0;
+}
+.toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  display: inline-block;
+  min-width: 1.9em;
+  color: var(--fg-faint);
+  font-variant-numeric: tabular-nums;
+  font-size: .8em;
+}
+.toc a { color: var(--fg-muted); text-decoration: none; }
+.toc a:hover { color: var(--accent); text-decoration: underline; }
+
+/* 由目錄跳落去嘅時候，標題唔好貼住 sticky header */
+h2[id] { scroll-margin-top: 4.5rem; }
+
+/* ================================================================
+   強調型 callout（例如「先講最容易中招嗰條」）
+   ================================================================ */
+
+.callout-alert {
+  background: var(--warn-bg);
+  border-left-color: var(--warn-line);
+  border-left-width: 4px;
+  color: var(--warn-fg);
+}
+.callout-alert h2 {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+  font-size: 1.15rem;
+  color: var(--warn-fg);
+}
+.callout-alert .data-block {
+  background: var(--bg-raised);
+  color: var(--fg);
+  margin: .9rem 0 .8rem;
+}
+.callout-alert strong { color: inherit; }

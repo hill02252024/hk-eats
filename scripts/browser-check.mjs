@@ -258,6 +258,69 @@ try {
   }
   console.log("");
 
+  /* ===== 2c. 錨點目錄 ===== */
+  console.log("── 2c. 錨點目錄：每條 anchor 跳唔跳得到 ──\n");
+  for (const url of ["/guides/bring-back.html", "/coffee/brewing-basics.html", "/trips/index.html"]) {
+    await goto(page, BASE + url, { settleMs: 300 });
+    const toc = await evaluate(page, `() => {
+      const nav = document.querySelector('nav.toc');
+      if (!nav) return null;
+      const links = [...nav.querySelectorAll('a')];
+      const broken = [];
+      let firstTop = null;
+      links.forEach((a) => {
+        const id = decodeURIComponent(a.getAttribute('href').slice(1));
+        const t = document.getElementById(id);
+        if (!t) broken.push(id);
+        else if (firstTop === null) firstTop = Math.round(t.getBoundingClientRect().top + scrollY);
+      });
+      const h2All = [...document.querySelectorAll('main h2')];
+      const navRect = nav.getBoundingClientRect();
+      const lede = document.querySelector('p.lede');
+      return {
+        count: links.length, broken,
+        h2Count: h2All.length,
+        h2WithId: h2All.filter((h) => h.id).length,
+        afterLede: lede ? navRect.top >= lede.getBoundingClientRect().bottom - 1 : null,
+        scrollMarginTop: getComputedStyle(h2All[0]).scrollMarginTop,
+      };
+    }`);
+    console.log(`  ▸ ${url}: ${toc ? `${toc.count} 條目錄項，${toc.h2WithId}/${toc.h2Count} 個 h2 有 id，斷鏈 ${toc.broken.length} 條，scroll-margin-top=${toc.scrollMarginTop}` : "冇目錄"}`);
+    say(!!toc, `${url} 有錨點目錄`);
+    if (toc) {
+      say(toc.broken.length === 0, `${url} 目錄冇斷鏈`, toc.broken.join(", "));
+      say(toc.count === toc.h2Count, `${url} 目錄涵蓋全部 h2`, `${toc.count}/${toc.h2Count}`);
+      say(toc.h2WithId === toc.h2Count, `${url} 每個 h2 都有 id`);
+      say(toc.afterLede === true, `${url} 目錄排喺首段之後`);
+    }
+  }
+  console.log("");
+
+  /* ===== 2d. 首頁最後更新 ===== */
+  console.log("── 2d. 首頁 ──\n");
+  await goto(page, BASE + "/index.html", { settleMs: 300 });
+  const home = await evaluate(page, `() => {
+    const h1 = document.querySelector('h1');
+    const sub = document.querySelector('.site-subtitle');
+    const meta = document.querySelector('.meta-line');
+    return {
+      h1: h1 ? h1.textContent.trim() : null,
+      subtitle: sub ? sub.textContent.trim() : null,
+      lastUpdate: meta ? meta.textContent.trim() : null,
+      hasOldSection: /點解要分開常青同易耗/.test(document.body.textContent),
+      aboutLink: !!document.querySelector('a[href$="about.html"]'),
+    };
+  }`);
+  console.log(`  H1: ${home.h1}`);
+  console.log(`  副標: ${home.subtitle}`);
+  console.log(`  ${home.lastUpdate}`);
+  say(home.h1 === "港深食飲指南", "首頁 H1 已改", home.h1);
+  say(!!home.subtitle, "首頁有副標題");
+  say(/最後更新：\d{4}-\d{2}/.test(home.lastUpdate || ""), "首頁有全站最後更新日期", home.lastUpdate);
+  say(!home.hasOldSection, "「點解要分開常青同易耗」已搬離首頁");
+  say(home.aboutLink, "首頁有連去 /about.html");
+  console.log("");
+
   /* ===== 3. 廣告位兩態高度 ===== */
   console.log("── 3. ads.js 佔位：兩態實際高度 ──\n");
   for (const [width, which] of [[390, "手機"], [1440, "桌面"]]) {

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://example.github.io/hk_eats/about.html</loc>
+    <lastmod>2026-08-21</lastmod>
+  </url>
+  <url>
     <loc>https://example.github.io/hk_eats/areas/hk-coffee-map.html</loc>
     <lastmod>2026-08-20</lastmod>
   </url>
@@ -38,7 +42,7 @@
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/guides/bring-back.html</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/guides/</loc>
@@ -50,7 +54,7 @@
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/trips/day-trip.html</loc>

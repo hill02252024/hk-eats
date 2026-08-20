@@ -437,6 +437,163 @@ function breadcrumbLd(trail) {
 }
 
 /* ------------------------------------------------------------------ */
+/* 錨點目錄（TOC）+ h2 id                                               */
+/* ------------------------------------------------------------------ */
+
+const TOC_START = "<!-- build:toc -->";
+const TOC_END = "<!-- /build:toc -->";
+const TOC_BLOCK_RE = /[ \t]*<!-- build:toc -->[\s\S]*?<!-- \/build:toc -->\n?/g;
+const TOC_MIN_CHARS = 1200;
+const TOC_MIN_H2 = 3;
+
+/* 由標題文字生成 id：保留中日韓字同英數，其餘一律當分隔。
+ * 中文 fragment 喺 URL 入面會被 percent-encode，瀏覽器照跳得到。 */
+function slugify(text) {
+  const cleaned = String(text)
+    .replace(/[\u3000-\u303F\uFF00-\uFF65]/g, " ")   // 中文標點、全形符號
+    .replace(/[^\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}a-zA-Z0-9]+/gu, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase();
+  return cleaned.slice(0, 24) || "";
+}
+
+/* 掃 <h2>，補 id（build 加嘅會帶 data-build-id，之後可以跟住標題重生），
+ * 回傳 [{ id, text }] 同改咗嘅 html。 */
+function ensureH2Ids(relPath, html) {
+  const used = new Set();
+  // 先收集頁面上所有已存在、唔係 build 加嘅 id，避免撞
+  const idRe = /\bid\s*=\s*["']([^"']+)["']/gi;
+  let im;
+  while ((im = idRe.exec(html))) used.add(im[1]);
+
+  const headings = [];
+  let n = 0;
+  const out = html.replace(/<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi, (all, attrs, inner) => {
+    n++;
+    const text = stripTags(inner);
+    const isBuildId = /\bdata-build-id\b/.test(attrs);
+    const existing = /\bid\s*=\s*["']([^"']+)["']/i.exec(attrs);
+
+    let id;
+    if (existing && !isBuildId) {
+      id = existing[1];                       // 人手寫嘅 id，尊重佢
+      headings.push({ id, text });
+      return all;
+    }
+    if (existing) used.delete(existing[1]);   // build 之前加嘅，收返可用
+
+    const base = slugify(text) || `h2-${n}`;
+    id = base;
+    let k = 2;
+    while (used.has(id)) id = `${base}-${k++}`;
+    used.add(id);
+
+    const cleanAttrs = attrs
+      .replace(/\s*\bid\s*=\s*["'][^"']*["']/i, "")
+      .replace(/\s*\bdata-build-id\b/i, "");
+    headings.push({ id, text });
+    return `<h2${cleanAttrs} id="${id}" data-build-id>${inner}</h2>`;
+  });
+
+  return { html: out, headings };
+}
+
+function renderToc(headings) {
+  const items = headings
+    .map((h) => `    <li><a href="#${esc(h.id)}">${esc(h.text)}</a></li>`)
+    .join("\n");
+  return (
+    TOC_START + "\n" +
+    `<nav class="toc" aria-labelledby="toc-title">\n` +
+    `  <p class="toc-title" id="toc-title">本頁目錄</p>\n` +
+    `  <ol>\n${items}\n  </ol>\n` +
+    `</nav>\n` +
+    TOC_END + "\n"
+  );
+}
+
+/* 中文字數（用嚟決定要唔要 TOC） */
+function cjkCount(html) {
+  const m = /<article[^>]*>([\s\S]*?)<\/article>|<main[^>]*>([\s\S]*?)<\/main>/i.exec(html);
+  const body = m ? (m[1] || m[2]) : html;
+  const text = body
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<svg[\s\S]*?<\/svg>/gi, "")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<[^>]+>/g, " ");
+  return (text.match(/[\u4e00-\u9fff]/g) || []).length;
+}
+
+/* 插入位置：首段（.lede，冇就 h1 之後第一個 </p>）之後 */
+function injectToc(relPath, html, headings) {
+  const block = renderToc(headings);
+  if (TOC_BLOCK_RE.test(html)) {
+    TOC_BLOCK_RE.lastIndex = 0;
+    return html.replace(TOC_BLOCK_RE, block);
+  }
+  TOC_BLOCK_RE.lastIndex = 0;
+  const lede = /<p class="lede">[\s\S]*?<\/p>\n?/i.exec(html);
+  if (lede) {
+    const at = lede.index + lede[0].length;
+    return html.slice(0, at) + "\n" + block + html.slice(at);
+  }
+  const h1 = /<h1[^>]*>[\s\S]*?<\/h1>/i.exec(html);
+  if (h1) {
+    const after = html.indexOf("</p>", h1.index);
+    if (after !== -1) {
+      const at = after + "</p>".length;
+      return html.slice(0, at) + "\n\n" + block + html.slice(at);
+    }
+  }
+  err(`E10 ${relPath}: 搵唔到插入 TOC 嘅位置（冇 .lede 亦冇 h1 後嘅段落）`);
+  return html;
+}
+
+/* E10：全頁 id 唯一 */
+function checkUniqueIds(relPath, html) {
+  const seen = new Map();
+  const re = /\bid\s*=\s*["']([^"']+)["']/gi;
+  let m;
+  while ((m = re.exec(html))) {
+    const id = m[1];
+    seen.set(id, (seen.get(id) || 0) + 1);
+  }
+  for (const [id, count] of seen) {
+    if (count > 1) err(`E10 ${relPath}: id="${id}" 出現 ${count} 次，唔唯一`);
+  }
+  const h2NoId = /<h2\b(?![^>]*\bid\s*=)[^>]*>/i.exec(html);
+  if (h2NoId) err(`E10 ${relPath}: 有 <h2> 冇 id（${h2NoId[0].slice(0, 40)}）`);
+}
+
+/* ------------------------------------------------------------------ */
+/* 全站最後更新（首頁用）                                                */
+/* ------------------------------------------------------------------ */
+
+const LU_START = "<!-- build:lastupdate -->";
+const LU_END = "<!-- /build:lastupdate -->";
+const LU_BLOCK_RE = /<!-- build:lastupdate -->[\s\S]*?<!-- \/build:lastupdate -->/g;
+
+function latestVerifiedOn() {
+  let best = null;
+  const walkJson = (dir) => {
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, ent.name);
+      if (ent.isDirectory()) { walkJson(full); continue; }
+      if (!ent.name.endsWith(".json")) continue;
+      let doc;
+      try { doc = JSON.parse(fs.readFileSync(full, "utf8")); } catch { continue; }
+      for (const entry of Object.values((doc && doc.entries) || {})) {
+        const v = entry && entry.verifiedOn;
+        if (/^\d{4}-\d{2}$/.test(String(v || "")) && (!best || v > best)) best = v;
+      }
+    }
+  };
+  const dataDir = path.join(ROOT, "data");
+  if (fs.existsSync(dataDir)) walkJson(dataDir);
+  return best;
+}
+
+/* ------------------------------------------------------------------ */
 /* JSON-LD                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -543,7 +700,9 @@ function loadData(name) {
 
 function checkPageData(relPath, html) {
   const base = relPath.replace(/\.html$/, "");
-  const isArticle = path.basename(relPath) !== "index.html";
+  // 只有分區目錄之下嘅非 index 頁先算「文章」——根目錄嘅 about.html
+  // 之類唔需要易耗芯。
+  const isArticle = relPath.includes("/") && path.basename(relPath) !== "index.html";
 
   const usedFresh = new Set();
   let m;
@@ -846,6 +1005,9 @@ console.log(`      SVG 易耗值掃描：${svgScanned} 個檔`);
 const pages = [];
 let svgCount = 0;
 let bcCount = 0;
+let tocCount = 0;
+const tocPages = [];
+const latestUpdate = latestVerifiedOn();
 for (const file of htmlFiles) {
   const relPath = rel(file);
   let html = fs.readFileSync(file, "utf8");
@@ -857,6 +1019,32 @@ for (const file of htmlFiles) {
 
   html = html.replace(LD_BLOCK_RE, "");
   const metas = readMetas(html);
+
+  // h2 id（全部頁都要，TOC 只加喺分區內、夠長嘅文）
+  const idRes = ensureH2Ids(relPath, html);
+  html = idRes.html;
+
+  const inSection = relPath.includes("/") && !!SECTIONS[relPath.split("/")[0]];
+  const chars = cjkCount(html);
+  if (inSection && chars >= TOC_MIN_CHARS && idRes.headings.length >= TOC_MIN_H2) {
+    html = injectToc(relPath, html, idRes.headings);
+    tocCount++;
+    tocPages.push({ relPath, chars, headings: idRes.headings.length });
+  } else if (TOC_BLOCK_RE.test(html)) {
+    TOC_BLOCK_RE.lastIndex = 0;
+    html = html.replace(TOC_BLOCK_RE, "");   // 唔再合資格就移走舊 TOC
+  }
+  TOC_BLOCK_RE.lastIndex = 0;
+
+  // 全站最後更新（放咗錨點嘅頁先會有）
+  if (LU_BLOCK_RE.test(html) || /<!--\s*lastupdate\s*-->/.test(html)) {
+    const lu = LU_START + (latestUpdate || "未有核實資料") + LU_END;
+    LU_BLOCK_RE.lastIndex = 0;
+    html = LU_BLOCK_RE.test(html)
+      ? (LU_BLOCK_RE.lastIndex = 0, html.replace(LU_BLOCK_RE, lu))
+      : html.replace(/<!--\s*lastupdate\s*-->/, lu);
+    LU_BLOCK_RE.lastIndex = 0;
+  }
 
   // 麵包屑：一步完成，唔好「先剝後補」——剝完先發現補唔到，就會寫低一個
   // 連錨點都冇嘅檔，之後永遠 build 唔返。
@@ -889,7 +1077,26 @@ for (const file of htmlFiles) {
   if (html !== before) fs.writeFileSync(file, html, "utf8");
   pages.push({ relPath, metas, injected, html });
 }
-console.log(`[4/8] SVG 注入 ${svgCount} 張；麵包屑注入 ${bcCount} 頁；JSON-LD 注入 ${pages.filter((p) => p.injected).length}/${pages.length} 頁`);
+console.log(`[4/8] SVG ${svgCount} 張；麵包屑 ${bcCount} 頁；目錄 ${tocCount} 頁；JSON-LD ${pages.filter((p) => p.injected).length}/${pages.length} 頁`);
+console.log(`      全站最新 verifiedOn：${latestUpdate || "（冇）"}`);
+
+for (const { relPath, html } of pages) checkUniqueIds(relPath, html);
+
+/* W9：文章頭嘅日期要用「最後更新：」而且同 jsonld:dateModified 一致 */
+for (const { relPath, html, metas } of pages) {
+  const m = /<p class="meta-line">([\s\S]*?)<\/p>/i.exec(html);
+  if (!m) continue;
+  // 首頁嗰行係全站最後更新（取自最新 verifiedOn，格式 YYYY-MM），
+  // 唔係文章日期，唔適用呢條規則。
+  if (m[1].includes(LU_START)) continue;
+  const text = stripTags(m[1]);
+  const want = metas["jsonld:dateModified"] || metas["jsonld:datePublished"];
+  if (!/最後更新：/.test(text)) {
+    warn(`W9 ${relPath}: 文章日期行冇「最後更新：」前綴（「${text}」）`);
+  } else if (want && !text.includes(want)) {
+    warn(`W9 ${relPath}: 文章日期行嘅日期同 jsonld:dateModified（${want}）唔一致（「${text}」）`);
+  }
+}
 
 for (const file of htmlFiles) checkPageData(rel(file), fs.readFileSync(file, "utf8"));
 const articleCount = htmlFiles.filter((f) => path.basename(f) !== "index.html").length;
@@ -917,6 +1124,10 @@ console.log("生成／改寫嘅檔案：");
 console.log("  sitemap.xml");
 console.log("  robots.txt");
 for (const p of pages) if (p.injected) console.log(`  ${p.relPath}`);
+
+console.log("");
+console.log("錨點目錄：");
+for (const t of tocPages) console.log(`  ${t.relPath.padEnd(34)} ${String(t.chars).padStart(5)} 字　${t.headings} 個 h2`);
 
 console.log("");
 console.log("由首頁計嘅點擊深度：");

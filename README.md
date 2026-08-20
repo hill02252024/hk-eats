@@ -43,6 +43,7 @@
 
 ```
 index.html                 首頁：四個 pillar 入口 + 全部文章列表
+about.html                 關於本站：常青／易耗嘅做法（由首頁搬出）
 guides/index.html          pillar：港人北上完整指南（+ 3 篇 cluster）
 areas/index.html           pillar：港深食飲地圖（+ 3 篇）
 coffee/index.html          pillar：港深咖啡入門（+ 3 篇）
@@ -97,6 +98,7 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 | E7 | SVG 入面出現易耗值（時間、金額、費率、日數）——圖解只可以畫結構 |
 | E8 | `hreflang` 唔係 zh-HK、連結指向 `/en/`、或者 `<html lang>` 唔係 zh-HK |
 | E9 | 孤兒頁（冇任何頁連入）、連去唔存在嘅頁、由首頁去唔到、麵包屑錨點缺失 |
+| E10 | 同一頁有重複 `id`、或者有 `<h2>` 冇 `id`（會令錨點目錄斷鏈） |
 
 警告（唔會 exit 1）：
 
@@ -105,7 +107,8 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 | W1–W5 | 文章冇對應 data 檔、`data-fresh-key` 搵唔到、entry 結構問題、`data-aff` 冇對應、JSON-LD meta 缺漏 |
 | W6 | 由首頁超過 3 click 先去到 |
 | W7 | 待核實標記（逐個列出，同時掃 HTML 同 data） |
-| W8 | cluster 冇用含 pillar 關鍵字嘅 anchor、喺上半部連返 pillar |
+| W8 | cluster 冇用含 pillar 關鍵字嘅 anchor、喺上半部連返 pillar；正文內連唔喺 3–5 條 |
+| W9 | 文章日期行冇「最後更新：」前綴，或者日期同 `jsonld:dateModified` 唔一致 |
 
 ## 點樣加一篇新文章
 
@@ -275,6 +278,28 @@ build 會由路徑同 `SECTIONS` 表生成可見麵包屑同 `BreadcrumbList`
 兩樣——同一個來源，唔會行開。四個 pillar 嘅名喺 `scripts/build.mjs`
 頂部嘅 `SECTIONS` 定義一次。
 
+### 10. 日期行同錨點目錄（都係自動）
+
+文章開頭嘅日期行格式固定：
+
+```html
+<p class="meta-line">北上實務 · 最後更新：2026-08-21</p>
+```
+
+日期要同 `jsonld:dateModified` 一致，唔跟就出 W9。
+
+**錨點目錄唔使手寫。** 分區之下、中文字數 ≥ 1200、而且有 ≥ 3 個 `<h2>`
+嘅頁，build 會自動：
+
+1. 幫每個 `<h2>` 生成 `id`（由標題文字 slug 化，撞名自動加 `-2`）。
+   build 加嘅會帶 `data-build-id`，改咗標題會跟住重生；
+   人手寫嘅 `id` 會被尊重，唔會覆蓋。
+2. 喺首段（`.lede`）之後插入 `<nav class="toc">`。
+3. 檢查全頁 `id` 唯一、每個 `h2` 都有 `id`（E10）。
+
+首頁嘅「全站資料最後更新」亦係 build 生成：放一個 `<!-- lastupdate -->`
+錨點，build 會填入全站所有 `data/**/*.json` 之中最新嗰個 `verifiedOn`。
+
 ### 10. 跑 build
 
 ```sh
@@ -335,6 +360,12 @@ node scripts/build.mjs
   「口岸通」公布為準。
 - 新皇崗口岸嗰組標記為 `volatility: "high"`，會永久掛變動中橫幅，
   因為正式通關日期未公布。
+
+`data/guides/bring-back.json` 嘅 `_status` 係 `verified`：11 項免稅額、
+許可證同罰則規定經編輯核實並列出，唯一例外係 `penalty.general`——
+未申報嘅一般罰則，搜到嘅金額同刑期互相矛盾，所以保持未核實，
+正文唔寫任何數字，改為指向海關官方頁。呢個係「同一篇文入面
+核實同未核實並存」嘅示範。
 
 `data/coffee/grinder-guide.json` 嘅 `_status` 係 `principles`：
 呢篇文冇時效性數值（冇型號、冇售價、冇規格區間），
