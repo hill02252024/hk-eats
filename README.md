@@ -24,6 +24,24 @@
 **現階段範圍：北上、香港本地、咖啡。**超出呢三樣嘅題材，先確認佢
 接唔接得返上面條尺，再決定要唔要開新分區。
 
+### 分區名點解唔跟品牌名一齊抽象化
+
+「港深食飲地圖」、「港深咖啡入門」呢類分區名**唔會改**，同品牌名嘅
+處理方式刻意相反：
+
+| | 要求 | 原因 |
+|---|---|---|
+| **品牌名** | 抽象 | 要跨目的地，加日本台灣唔使改名重建認知 |
+| **分區名** | 具體 | 佢係 pillar 標題，要直接對上讀者實際會搵嘅嘢 |
+
+分區名同時係 `<h1>`、`<title>`、麵包屑同 `BreadcrumbList` 嘅內容 ——
+佢哋嘅工作係俾人一眼睇到「呢頁講咩」，所以越具體越好。
+一個叫「食飲地圖」嘅 pillar 對唔上任何具體搜尋意圖，改咗係倒退。
+
+**將來加新目的地，係開新分區，唔係改舊分區名。**例如加日本就開
+一個新 pillar，「港深食飲地圖」照樣留喺度講港深。呢個亦係品牌名要
+抽象嘅原因：品牌撐得住新分區，分區名唔使遷就品牌。
+
 
 純靜態繁體中文網站，部署目標為 GitHub Pages。無框架、無 npm 依賴，
 只有幾個用 Node 內建模組寫嘅 script。
@@ -102,8 +120,43 @@ node scripts/browser-check.mjs    # 真無頭 Chrome：量 computed 值同實際
 SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署前
 ```
 
-`SITE_ORIGIN` 只影響 `sitemap.xml`、`robots.txt` 同 JSON-LD 嘅絕對 URL。
-頁面之間全部用相對路徑，所以放喺 repo 子路徑一樣行。
+### SITE_ORIGIN：全站絕對 URL 嘅唯一來源
+
+`SITE_ORIGIN` 係全站**所有**絕對 URL 嘅唯一來源，一共 115 處：
+
+| 用途 | 處數 |
+|---|---|
+| `og:url` | 每頁 1 |
+| JSON-LD `@id` / `url` / `publisher.url` / `WebSite.url` | 每頁 2–4 |
+| `BreadcrumbList` 嘅 `item` | 每頁 2–3 |
+| `sitemap.xml` 嘅 `<loc>` | 18 |
+| `robots.txt` 嘅 `Sitemap:` | 1 |
+
+頁面之間、CSS／JS／資料檔全部用**相對路徑**，所以放喺 repo 子路徑一樣行，
+換網域亦唔會影響。
+
+**冇任何一處寫死。**驗證方法：用另一個 origin 跑一次 build，
+舊 origin 應該一處都唔剩：
+
+```sh
+SITE_ORIGIN=https://example.test node scripts/build.mjs
+grep -r 'example.github.io' --include='*.html' --include='*.xml' --include='*.txt' .   # 應該 0 行
+node scripts/build.mjs                                                                # 換返
+```
+
+build 亦有兩重保障：**E12** 會攔任何寫死嘅絕對網址（掃描前先剝走
+`<!-- build:og -->` 同 `<!-- build:jsonld -->` 兩個生成區塊，剩低嘅就係人手寫嘅）；
+**W11** 會喺 `SITE_ORIGIN` 仲係佔位網域嗰陣提你唔好發布。
+
+### 部署前一定要跑
+
+```sh
+SITE_ORIGIN=https://實際域名 node scripts/build.mjs
+```
+
+見唔到 W11 先算準備好。用預設值 build 出嚟嘅 `sitemap.xml`、`robots.txt`
+同所有 `og:url` 都會指去 `example.github.io`，發布咗等於叫搜尋引擎去一個
+唔存在嘅網域。
 
 ### build 做嘅嘢
 
@@ -125,6 +178,7 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 | E9 | 孤兒頁（冇任何頁連入）、連去唔存在嘅頁、由首頁去唔到、麵包屑錨點缺失 |
 | E10 | 同一頁有重複 `id`、或者有 `<h2>` 冇 `id`（會令錨點目錄斷鏈） |
 | E11 | 頁面冇 `<title>` 或者冇 `</head>`（`<title>` 同 Open Graph 注入唔到） |
+| E12 | 寫死咗絕對網址：站內絕對 URL（換網域唔會跟住變）或者唔喺白名單嘅外部網址 |
 
 警告（唔會 exit 1）：
 
@@ -135,7 +189,8 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 | W7 | 待核實標記（逐個列出，同時掃 HTML 同 data） |
 | W8 | cluster 冇用含 pillar 關鍵字嘅 anchor、喺上半部連返 pillar；正文內連唔喺 3–5 條 |
 | W9 | 文章日期行冇「最後更新：」前綴，或者日期同 `jsonld:dateModified` 唔一致 |
-| W10 | cluster 頁嘅中文字數超過所屬 pillar（見下面「幾時要把 cluster 升格」） |
+| W10 | cluster 頁嘅中文字數**超出所屬 pillar 40% 或以上**（見下面「幾時要把 cluster 升格」） |
+| W11 | `SITE_ORIGIN` 仲係佔位網域（含 `example.`）——未設定正式網域，唔好發布 |
 
 ## 點樣加一篇新文章
 
@@ -374,7 +429,17 @@ pillar 仲大，兩者就會開始爭同一批關鍵字，而且讀者會分唔�
 
 主要訊號（build 會報 **W10**）：
 
-- **字數超過所屬 pillar。**呢個係硬訊號，build 每次都會列出超出幾多同幾多 %。
+- **字數超出所屬 pillar 40% 或以上。**build 會列出超出幾多字同幾多 %。
+
+**點解門檻係 +40% 而唔係 0%？**因為<strong>成日響嘅警告等於冇警告</strong>。
+門檻設 0% 嗰陣，12 篇 cluster 之中有 9 篇報 warning——包括只超出 4%、
+5%、7% 呢種。嗰個級數唔代表要拆文，只代表 pillar 寫得薄咗少少，
+而每次 build 都見到九行黃字，結果就係冇人再讀 W10。
+設 +40% 之後只剩三篇，而且下一名係 +11%，中間有清楚嘅斷層。
+
+判斷用嘅係**四捨五入之後嘅百分比**，同警告訊息顯示嘅數字一致——
+用原始比值會出現「訊息寫住 +40% 但唔報 warning」呢種自相矛盾嘅情況
+（例如 2550 / 1823 = +39.88%）。
 
 輔助訊號（要自己判斷）：
 
@@ -383,9 +448,8 @@ pillar 仲大，兩者就會開始爭同一批關鍵字，而且讀者會分唔�
   又講許可證、又講出境限制，三者根本唔會同一個人同一時間搵）。
 - 內連入度高過同分區其他 cluster，即係佢實際已經扮緊入口。
 
-**超出 10–20% 唔使急。**呢個級數只代表 pillar 寫得薄咗，通常補闊
-pillar 就解決。真正要考慮升格嘅係**超出 50% 以上**，或者硬訊號加埋
-兩個輔助訊號同時成立。
+**超出 10–20% 唔使急**（呢個級數而家根本唔會報 warning）。真正要考慮
+升格嘅係**超出 50% 以上**，或者 W10 響咗再加兩個輔助訊號同時成立。
 
 ### 做法
 

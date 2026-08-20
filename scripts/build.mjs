@@ -834,6 +834,45 @@ function checkPageData(relPath, html) {
 }
 
 /* ------------------------------------------------------------------ */
+/* E12 唔准寫死絕對網址                                                 */
+/* ------------------------------------------------------------------ */
+
+/* 全站嘅絕對 URL 只可以有兩個來源：
+ *   1. build 由 SITE_ORIGIN 生成（<!-- build:og --> 同 <!-- build:jsonld --> 兩個區塊）
+ *   2. 白名單上嘅外部參考連結
+ * 除此之外任何 http(s):// 都係寫死，換網域嗰陣唔會跟住變。
+ * 掃描前會剝走上面兩個生成區塊，剩低嘅就係人手寫嘅。 */
+function checkNoHardcodedOrigin(relPath, html) {
+  const stripped = html.replace(OG_BLOCK_RE, "").replace(LD_BLOCK_RE, "");
+  OG_BLOCK_RE.lastIndex = 0;
+  LD_BLOCK_RE.lastIndex = 0;
+
+  const re = /https?:\/\/[^\s"'<>)]+/g;
+  let m;
+  while ((m = re.exec(stripped))) {
+    const url = m[0];
+    const before = stripped.slice(Math.max(0, m.index - 40), m.index);
+    // xmlns 係命名空間識別碼，唔係連結，唔會跟網域走
+    if (/xmlns(:[\w-]+)?\s*=\s*["']$/.test(before)) continue;
+
+    let host;
+    try { host = new URL(url).host; } catch { continue; }
+
+    const at = html.indexOf(url);
+    const line = at === -1 ? "?" : lineOf(html, at);
+    if (host === SITE_HOST) {
+      err(
+        `E12 ${relPath}:${line} 寫死咗站內絕對網址「${url.slice(0, 70)}」→ ` +
+        `站內連結一律用相對路徑；絕對 URL 只可以由 SITE_ORIGIN 生成，` +
+        `否則換網域嗰陣呢一處唔會跟住變`
+      );
+    } else if (!hostAllowed(host)) {
+      err(`E12 ${relPath}:${line} 絕對網址「${url.slice(0, 70)}」唔喺 EXTERNAL_ALLOWLIST`);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* E9 孤兒頁 / W6 點擊深度                                              */
 /* ------------------------------------------------------------------ */
 
@@ -976,7 +1015,16 @@ function checkPillarLinks(pageList) {
 
 /* Pillar 應該係一個分區入面最高層、最闊嘅一頁。如果某篇 cluster 寫到
  * 比 pillar 仲長，兩者就會開始爭同一批關鍵字，而且讀者會分唔清邊頁
- * 先係入口。呢個時候應該考慮將該 cluster 升格成子 pillar（做法見 README）。 */
+ * 先係入口。呢個時候應該考慮將該 cluster 升格成子 pillar（做法見 README）。
+ *
+ * 門檻設 +40%：超出 10–20% 只代表 pillar 寫得薄咗，補闊 pillar 就解決，
+ * 唔值得每次 build 都嘈。成日響嘅警告等於冇警告 —— 留返畀真係要拆嘅個案。
+ *
+ * 判斷用嘅係「四捨五入之後嘅百分比」，同訊息顯示嘅數字一致。
+ * 用原始比值會出現「訊息寫住 +40% 但唔報 warning」呢種自相矛盾嘅情況
+ * （例如 2550/1823 = +39.88%）。 */
+const CLUSTER_OVERSIZE_PCT = 40;
+
 function checkClusterVsPillar(pageList) {
   const bySection = new Map();
   for (const p of pageList) {
@@ -991,11 +1039,12 @@ function checkClusterVsPillar(pageList) {
   for (const [section, { pillar, clusters }] of bySection) {
     if (!pillar) continue;
     for (const c of clusters) {
-      if (c.chars > pillar.chars) {
-        over.push({ relPath: c.relPath, chars: c.chars, pillarChars: pillar.chars, section });
+      const pct = Math.round((c.chars / pillar.chars - 1) * 100);
+      if (pct >= CLUSTER_OVERSIZE_PCT) {
+        over.push({ relPath: c.relPath, chars: c.chars, pillarChars: pillar.chars, section, pct });
         warn(
           `W10 ${c.relPath}: ${c.chars} 字，超過所屬 pillar ${section}/index.html 嘅 ${pillar.chars} 字` +
-          `（多 ${c.chars - pillar.chars} 字，${Math.round((c.chars / pillar.chars - 1) * 100)}%）` +
+          `（多 ${c.chars - pillar.chars} 字，+${pct}%，門檻 +${CLUSTER_OVERSIZE_PCT}%）` +
           `→ 考慮升格成子 pillar，或者將 pillar 寫闊啲`
         );
       }
@@ -1069,7 +1118,17 @@ function writeRobots() {
 /* ------------------------------------------------------------------ */
 
 console.log(`hk_eats build — root ${ROOT}`);
-console.log(`SITE_ORIGIN = ${SITE_ORIGIN}`);
+console.log(`SITE_ORIGIN = ${SITE_ORIGIN}${process.env.SITE_ORIGIN ? "" : "（預設值，未由環境變數設定）"}`);
+
+/* SITE_ORIGIN 係全站絕對 URL 嘅唯一來源：sitemap 嘅 <loc>、robots 嘅
+ * Sitemap:、JSON-LD 嘅 @id／url／item、Open Graph 嘅 og:url。
+ * 佢一錯，成套嘢就全部指去唔存在嘅網域。 */
+if (SITE_ORIGIN.toLowerCase().includes("example.")) {
+  warn(
+    `W11 SITE_ORIGIN 仲係佔位網域「${SITE_ORIGIN}」——未設定正式網域，唔好發布。` +
+    `部署前跑：SITE_ORIGIN=https://你嘅網域 node scripts/build.mjs`
+  );
+}
 console.log("");
 
 let extLinks = 0;
@@ -1194,7 +1253,10 @@ console.log(`[4/8] SVG ${svgCount} 張；麵包屑 ${bcCount} 頁；目錄 ${toc
 console.log(`      <title> + Open Graph：${ogCount} 頁（品牌「${SITE_NAME}」）`);
 console.log(`      全站最新 verifiedOn：${latestUpdate || "（冇）"}`);
 
-for (const { relPath, html } of pages) checkUniqueIds(relPath, html);
+for (const { relPath, html } of pages) {
+  checkUniqueIds(relPath, html);
+  checkNoHardcodedOrigin(relPath, html);
+}
 
 /* W9：文章頭嘅日期要用「最後更新：」而且同 jsonld:dateModified 一致 */
 for (const { relPath, html, metas } of pages) {
