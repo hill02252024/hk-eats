@@ -42,11 +42,12 @@
 ## 目錄結構
 
 ```
-index.html                 首頁：四個分區入口 + 文章列表
-guides/                    北上實務（hub + 2 篇）
-areas/  trips/             分區地圖、行程模板（hub）
-coffee/                    咖啡（hub + 1 篇）
-en/                        預留英文版目錄，本次唔填內容
+index.html                 首頁：四個 pillar 入口 + 全部文章列表
+guides/index.html          pillar：港人北上完整指南（+ 3 篇 cluster）
+areas/index.html           pillar：港深食飲地圖（+ 3 篇）
+coffee/index.html          pillar：港深咖啡入門（+ 3 篇）
+trips/index.html           pillar：香港出發行程設計（+ 3 篇）
+en/                        預留目錄，唔填內容、唔入 sitemap、唔對外宣告
 css/main.css               全站樣式，手機優先，深色模式用 prefers-color-scheme
 js/freshness.js            易耗芯載入 + volatility + 兩套提示
 js/affiliates.js           由 data/affiliates.json 注入 affiliate 連結
@@ -55,7 +56,9 @@ assets/svg/*.svg           圖解唯一來源，由 build 注入頁面
 data/<section>/<name>.json 各文章嘅易耗芯
 data/affiliates.json       全站唯一 affiliate 來源
 data/ad-slots.json         全站唯一廣告位定義
-scripts/build.mjs          build + 六類守衛
+scripts/build.mjs          build + 守衛
+scripts/lib/cdp.mjs        零依賴 Chrome DevTools Protocol 驅動
+scripts/browser-check.mjs  真無頭 Chrome 量度（版面／hydration／廣告位／深色）
 scripts/test-freshness.mjs volatility 單元測試
 scripts/check-contrast.mjs 深／淺色對比度量度
 sitemap.xml  robots.txt    由 build 生成，要 commit
@@ -67,7 +70,8 @@ sitemap.xml  robots.txt    由 build 生成，要 commit
 node scripts/build.mjs            # build + 全部守衛
 node scripts/test-freshness.mjs   # volatility 邏輯測試
 node scripts/check-contrast.mjs   # WCAG 對比度量度（深／淺兩套）
-node scripts/check-ads-cls.mjs    # 證明廣告位兩態高度一致（CLS 預留）
+node scripts/check-ads-cls.mjs    # 靜態證明廣告位兩態高度一致
+node scripts/browser-check.mjs    # 真無頭 Chrome：量 computed 值同實際 hydration
 
 SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署前
 ```
@@ -91,10 +95,17 @@ SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署�
 | E5 | `ad-slots.json` 嘅高度同 `css/main.css` 嘅 `min-height` 唔一致；或者 `enabled:true` / `publisher` 有值 |
 | E6 | 引用嘅資料檔／SVG 唔存在、JSON 壞咗 |
 | E7 | SVG 入面出現易耗值（時間、金額、費率、日數）——圖解只可以畫結構 |
+| E8 | `hreflang` 唔係 zh-HK、連結指向 `/en/`、或者 `<html lang>` 唔係 zh-HK |
+| E9 | 孤兒頁（冇任何頁連入）、連去唔存在嘅頁、由首頁去唔到、麵包屑錨點缺失 |
 
-警告（唔會 exit 1）：文章冇對應 data 檔、`data-fresh-key` 搵唔到、
-entry 結構問題（冇 `value`、`verifiedOn` 格式錯、`volatility` 亂寫、
-`high` 但冇 `volatileNote`）、`data-aff` key 冇對應、JSON-LD meta 缺漏。
+警告（唔會 exit 1）：
+
+| 編號 | 檢查 |
+|---|---|
+| W1–W5 | 文章冇對應 data 檔、`data-fresh-key` 搵唔到、entry 結構問題、`data-aff` 冇對應、JSON-LD meta 缺漏 |
+| W6 | 由首頁超過 3 click 先去到 |
+| W7 | 待核實標記（逐個列出，同時掃 HTML 同 data） |
+| W8 | cluster 冇用含 pillar 關鍵字嘅 anchor、喺上半部連返 pillar |
 
 ## 點樣加一篇新文章
 
@@ -169,7 +180,25 @@ entry 結構問題（冇 `value`、`verifiedOn` 格式錯、`volatility` 亂寫�
 `value` 可以係字串、數字或者陣列；陣列填入 `<ul>`/`<ol>` 會變成逐個 `<li>`。
 
 `_status` 係畀人睇嘅標籤，唔影響邏輯：`sourced`（有來源核實）、
-`principles`（純原理，冇時效性）。
+`principles`（純原理，冇時效性）、`unverified`（未核實）、`mixed`。
+
+### 未核實嘅資料：寧願留白，唔好作
+
+如果你冇核實過一項數值，**唔准填一個似層層嘅數字**。改為用 `needsVerify`：
+
+```json
+"duty.alcohol": {
+  "needsVerify": "香港入境旅客嘅酒類免稅限額（數量、酒精濃度門檻、年齡限制）",
+  "volatility": "normal"
+}
+```
+
+有 `needsVerify` 嘅 entry **唔要** `value`，亦**唔要** `verifiedOn`——
+未核實就冇核實日期，寫一個日期落去係講大話。頁面會喺該位置渲染
+`{{NEEDS_VERIFY: …}}` 標記，區塊加 `.is-unverified`，註腳寫明有幾多項待核實。
+build 會逐個列出（W7），所以呢批標記同時係一份待辦清單。
+
+正文入面亦可以直接寫 `{{NEEDS_VERIFY: 描述}}`，build 一樣掃得到。
 
 ### 5. 喺 HTML 掛上易耗芯
 
@@ -231,9 +260,20 @@ SVG 要求：`viewBox`、`role="img"`、`aria-labelledby` 指向自己嘅
 
 四個可用 slot 見 `data/ad-slots.json`。唔做頁頂 leaderboard，唔做 sticky anchor。
 
-### 9. 加入導覽
+### 9. 加入導覽同內連
 
-首頁 `index.html` 同對應分區 hub 嘅文章清單（目前手寫，唔係 build 生成）。
+三個地方：
+
+1. 首頁 `index.html` 嘅「全部文章」清單（手寫）。
+2. 所屬 pillar 嘅 `.cluster-list`（手寫）。
+3. **正文內 3–5 條內連**，其中最少一條要喺頁面上半部、用含 pillar 名嘅
+   anchor 連返 pillar，例如 `<a href="./index.html">港人北上完整指南</a>`。
+   唔跟就出 W8。
+
+麵包屑唔使手寫。喺 `.wrap` 開頭放一個 `<!-- breadcrumb -->` 錨點，
+build 會由路徑同 `SECTIONS` 表生成可見麵包屑同 `BreadcrumbList`
+兩樣——同一個來源，唔會行開。四個 pillar 嘅名喺 `scripts/build.mjs`
+頂部嘅 `SECTIONS` 定義一次。
 
 ### 10. 跑 build
 
@@ -242,6 +282,20 @@ node scripts/build.mjs
 ```
 
 見到 `0 error` 先 commit。
+
+## 版面
+
+閱讀寬度統一由 `.wrap` 決定：`max-width: 46rem`（736px @16px root）、
+`margin-left/right: auto`、`padding: 0 1.25rem`、`box-sizing: border-box`。
+
+**唔好再喺 `p` / `li` 另外加 `max-width`。** 以前呢度夾住一個 38rem，
+令段落右邊剩低約 91px 死位，而標題、表格、圖解冇受限，兩者右邊界對唔齊——
+睇落就似成欄嘢偏咗。而家所有內容欄嘅直接子元素共用同一條左右邊界。
+
+實測（`node scripts/browser-check.mjs`，真無頭 Chrome）：
+1440px 時 wrap 左右留白各 352px，2560px 時各 912px，
+內容框 696px，段落／標題／清單／資料塊／圖解嘅左右偏移全部 0.00px。
+廣告位刻意固定闊度並置中，所以驗嘅係左右偏移相等而唔係貼齊。
 
 ## 廣告位：而家係咩狀態
 
@@ -288,6 +342,14 @@ node scripts/build.mjs
 
 仍然係佔位值嘅只有 `data/affiliates.json` 嘅追蹤 ID（`PENDING-*`）——
 未申請聯盟帳號之前唔應該當佢係真嘅。
+
+## 語言
+
+全站 `<html lang="zh-HK">`。`/en/` 保留做結構預留，但**唔填內容、唔入
+sitemap、唔出現喺 nav、亦冇任何 `hreflang` 指住佢**——冇內容之前宣告雙語，
+等於向搜尋引擎同讀者承諾一個唔存在嘅版本。build 會攔（E8）。
+
+真係有英文內容之後，先放寬 E8 並喺 `RESERVED_DIRS` 移走 `en`。
 
 ## 部署到 GitHub Pages
 

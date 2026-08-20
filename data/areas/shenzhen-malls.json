@@ -1,0 +1,36 @@
+{
+  "title": "深圳北上商圈 — 易耗芯資料",
+  "belongsTo": "/areas/shenzhen-malls.html",
+  "_status": "unverified",
+  "_note": "商圈嘅具體名單、各自最近嘅口岸同地鐵站、營業時間慣例，編輯冇提供核實資料，本站亦冇能力喺現場核實。正文只寫分類框架（四種商圈類型）同判斷方法，具體名單一律留待核實，唔填估算值。",
+  "entries": {
+    "list.gateway": {
+      "needsVerify": "口岸型商圈嘅實際名單（緊貼羅湖／福田／深圳灣等口岸，步行或一程車可達）",
+      "volatility": "normal"
+    },
+    "list.cbd": {
+      "needsVerify": "CBD 型商圈嘅實際名單同所屬行政區",
+      "volatility": "normal"
+    },
+    "list.destination": {
+      "needsVerify": "目的地型商圈（值得專程去、單獨佔一日）嘅實際名單",
+      "volatility": "normal"
+    },
+    "list.local": {
+      "needsVerify": "生活型商圈（本地客為主）嘅實際名單",
+      "volatility": "normal"
+    },
+    "access.byPort": {
+      "needsVerify": "各商圈由六個主要口岸出發嘅最短路線同大概車程",
+      "volatility": "normal"
+    },
+    "hours.mall": {
+      "needsVerify": "深圳大型商場嘅一般營業時間區間，同餐飲樓層嘅收工時間差異",
+      "volatility": "normal"
+    },
+    "hours.peak": {
+      "needsVerify": "週末與長假期嘅人流高峰時段",
+      "volatility": "normal"
+    }
+  }
+}

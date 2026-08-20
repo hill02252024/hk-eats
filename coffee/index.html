@@ -3,33 +3,114 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>咖啡 — hk_eats</title>
-<meta name="description" content="器材同沖煮嘅機械原理。只寫原理，唔寫型號同售價。">
-<link rel="alternate" hreflang="zh-HK" href="../coffee/index.html">
-<link rel="alternate" hreflang="en" href="../en/coffee/index.html">
-<link rel="alternate" hreflang="x-default" href="../coffee/index.html">
-<meta name="jsonld:type" content="ItemList">
-<meta name="jsonld:headline" content="咖啡">
-<meta name="jsonld:description" content="器材同沖煮嘅機械原理。只寫原理，唔寫型號同售價。">
-<meta name="jsonld:datePublished" content="2026-08-19">
-<meta name="jsonld:dateModified" content="2026-08-19">
-<meta name="jsonld:itemListName" content="咖啡文章">
-<meta name="jsonld:itemList" content="手搖磨豆機點揀">
+<title>港深咖啡入門 — hk_eats</title>
+<meta name="description" content="由杯入面嘅變數層級講起：點解一杯咖啡會咁樣、點揀器材、點睇一間店嘅豆單。只寫原理，唔寫型號同售價。">
+<meta name="jsonld:type" content="Article,ItemList,FAQPage">
+<meta name="jsonld:headline" content="港深咖啡入門">
+<meta name="jsonld:description" content="咖啡嘅變數層級、器材原理、豆單解讀，同全部咖啡文章。">
+<meta name="jsonld:datePublished" content="2026-08-20">
+<meta name="jsonld:dateModified" content="2026-08-20">
+<meta name="jsonld:section" content="咖啡">
+<meta name="jsonld:itemListName" content="咖啡分區全部文章">
+<meta name="jsonld:itemList" content="手搖磨豆機點揀|手沖參數入門|點睇一間咖啡店嘅豆單">
 <link rel="stylesheet" href="../css/main.css">
 <script src="../js/ads.js" defer></script>
 <!-- build:jsonld -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "咖啡文章",
-  "itemListOrder": "https://schema.org/ItemListOrderAscending",
-  "numberOfItems": 1,
-  "itemListElement": [
+  "@graph": [
     {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "手搖磨豆機點揀"
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://example.github.io/hk_eats/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "港深咖啡入門",
+          "item": "https://example.github.io/hk_eats/coffee/"
+        }
+      ]
+    },
+    {
+      "@type": "Article",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://example.github.io/hk_eats/coffee/"
+      },
+      "headline": "港深咖啡入門",
+      "description": "咖啡嘅變數層級、器材原理、豆單解讀，同全部咖啡文章。",
+      "inLanguage": "zh-HK",
+      "datePublished": "2026-08-20",
+      "dateModified": "2026-08-20",
+      "articleSection": "咖啡",
+      "author": {
+        "@type": "Organization",
+        "name": "hk_eats",
+        "url": "https://example.github.io/hk_eats/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "hk_eats",
+        "url": "https://example.github.io/hk_eats/"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "咖啡分區全部文章",
+      "itemListOrder": "https://schema.org/ItemListOrderAscending",
+      "numberOfItems": 3,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "手搖磨豆機點揀"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "手沖參數入門"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "點睇一間咖啡店嘅豆單"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "完全新手，應該由邊篇睇起？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "如果你未買器材，由豆單嗰篇開始——佢成本最低，而且即刻用得着。之後睇手沖參數，最後先睇磨豆機。順序係按「幾時真係需要」排，唔係按重要性排。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "只得有限預算，應該先花喺邊？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "磨豆機。佢喺變數層級上高過壺、濾杯同水壺，佢嘅粒徑分佈框死咗你之後所有調整嘅上限。一部定位唔穩嘅磨豆機，配幾靚嘅濾杯都補唔返。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "點解成個分區都唔提牌子？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "因為牌子同型號會停產、換代、改規格，而背後嘅機械關係唔會。寫結構準則等於畀你一把尺，你自己量得到；寫型號等於畀你一個答案，一年後就唔啱用。"
+          }
+        }
+      ]
     }
   ]
 }
@@ -53,29 +134,117 @@
 
 <main id="main">
 <div class="wrap">
-<h1>咖啡</h1>
+<!-- build:breadcrumb -->
+<nav class="breadcrumb" aria-label="麵包屑">
+  <ol>
+      <li><a href="../index.html">首頁</a></li>
+      <li><span aria-current="page">港深咖啡入門</span></li>
+  </ol>
+</nav>
+<!-- /build:breadcrumb -->
 
-<p class="lede">呢個分區只寫原理，唔寫型號同售價。原因好直接：型號會停產，售價會變，但決定杯裡面味道嘅機械關係唔會。你識得判斷結構，就唔需要每年重新睇一次推薦清單。</p>
+<h1>港深咖啡入門</h1>
+<p class="meta-line">咖啡 · 2026-08-20</p>
 
-<h2>編輯原則</h2>
+<p class="lede">呢個分區只寫原理，唔寫型號同售價。原因好直接：型號會停產、售價會變，但決定杯裡面味道嘅物理關係唔會。識得判斷結構，你就唔需要每年重新睇一次推薦清單，亦唔需要靠人告訴你邊間店好。</p>
 
-<ul>
-  <li><strong>唔出型號推薦。</strong>推薦清單嘅保質期通常唔夠一年，而且會令讀者停止思考。我哋寫嘅係「應該睇邊幾樣結構」。</li>
-  <li><strong>價錢只講分層邏輯。</strong>每個價位層級主要買緊咩（材料、定位剛性、幾何與公差、小批量製造），呢個分層唔會變；具體價位帶放喺資料檔，會浮動。</li>
-  <li><strong>由物理講起。</strong>粒徑分佈、萃取窗口、剛性同公差 — 呢啲係所有器材討論嘅共同底層，講清楚一次，之後篇篇都可以引用。</li>
-  <li><strong>講明咩唔值得畀錢。</strong>同講值得畀咩一樣重要。</li>
-</ul>
+<h2>先搞清楚變數層級</h2>
 
-<h2>文章</h2>
+<p>一杯咖啡好唔好飲，唔係一個問題，係四層問題疊埋。每一層都會限制下一層嘅上限——上層搞唔掂，下層點調都無用。呢個層級關係係整個分區嘅骨幹。</p>
 
-<ul class="post-list">
+<ol>
+  <li><strong>豆。</strong>產地、品種、處理法、烘焙度、新鮮度。呢一層決定咗杯入面「有咩可能出現」。冇嘅嘢，沖幾好都沖唔出嚟。</li>
+  <li><strong>研磨。</strong>粒徑分佈決定萃取嘅均勻度。呢一層決定咗「能唔能夠乾淨咁攞到」。分佈太闊，就會同時有過萃嘅苦同萃取不足嘅酸澀。</li>
+  <li><strong>水同溫度。</strong>水質、水溫、粉水比，決定「攞到幾多」。</li>
+  <li><strong>手法。</strong>注水方式、時間分配，喺前三層框死嘅範圍之內做微調。</li>
+</ol>
+
+<p>大部分新手嘅精力放喺第四層，但收益最大嘅係第二層。呢個錯配係最常見嘅入門陷阱：買咗好豆、買咗靚壺，但用一部粒徑分佈好闊嘅磨豆機，結果每杯都「唔乾淨」而唔知點解。</p>
+
+<h2>一、豆：睇得明豆單就唔使靠推薦</h2>
+
+<p>豆單上面嘅每一項都係一個承諾：產地同品種講緊風味嘅基礎範圍，處理法講緊發酵同甜感嘅方向，烘焙度講緊酸苦嘅平衡點，烘焙日期講緊佢而家喺賞味曲線嘅邊個位置。</p>
+
+<p>識得讀呢幾項，你落單之前就已經知道大概會飲到咩，唔使靠「邊隻好飲」呢類冇上下文嘅推薦。逐項點解讀，睇<a href="./reading-menu.html">點睇一間咖啡店嘅豆單</a>。</p>
+
+<h2>二、研磨：回報最大嘅一層</h2>
+
+<p>研磨嘅工作唔係「切碎」，係將豆帶入一個逐漸收窄嘅通道，逐級破碎到細過出口間隙先跌出嚟。所以決定粗細嘅唔係你轉幾快，係兩塊刀盤之間嘅間隙。</p>
+
+<p>而杯裡面嘅乾淨程度，由<strong>粒徑分佈</strong>決定，唔係平均粒徑。同樣係中度研磨，一部機出嚟嘅粉可能集中喺一個窄範圍，另一部可能同時有大量粗粒同大量極細粉。後者就係「又苦又澀」嘅來源。</p>
+
+<p>所以評價一部磨豆機，實際上係評價佢「令粒徑分佈收窄」嘅能力，而呢個能力由刀盤幾何、定位剛性同製造公差三樣嘢決定。三者點樣對應到價錢層級，睇<a href="./grinder-guide.html">手搖磨豆機點揀</a>。</p>
+
+<h2>三、水同手法：可調嘅嗰層</h2>
+
+<p>前兩層定咗之後，剩低嘅係一組互相牽扯嘅參數：粉水比、水溫、研磨度、時間。呢四樣唔可以獨立睇——調任何一樣都會推動其餘三樣。</p>
+
+<p>入門最重要嘅紀律唔係「用邊組參數」，而係<strong>一次只改一個</strong>。同時改兩樣，你就永遠唔知道係邊樣起作用，練幾多次都唔會累積到判斷力。呢套調參方法同一張診斷對照，喺<a href="./brewing-basics.html">手沖參數入門</a>。</p>
+
+<h2>四、出街飲：兩地嘅空間邏輯唔同</h2>
+
+<p>喺屋企沖同出街飲係兩件事。出街要處理嘅係空間問題——邊度有、幾點開、坐唔坐得耐。呢個喺香港同深圳嘅答案完全唔同：香港嘅咖啡地圖由租金同舖位型態畫出嚟，深圳嘅由商場同園區規劃畫出嚟。</p>
+
+<p>兩邊嘅分區結構分別喺<a href="../areas/hk-coffee-map.html">香港咖啡店分區</a>同<a href="../areas/sz-coffee-map.html">深圳咖啡店分區</a>。如果你係北上飲咖啡，仲要處理支付同上網，嗰部分喺<a href="../guides/index.html">港人北上完整指南</a>。</p>
+
+<h2>全部文章</h2>
+
+<ul class="cluster-list">
   <li>
+    <span class="step">01</span>
+    <a href="./reading-menu.html">點睇一間咖啡店嘅豆單</a>
+    <p>產地、品種、海拔、處理法、烘焙度、烘焙日期——逐項講佢實際承諾緊咩，同埋邊啲字眼其實冇資訊量。落單之前就知道會飲到咩。</p>
+  </li>
+  <li>
+    <span class="step">02</span>
+    <a href="./brewing-basics.html">手沖參數入門：一次只改一個</a>
+    <p>五個變數點樣互相牽扯、一套可以重複嘅調參紀律、同一張由味道倒推應該改邊個參數嘅診斷對照。</p>
+  </li>
+  <li>
+    <span class="step">03</span>
     <a href="./grinder-guide.html">手搖磨豆機點揀：刀盤、定位、公差，同價錢的關係</a>
-    <p>由刀盤幾何、定位剛性同製造公差三個角度，解釋價差究竟買緊咩，以及按沖煮方式應該付到邊個層級。</p>
+    <p>由刀盤幾何、定位剛性同製造公差三個角度，解釋價差究竟買緊咩，以及按沖煮方式應該付到邊個層級。冇型號，冇售價。</p>
   </li>
 </ul>
 
 <div class="ad-slot" data-ad-slot="ad-hub-grid"></div>
+
+<h2>呢個分區點寫</h2>
+
+<ul>
+  <li><strong>唔出型號推薦。</strong>推薦清單嘅保質期通常唔夠一年，而且會令讀者停止思考。我哋寫嘅係「應該睇邊幾樣結構」。</li>
+  <li><strong>價錢只講分層邏輯。</strong>每個價位層級主要買緊咩（材料、定位剛性、幾何與公差、小批量製造），呢個分層唔會變；具體價位帶會浮動，所以唔寫。</li>
+  <li><strong>由物理講起。</strong>粒徑分佈、萃取窗口、剛性同公差——呢啲係所有器材討論嘅共同底層，講清楚一次，之後篇篇都可以引用。</li>
+  <li><strong>講明咩唔值得畀錢。</strong>同講值得畀咩一樣重要。</li>
+</ul>
+
+<h2>入門嘅三個常見誤區</h2>
+
+<ul>
+  <li><strong>先買壺，後買磨。</strong>次序反咗。磨豆機喺變數層級上高一層，佢框死咗你嘅上限。</li>
+  <li><strong>同時改幾個參數。</strong>咁樣練幾多次都唔會累積判斷力，因為你永遠唔知邊樣起作用。</li>
+  <li><strong>以為貴就一定好飲。</strong>由入門去中階嘅回報最大，之後係遞減。過咗某一點，你買緊嘅係興趣，唔係味道。</li>
+</ul>
+
+<section class="faq">
+  <h2>常見問題</h2>
+
+  <h3 data-faq-q>完全新手，應該由邊篇睇起？</h3>
+  <div data-faq-a>
+    <p>如果你未買器材，由豆單嗰篇開始——佢成本最低，而且即刻用得着。之後睇手沖參數，最後先睇磨豆機。順序係按「幾時真係需要」排，唔係按重要性排。</p>
+  </div>
+
+  <h3 data-faq-q>只得有限預算，應該先花喺邊？</h3>
+  <div data-faq-a>
+    <p>磨豆機。佢喺變數層級上高過壺、濾杯同水壺，佢嘅粒徑分佈框死咗你之後所有調整嘅上限。一部定位唔穩嘅磨豆機，配幾靚嘅濾杯都補唔返。</p>
+  </div>
+
+  <h3 data-faq-q>點解成個分區都唔提牌子？</h3>
+  <div data-faq-a>
+    <p>因為牌子同型號會停產、換代、改規格，而背後嘅機械關係唔會。寫結構準則等於畀你一把尺，你自己量得到；寫型號等於畀你一個答案，一年後就唔啱用。</p>
+  </div>
+</section>
+
 </div>
 </main>
 

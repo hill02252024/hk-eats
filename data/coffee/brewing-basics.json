@@ -1,0 +1,47 @@
+{
+  "title": "手沖參數 — 起手範圍",
+  "belongsTo": "/coffee/brewing-basics.html",
+  "_status": "principles",
+  "_note": "呢度嘅數字係業界通用嘅起手範圍，唔係本站量度出嚟嘅數據，亦唔係邊個機構嘅標準。佢哋嘅作用係畀你一個可重複嘅起點，然後靠自己一次改一個變數收窄。因為冇時效性，全部標記 volatility: low；verifiedOn 記錄嘅係最後覆核措辭嘅月份，唔係「數據核實」。",
+  "entries": {
+    "ratio.range": {
+      "value": "1:15 至 1:17（粉:水，以重量計）",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "ratio.start": {
+      "value": "由 1:16 起手，即 15 克粉配 240 克水",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "temp.range": {
+      "value": "88–96°C",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "temp.rule": {
+      "value": "烘焙度越淺用越高溫，越深用越低溫",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "time.range": {
+      "value": "單杯份量總時間約 2:30–3:30",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "bloom.rule": {
+      "value": "悶蒸用約兩倍粉重嘅水，靜候 30–45 秒",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "adjust.step": {
+      "value": "一次只改一個變數，而且改一個可以察覺嘅幅度，唔好改半格",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "freshness.window": {
+      "needsVerify": "唔同烘焙度嘅最佳賞味窗口（由烘焙日起計嘅日數區間）",
+      "volatility": "low"
+    }
+  }
+}

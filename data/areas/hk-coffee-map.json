@@ -1,0 +1,32 @@
+{
+  "title": "香港咖啡店分區 — 易耗芯資料",
+  "belongsTo": "/areas/hk-coffee-map.html",
+  "_status": "unverified",
+  "_note": "具體分區名單、店舖密度、工廈區嘅實際情況會隨租金同城市更新變化，而且本站唔喺現場。正文只寫三種舖位型態嘅結構邏輯，具體分區同名單一律留待核實。",
+  "entries": {
+    "district.street": {
+      "needsVerify": "香港街舖型咖啡店密度較高嘅實際分區名單",
+      "volatility": "normal"
+    },
+    "district.upstairs": {
+      "needsVerify": "樓上舖型咖啡店集中嘅實際分區名單",
+      "volatility": "normal"
+    },
+    "district.industrial": {
+      "needsVerify": "工廈型咖啡店集中嘅實際工業區名單，同各區嘅出入管制情況",
+      "volatility": "normal"
+    },
+    "hours.industrial": {
+      "needsVerify": "工廈型咖啡店嘅一般營業日同時間（尤其週末開唔開）",
+      "volatility": "normal"
+    },
+    "hours.street": {
+      "needsVerify": "街舖型咖啡店嘅一般開門同尾單時間",
+      "volatility": "normal"
+    },
+    "access.upstairs": {
+      "needsVerify": "樓上舖常見嘅入口形式同上落方式（有冇管理處登記、電梯限制）",
+      "volatility": "low"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "title": "豆單解讀 — 對照表",
+  "belongsTo": "/coffee/reading-menu.html",
+  "_status": "principles",
+  "_note": "處理法同烘焙度嘅風味傾向係業界通用嘅粗略對照，唔係精確規則 —— 同一種處理法喺唔同產區同莊園可以差好遠。呢度寫嘅係方向性期望，方便你落單前有個預判。因為冇時效性，全部標記 volatility: low。",
+  "entries": {
+    "process.washed": {
+      "value": "水洗：酸質清晰、乾淨、產地特徵最直接",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "process.natural": {
+      "value": "日曬：果香同發酵感強、甜感厚、乾淨度通常低過水洗",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "process.honey": {
+      "value": "蜜處理：介乎兩者之間，保留部分果膠，甜感同酸質並存",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "process.anaerobic": {
+      "value": "厭氧／實驗性發酵：風味最誇張、辨識度最高，亦最偏離產地原貌",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "roast.light": {
+      "value": "淺烘：酸質高、香氣揚、產地特徵保留最多；對研磨同水溫最敏感",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "roast.medium": {
+      "value": "中烘：酸苦較平衡、甜感明顯、容錯度最高",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "roast.dark": {
+      "value": "深烘：焦糖與可可調、苦感為主、產地特徵被烘焙風味覆蓋",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "altitude.rule": {
+      "value": "海拔越高，果實成熟越慢，一般酸質越明亮、密度越高",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "menu.pricing": {
+      "needsVerify": "港深兩地精品咖啡店單品手沖嘅常見價位帶",
+      "volatility": "normal"
+    }
+  }
+}

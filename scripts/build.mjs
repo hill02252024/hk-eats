@@ -40,7 +40,19 @@ const SITE_NAME = "hk_eats";
 const SITE_LANG = "zh-HK";
 const SITE_HOST = (() => { try { return new URL(SITE_ORIGIN).host; } catch { return ""; } })();
 
-const SKIP_DIRS = new Set([".git", "node_modules", "scripts", ".github"]);
+const SKIP_DIRS = new Set([".git", "node_modules", "scripts", ".github", "assets"]);
+
+/* 四個內容分區。pillar 名同 nav 名喺呢度定義一次，
+ * 麵包屑（可見 + JSON-LD）全部由呢度生成，唔會同頁面寫嘅內容行開。 */
+const SECTIONS = {
+  guides: { pillar: "港人北上完整指南", nav: "北上實務" },
+  areas:  { pillar: "港深食飲地圖",     nav: "分區地圖" },
+  coffee: { pillar: "港深咖啡入門",     nav: "咖啡" },
+  trips:  { pillar: "香港出發行程設計", nav: "行程模板" },
+};
+
+/* /en/ 係預留目錄，本次唔填內容，亦唔對外宣告。 */
+const RESERVED_DIRS = new Set(["en"]);
 
 const errors = [];
 const warnings = [];
@@ -156,6 +168,29 @@ function checkExternalLinks(file, text) {
     }
   }
   return checked;
+}
+
+/* ------------------------------------------------------------------ */
+/* E8 唔准宣告未存在的英文版                                            */
+/* ------------------------------------------------------------------ */
+
+/* /en/ 目前係空目錄。任何 hreflang="en"、x-default 或者指向 /en/ 嘅連結
+ * 都係向搜尋引擎同讀者宣告一個唔存在嘅版本，所以一律攔。
+ * 真係有英文內容之後，先放寬呢條。 */
+function checkNoBilingualClaims(file, text) {
+  const r = rel(file);
+  const patterns = [
+    { re: /hreflang\s*=\s*["'](?!zh-HK["'])[^"']*["']/gi, why: "hreflang 指向非 zh-HK 版本" },
+    { re: /href\s*=\s*["'][^"']*\/en\/[^"']*["']/gi,      why: "連結指向未填內容嘅 /en/" },
+    { re: /<html[^>]*\blang\s*=\s*["'](?!zh-HK["'])[^"']*["']/gi, why: "html lang 唔係 zh-HK" },
+  ];
+  for (const p of patterns) {
+    p.re.lastIndex = 0;
+    let m;
+    while ((m = p.re.exec(text))) {
+      err(`E8 ${r}:${lineOf(text, m.index)} ${p.why}：「${m[0].slice(0, 60)}」→ /en/ 未有內容前唔准對外宣告雙語`);
+    }
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -345,6 +380,63 @@ function checkSvgVolatiles() {
 }
 
 /* ------------------------------------------------------------------ */
+/* 麵包屑（可見 markup + BreadcrumbList，同一個來源）                    */
+/* ------------------------------------------------------------------ */
+
+const BC_START = "<!-- build:breadcrumb -->";
+const BC_END = "<!-- /build:breadcrumb -->";
+const BC_BLOCK_RE = /[ \t]*<!-- build:breadcrumb -->[\s\S]*?<!-- \/build:breadcrumb -->\n?/g;
+
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+/* 回傳 [{ name, href|null }]；href = null 代表當前頁 */
+function breadcrumbTrail(relPath, metas) {
+  if (relPath === "index.html") return null;
+  const parts = relPath.split("/");
+  const dir = parts.length > 1 ? parts[0] : null;
+  const sec = dir && SECTIONS[dir];
+  if (!sec) return null;
+
+  const isPillar = parts[1] === "index.html";
+  const trail = [{ name: "首頁", href: "../index.html", abs: "/" }];
+  if (isPillar) {
+    trail.push({ name: sec.pillar, href: null, abs: `/${dir}/` });
+  } else {
+    trail.push({ name: sec.pillar, href: "./index.html", abs: `/${dir}/` });
+    trail.push({ name: metas["jsonld:headline"] || metas["jsonld:breadcrumbName"] || parts[1].replace(/\.html$/, ""),
+                 href: null, abs: `/${relPath}` });
+  }
+  return trail;
+}
+
+function renderBreadcrumb(trail) {
+  const items = trail.map((t) =>
+    t.href
+      ? `      <li><a href="${esc(t.href)}">${esc(t.name)}</a></li>`
+      : `      <li><span aria-current="page">${esc(t.name)}</span></li>`
+  ).join("\n");
+  return (
+    BC_START + "\n" +
+    `<nav class="breadcrumb" aria-label="麵包屑">\n` +
+    `  <ol>\n${items}\n  </ol>\n` +
+    `</nav>\n` +
+    BC_END + "\n"
+  );
+}
+
+function breadcrumbLd(trail) {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: t.name,
+      item: SITE_ORIGIN + t.abs,
+    })),
+  };
+}
+
+/* ------------------------------------------------------------------ */
 /* JSON-LD                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -376,6 +468,11 @@ function buildGraph(relPath, html, metas) {
   const types = (metas["jsonld:type"] || "").split(",").map((s) => s.trim()).filter(Boolean);
   if (!types.length) return null;
   const graph = [];
+
+  // 麵包屑唔洗喺 meta 宣告 —— 由路徑同 SECTIONS 推出嚟，
+  // 咁可見麵包屑同 BreadcrumbList 一定一致。
+  const trail = breadcrumbTrail(relPath, metas);
+  if (trail) graph.push(breadcrumbLd(trail));
 
   for (const type of types) {
     if (type === "Article") {
@@ -471,8 +568,25 @@ function checkPageData(relPath, html) {
     if (doc === false) continue;
     for (const [key, entry] of Object.entries(doc.entries || {})) {
       available.add(key);
+      // 有 needsVerify 嘅 entry 係「明示留白」，唔應該當成結構錯誤 ——
+      // 佢由 W7 獨立列出，唔喺呢度重複報。
+      if (entry && entry.needsVerify) {
+        if ("value" in entry && entry.value !== null) {
+          warn(`W3 data/${name}.json: entry「${key}」同時有 needsVerify 同 value，應該二擇其一`);
+        }
+        if (entry.verifiedOn) {
+          warn(`W3 data/${name}.json: entry「${key}」有 needsVerify 就唔應該有 verifiedOn（未核實就冇核實日期）`);
+        }
+        if ("volatility" in entry && !VALID_VOLATILITY.has(entry.volatility)) {
+          warn(`W3 data/${name}.json: entry「${key}」嘅 volatility「${entry.volatility}」唔係 low/normal/high`);
+        }
+        if (entry.volatility === "high" && !entry.volatileNote) {
+          warn(`W3 data/${name}.json: entry「${key}」係 high 但冇 volatileNote`);
+        }
+        continue;
+      }
       if (!entry || typeof entry !== "object" || !("value" in entry)) {
-        warn(`W3 data/${name}.json: entry「${key}」冇 value`);
+        warn(`W3 data/${name}.json: entry「${key}」冇 value（如果係未核實，應該用 needsVerify）`);
         continue;
       }
       if (!/^\d{4}-\d{2}$/.test(String(entry.verifiedOn || ""))) {
@@ -502,6 +616,178 @@ function checkPageData(relPath, html) {
     if (!affDoc) { err(`E6 ${relPath}: 用咗 data-aff 但讀唔到 data/affiliates.json`); break; }
     if (!affDoc.links || !affDoc.links[m[1]]) warn(`W4 ${relPath}: data-aff="${m[1]}" 喺 affiliates.json 冇對應 entry`);
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* E9 孤兒頁 / W6 點擊深度                                              */
+/* ------------------------------------------------------------------ */
+
+/* 由某頁嘅 href 解析出目標頁（repo 相對路徑），唔係內部頁就回 null */
+function resolveInternal(fromRel, href) {
+  const raw = String(href).trim();
+  if (!raw) return null;
+  if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(raw)) return null;  // 絕對／協議相對
+  if (/^(?:mailto:|tel:|#)/i.test(raw)) return null;
+  const clean = raw.split("#")[0].split("?")[0];
+  if (!clean) return null;
+  const fromDir = path.posix.dirname(fromRel);
+  let target = path.posix.normalize(path.posix.join(fromDir === "." ? "" : fromDir, clean));
+  if (target.startsWith("../")) return null;
+  if (target.endsWith("/")) target += "index.html";
+  if (!target.endsWith(".html")) return null;
+  return target;
+}
+
+function buildLinkGraph(pageList) {
+  const graph = new Map();     // from → Set(to)
+  const inbound = new Map();   // to → Set(from)
+  for (const { relPath, html } of pageList) {
+    const outs = new Set();
+    const re = /<a\b[^>]*?\bhref\s*=\s*["']([^"']*)["']/gi;
+    let m;
+    while ((m = re.exec(html))) {
+      const t = resolveInternal(relPath, m[1]);
+      if (!t || t === relPath) continue;
+      outs.add(t);
+      if (!inbound.has(t)) inbound.set(t, new Set());
+      inbound.get(t).add(relPath);
+    }
+    graph.set(relPath, outs);
+  }
+  return { graph, inbound };
+}
+
+function checkLinkStructure(pageList) {
+  const all = new Set(pageList.map((p) => p.relPath));
+  const { graph, inbound } = buildLinkGraph(pageList);
+
+  // 連到唔存在嘅頁
+  for (const [from, outs] of graph) {
+    for (const t of outs) {
+      if (!all.has(t)) err(`E9 ${from}: 連結指向唔存在嘅頁「${t}」`);
+    }
+  }
+
+  // 孤兒頁：冇任何其他頁連入
+  const orphans = [];
+  for (const relPath of all) {
+    if (relPath === "index.html") continue;   // 首頁係入口，唔需要入連
+    const inb = inbound.get(relPath);
+    if (!inb || inb.size === 0) orphans.push(relPath);
+  }
+  for (const o of orphans) err(`E9 孤兒頁：${o} 冇任何頁面連入`);
+
+  // BFS 算由首頁去每頁嘅最短點擊數
+  const depth = new Map([["index.html", 0]]);
+  const queue = ["index.html"];
+  while (queue.length) {
+    const cur = queue.shift();
+    for (const next of graph.get(cur) || []) {
+      if (!all.has(next) || depth.has(next)) continue;
+      depth.set(next, depth.get(cur) + 1);
+      queue.push(next);
+    }
+  }
+  const unreachable = [...all].filter((p) => !depth.has(p));
+  for (const u of unreachable) err(`E9 由首頁去唔到：${u}`);
+  const deep = [...depth.entries()].filter(([, d]) => d > 3);
+  for (const [p, d] of deep) warn(`W6 ${p}: 由首頁要 ${d} click 先去到（超過 3）`);
+
+  return { orphans: orphans.length, depth, inbound, graph, maxDepth: Math.max(...depth.values()) };
+}
+
+/* ------------------------------------------------------------------ */
+/* W8 cluster → pillar 內連                                             */
+/* ------------------------------------------------------------------ */
+
+/* 每篇 cluster 都要用一個「含 pillar 關鍵字」嘅 anchor 連返所屬 pillar，
+ * 而且要喺頁面上半部 —— 咁樣讀者同爬蟲都容易由文章行返上去主題頁。 */
+function checkPillarLinks(pageList) {
+  const results = [];
+  for (const { relPath, html } of pageList) {
+    const parts = relPath.split("/");
+    if (parts.length < 2 || parts[1] === "index.html") continue;
+    const sec = SECTIONS[parts[0]];
+    if (!sec) continue;
+
+    const bodyM = /<article[^>]*>([\s\S]*?)<\/article>/i.exec(html);
+    // 麵包屑一定喺最頂、一定連住 pillar，如果計佢，呢條檢查就永遠通過 ——
+    // 要驗嘅係正文有冇真嘅內連，所以要先剝走麵包屑同廣告位。
+    const body = (bodyM ? bodyM[1] : html)
+      .replace(BC_BLOCK_RE, "")
+      .replace(/<nav class="breadcrumb"[\s\S]*?<\/nav>/gi, "");
+    BC_BLOCK_RE.lastIndex = 0;
+    const half = Math.floor(body.length / 2);
+
+    // 正文內連總數（指向站內其他頁）
+    const allRe = /<a\b[^>]*?\bhref\s*=\s*["']([^"']*)["']/gi;
+    let am, bodyLinks = 0;
+    while ((am = allRe.exec(body))) {
+      const t = resolveInternal(relPath, am[1]);
+      if (t && t !== relPath) bodyLinks++;
+    }
+    if (bodyLinks < 3) warn(`W8 ${relPath}: 正文內連只有 ${bodyLinks} 條，要求 3–5 條`);
+    else if (bodyLinks > 5) warn(`W8 ${relPath}: 正文內連有 ${bodyLinks} 條，超出 3–5 條`);
+
+    const re = /<a\b[^>]*?\bhref\s*=\s*["']([^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi;
+    let m, best = null, total = 0;
+    while ((m = re.exec(body))) {
+      const target = resolveInternal(relPath, m[1]);
+      if (target !== `${parts[0]}/index.html`) continue;
+      total++;
+      const text = stripTags(m[2]);
+      const hasKeyword = text.includes(sec.pillar);
+      const inTopHalf = m.index < half;
+      if (!best || (hasKeyword && inTopHalf && !(best.hasKeyword && best.inTopHalf))) {
+        best = { text, hasKeyword, inTopHalf, at: m.index };
+      }
+    }
+
+    if (total === 0) {
+      warn(`W8 ${relPath}: 完全冇連返所屬 pillar（${parts[0]}/index.html）`);
+    } else if (!best.hasKeyword) {
+      warn(`W8 ${relPath}: 連返 pillar 嘅 anchor「${best.text}」唔含 pillar 關鍵字「${sec.pillar}」`);
+    } else if (!best.inTopHalf) {
+      warn(`W8 ${relPath}: 含關鍵字嘅 pillar 連結喺頁面下半部（位置 ${best.at}/${body.length}）`);
+    }
+    results.push({ relPath, total, bodyLinks, ok: !!best && best.hasKeyword && best.inTopHalf && bodyLinks >= 3 && bodyLinks <= 5 });
+  }
+  return results;
+}
+
+/* ------------------------------------------------------------------ */
+/* W7 未核實標記                                                        */
+/* ------------------------------------------------------------------ */
+
+const NEEDS_VERIFY_RE = /\{\{\s*NEEDS_VERIFY\s*:\s*([^}]*)\}\}/g;
+
+function collectNeedsVerify(pageList) {
+  const found = [];
+  for (const { relPath, html } of pageList) {
+    NEEDS_VERIFY_RE.lastIndex = 0;
+    let m;
+    while ((m = NEEDS_VERIFY_RE.exec(html))) {
+      found.push({ where: `${relPath}:${lineOf(html, m.index)}`, what: m[1].trim(), kind: "HTML" });
+    }
+  }
+  const dataDir = path.join(ROOT, "data");
+  const walkJson = (dir) => {
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, ent.name);
+      if (ent.isDirectory()) { walkJson(full); continue; }
+      if (!ent.name.endsWith(".json")) continue;
+      let doc;
+      try { doc = JSON.parse(fs.readFileSync(full, "utf8")); } catch { continue; }
+      for (const [key, entry] of Object.entries((doc && doc.entries) || {})) {
+        if (entry && entry.needsVerify) {
+          found.push({ where: `${rel(full)} → ${key}`, what: entry.needsVerify, kind: "data" });
+        }
+      }
+    }
+  };
+  if (fs.existsSync(dataDir)) walkJson(dataDir);
+  for (const f of found) warn(`W7 待核實（${f.kind}）${f.where}：${f.what}`);
+  return found;
 }
 
 /* ------------------------------------------------------------------ */
@@ -544,20 +830,22 @@ for (const file of [...htmlFiles, ...jsFiles]) {
     extLinks += checkExternalLinks(file, text);
     checkExternalImages(file, text);
     checkAdOrdering(file, text);
+    checkNoBilingualClaims(file, text);
   }
   checkAdNetworkCode(file, text);
 }
-console.log(`[1/6] 外部連結白名單：掃 ${htmlFiles.length} 頁，${extLinks} 條絕對連結`);
-console.log(`[2/6] 外部圖片 / 廣告代碼掃描：${htmlFiles.length + jsFiles.length} 個檔`);
+console.log(`[1/8] 外部連結白名單 + 雙語宣告：掃 ${htmlFiles.length} 頁，${extLinks} 條絕對連結`);
+console.log(`[2/8] 外部圖片 / 廣告代碼掃描：${htmlFiles.length + jsFiles.length} 個檔`);
 
 const sizeChecks = checkAdSlotSizes();
-console.log(`[3/6] 廣告位尺寸對帳：${sizeChecks} 組高度同 ad-slots.json 一致`);
+console.log(`[3/8] 廣告位尺寸對帳：${sizeChecks} 組高度同 ad-slots.json 一致`);
 
 const svgScanned = checkSvgVolatiles();
 console.log(`      SVG 易耗值掃描：${svgScanned} 個檔`);
 
 const pages = [];
 let svgCount = 0;
+let bcCount = 0;
 for (const file of htmlFiles) {
   const relPath = rel(file);
   let html = fs.readFileSync(file, "utf8");
@@ -569,6 +857,24 @@ for (const file of htmlFiles) {
 
   html = html.replace(LD_BLOCK_RE, "");
   const metas = readMetas(html);
+
+  // 麵包屑：一步完成，唔好「先剝後補」——剝完先發現補唔到，就會寫低一個
+  // 連錨點都冇嘅檔，之後永遠 build 唔返。
+  const trail = breadcrumbTrail(relPath, metas);
+  if (trail) {
+    const block = renderBreadcrumb(trail);
+    if (BC_BLOCK_RE.test(html)) {
+      BC_BLOCK_RE.lastIndex = 0;
+      html = html.replace(BC_BLOCK_RE, block);
+      bcCount++;
+    } else if (/<!--\s*breadcrumb\s*-->/.test(html)) {
+      html = html.replace(/[ \t]*<!--\s*breadcrumb\s*-->\n?/, block);
+      bcCount++;
+    } else {
+      err(`E9 ${relPath}: 搵唔到 <!-- breadcrumb --> 錨點，麵包屑注入唔到`);
+    }
+    BC_BLOCK_RE.lastIndex = 0;
+  }
   const doc = buildGraph(relPath, html, metas);
   let injected = false;
   if (doc) {
@@ -581,23 +887,43 @@ for (const file of htmlFiles) {
   }
 
   if (html !== before) fs.writeFileSync(file, html, "utf8");
-  pages.push({ relPath, metas, injected });
+  pages.push({ relPath, metas, injected, html });
 }
-console.log(`[4/6] SVG 注入：${svgCount} 張；JSON-LD 注入：${pages.filter((p) => p.injected).length}/${pages.length} 頁`);
+console.log(`[4/8] SVG 注入 ${svgCount} 張；麵包屑注入 ${bcCount} 頁；JSON-LD 注入 ${pages.filter((p) => p.injected).length}/${pages.length} 頁`);
 
 for (const file of htmlFiles) checkPageData(rel(file), fs.readFileSync(file, "utf8"));
 const articleCount = htmlFiles.filter((f) => path.basename(f) !== "index.html").length;
-console.log(`[5/6] 文章 ↔ data 對應檢查：${articleCount} 篇文章`);
+console.log(`[5/8] 文章 ↔ data 對應檢查：${articleCount} 篇文章`);
 
-writeSitemap(pages);
+const linkStats = checkLinkStructure(pages);
+console.log(`[6/8] 內連結構：${pages.length} 頁，孤兒 ${linkStats.orphans} 個，最深 ${linkStats.maxDepth} click`);
+
+const pillarLinks = checkPillarLinks(pages);
+console.log(`      cluster → pillar 內連：${pillarLinks.filter((r) => r.ok).length}/${pillarLinks.length} 篇合格`);
+
+const nv = collectNeedsVerify(pages);
+console.log(`[7/8] 待核實標記：${nv.length} 個（HTML ${nv.filter((x) => x.kind === "HTML").length} / data ${nv.filter((x) => x.kind === "data").length}）`);
+
+const sitemapPages = pages.filter((p) => !RESERVED_DIRS.has(p.relPath.split("/")[0]));
+if (sitemapPages.length !== pages.length) {
+  console.log(`      sitemap 排除預留目錄：${pages.length - sitemapPages.length} 頁`);
+}
+writeSitemap(sitemapPages);
 writeRobots();
-console.log(`[6/6] sitemap.xml（${pages.length} 條 URL）、robots.txt：已生成`);
+console.log(`[8/8] sitemap.xml（${sitemapPages.length} 條 URL）、robots.txt：已生成`);
 
 console.log("");
 console.log("生成／改寫嘅檔案：");
 console.log("  sitemap.xml");
 console.log("  robots.txt");
 for (const p of pages) if (p.injected) console.log(`  ${p.relPath}`);
+
+console.log("");
+console.log("由首頁計嘅點擊深度：");
+for (const [p, d] of [...linkStats.depth.entries()].sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]))) {
+  const inb = linkStats.inbound.get(p);
+  console.log(`  ${String(d)} click  ${p.padEnd(34)} 入連 ${inb ? inb.size : 0} 條  出連 ${(linkStats.graph.get(p) || new Set()).size} 條`);
+}
 
 if (warnings.length) { console.log(""); for (const m of warnings) console.log(`WARNING ${m}`); }
 if (errors.length) { console.log(""); for (const m of errors) console.error(`ERROR   ${m}`); }

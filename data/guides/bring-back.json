@@ -1,0 +1,44 @@
+{
+  "title": "帶咩返香港 — 易耗芯資料",
+  "belongsTo": "/guides/bring-back.html",
+  "_status": "unverified",
+  "_note": "香港入境嘅免稅額、申報門檻同許可證要求全部係法定數字，會修訂，而且寫錯嘅後果係讀者被罰。編輯冇提供核實數值，所以呢度一項都唔填，全部用 needsVerify 標記，由頁面顯示待核實。正文只寫類別邏輯，唔寫數。",
+  "entries": {
+    "duty.alcohol": {
+      "needsVerify": "香港入境旅客嘅酒類免稅限額（數量、酒精濃度門檻、年齡限制）",
+      "volatility": "normal"
+    },
+    "duty.tobacco": {
+      "needsVerify": "香港入境旅客嘅煙草製品免稅限額（香煙／雪茄／煙絲各自數量）",
+      "volatility": "normal"
+    },
+    "duty.ageLimit": {
+      "needsVerify": "享有煙酒免稅優惠嘅最低年齡",
+      "volatility": "low"
+    },
+    "duty.dutiableList": {
+      "needsVerify": "香港四類應課稅品嘅完整清單",
+      "volatility": "low"
+    },
+    "declare.cash": {
+      "needsVerify": "大額現金或不記名票據嘅申報門檻金額",
+      "volatility": "normal"
+    },
+    "permit.meat": {
+      "needsVerify": "肉類及家禽製品入境嘅重量上限同許可證要求",
+      "volatility": "normal"
+    },
+    "permit.plant": {
+      "needsVerify": "植物、種子、鮮果入境嘅許可證要求",
+      "volatility": "normal"
+    },
+    "permit.medicine": {
+      "needsVerify": "個人自用藥物（尤其含受管制成分）嘅入境數量同處方要求",
+      "volatility": "normal"
+    },
+    "penalty.general": {
+      "needsVerify": "未申報應課稅品或違禁品嘅法定後果",
+      "volatility": "low"
+    }
+  }
+}

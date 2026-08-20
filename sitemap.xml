@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://example.github.io/hk_eats/areas/hk-coffee-map.html</loc>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
     <loc>https://example.github.io/hk_eats/areas/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/areas/shenzhen-malls.html</loc>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/areas/sz-coffee-map.html</loc>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/coffee/brewing-basics.html</loc>
+    <lastmod>2026-08-20</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/coffee/grinder-guide.html</loc>
@@ -10,15 +26,23 @@
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/coffee/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/coffee/reading-menu.html</loc>
+    <lastmod>2026-08-20</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/guides/border-crossings.html</loc>
     <lastmod>2026-08-19</lastmod>
   </url>
   <url>
+    <loc>https://example.github.io/hk_eats/guides/bring-back.html</loc>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
     <loc>https://example.github.io/hk_eats/guides/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-20</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/guides/payment-setup.html</loc>
@@ -26,10 +50,22 @@
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/trips/day-trip.html</loc>
+    <lastmod>2026-08-20</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/trips/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/trips/overnight.html</loc>
+    <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/trips/with-family.html</loc>
+    <lastmod>2026-08-20</lastmod>
   </url>
 </urlset>

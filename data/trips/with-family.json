@@ -1,0 +1,25 @@
+{
+  "title": "帶長輩或小朋友 — 易耗芯資料",
+  "belongsTo": "/trips/with-family.html",
+  "_status": "unverified",
+  "_note": "無障礙設施、電梯位置、廁所分佈同兒童票規則，係現場設施同營運規定，本站冇能力核實。行程節奏設計本身係本站設計，寫喺正文。",
+  "entries": {
+    "access.ports": {
+      "needsVerify": "各口岸嘅步行距離、有冇電梯／扶手電梯、有冇輪椅通道",
+      "volatility": "low"
+    },
+    "access.toilets": {
+      "needsVerify": "各口岸及主要商圈嘅廁所分佈同育嬰設施",
+      "volatility": "normal"
+    },
+    "fare.child": {
+      "needsVerify": "兒童及長者喺跨境交通同深圳地鐵嘅票價優惠同年齡／身高門檻",
+      "volatility": "normal"
+    },
+    "docs.child": {
+      "needsVerify": "小童過關所需嘅證件同隨行人要求",
+      "volatility": "high",
+      "volatileNote": "小童出入境所需證件同隨行安排屬制度性規定，會調整，亦可能因家庭情況而異。出發前應向入境事務部門或旅行社直接確認。"
+    }
+  }
+}

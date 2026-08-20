@@ -1,0 +1,26 @@
+{
+  "title": "北上過夜兩日 — 易耗芯資料",
+  "belongsTo": "/trips/overnight.html",
+  "_status": "unverified",
+  "_note": "境外旅客住宿登記嘅規定、酒店對證件嘅要求、行李寄存嘅可得性，全部係會變嘅制度性資料，本站冇核實。行程結構本身係本站設計，寫喺正文。",
+  "entries": {
+    "lodging.registration": {
+      "needsVerify": "境外旅客喺內地住宿嘅登記要求（酒店代辦定要自行申報、需要咩證件）",
+      "volatility": "high",
+      "volatileNote": "住宿登記同證件要求屬制度性規定，唔同城市同酒店嘅執行方式可能有差異，亦會調整。出發前應以你訂嘅住宿方直接確認為準。"
+    },
+    "lodging.foreignerAccept": {
+      "needsVerify": "接待境外旅客嘅住宿類型限制（邊類住宿可以接待）",
+      "volatility": "high",
+      "volatileNote": "住宿登記同證件要求屬制度性規定，唔同城市同酒店嘅執行方式可能有差異，亦會調整。出發前應以你訂嘅住宿方直接確認為準。"
+    },
+    "luggage.storage": {
+      "needsVerify": "口岸、地鐵站同商場嘅行李寄存服務可得性同收費方式",
+      "volatility": "normal"
+    },
+    "checkin.hours": {
+      "needsVerify": "一般入住與退房時間，同提早寄存行李嘅慣例",
+      "volatility": "normal"
+    }
+  }
+}

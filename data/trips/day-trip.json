@@ -1,0 +1,28 @@
+{
+  "title": "深圳一日遊骨架 — 易耗芯資料",
+  "belongsTo": "/trips/day-trip.html",
+  "_status": "mixed",
+  "_note": "段落劃分同緩衝比例係本站嘅設計，唔係外部事實，所以直接寫喺正文。實際時長（過關等候、車程）係現實世界嘅量度值，本站冇核實，一律留待核實 —— 讀者應該用自己量到嘅時間填。",
+  "entries": {
+    "duration.clearance.weekday": {
+      "needsVerify": "平日各主要口岸嘅一般過關等候時間區間",
+      "volatility": "normal"
+    },
+    "duration.clearance.weekend": {
+      "needsVerify": "週末及長假期各主要口岸嘅過關等候時間區間",
+      "volatility": "normal"
+    },
+    "duration.hkSide": {
+      "needsVerify": "由主要出發區域（新界東／新界西／九龍）到各口岸嘅一般車程",
+      "volatility": "low"
+    },
+    "duration.szSide": {
+      "needsVerify": "由各口岸到主要商圈嘅一般車程",
+      "volatility": "low"
+    },
+    "lastEntry.byPort": {
+      "needsVerify": "各口岸返港方向嘅最遲進入時間（同公布嘅服務結束時間可能唔同）",
+      "volatility": "normal"
+    }
+  }
+}

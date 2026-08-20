@@ -14,3 +14,6 @@ npm-debug.log*
 # 本機預覽產生嘅嘢
 .cache/
 *.log
+
+# 無頭瀏覽器測試嘅臨時 profile
+.chrome-profile/

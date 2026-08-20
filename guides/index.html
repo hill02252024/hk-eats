@@ -3,38 +3,114 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>北上實務 — hk_eats</title>
-<meta name="description" content="過關、支付一類操作性主題。寫可以自己套用的判斷邏輯，而唔係逐項抄現行規則。">
-<link rel="alternate" hreflang="zh-HK" href="../guides/index.html">
-<link rel="alternate" hreflang="en" href="../en/guides/index.html">
-<link rel="alternate" hreflang="x-default" href="../guides/index.html">
-<meta name="jsonld:type" content="ItemList">
-<meta name="jsonld:headline" content="北上實務">
-<meta name="jsonld:description" content="過關、支付一類操作性主題。寫可以自己套用的判斷邏輯，而唔係逐項抄現行規則。">
-<meta name="jsonld:datePublished" content="2026-08-19">
-<meta name="jsonld:dateModified" content="2026-08-19">
-<meta name="jsonld:itemListName" content="北上實務文章">
-<meta name="jsonld:itemList" content="深圳六大口岸點揀|港人北上支付設定：先預留七個工作天">
+<title>港人北上完整指南 — hk_eats</title>
+<meta name="description" content="由出發前嘅準備、揀口岸、支付設定，去到返程帶嘢過關，一份由頭到尾嘅北上操作指南。寫判斷邏輯，唔寫會過期嘅清單。">
+<meta name="jsonld:type" content="Article,ItemList,FAQPage">
+<meta name="jsonld:headline" content="港人北上完整指南">
+<meta name="jsonld:description" content="北上全流程：出發前準備、口岸選擇、支付設定、返程帶嘢。">
+<meta name="jsonld:datePublished" content="2026-08-20">
+<meta name="jsonld:dateModified" content="2026-08-20">
+<meta name="jsonld:section" content="北上實務">
+<meta name="jsonld:itemListName" content="北上實務全部文章">
+<meta name="jsonld:itemList" content="深圳六大口岸點揀|港人北上支付設定|帶咩返香港">
 <link rel="stylesheet" href="../css/main.css">
 <script src="../js/ads.js" defer></script>
 <!-- build:jsonld -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "北上實務文章",
-  "itemListOrder": "https://schema.org/ItemListOrderAscending",
-  "numberOfItems": 2,
-  "itemListElement": [
+  "@graph": [
     {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "深圳六大口岸點揀"
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://example.github.io/hk_eats/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "港人北上完整指南",
+          "item": "https://example.github.io/hk_eats/guides/"
+        }
+      ]
     },
     {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "港人北上支付設定：先預留七個工作天"
+      "@type": "Article",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://example.github.io/hk_eats/guides/"
+      },
+      "headline": "港人北上完整指南",
+      "description": "北上全流程：出發前準備、口岸選擇、支付設定、返程帶嘢。",
+      "inLanguage": "zh-HK",
+      "datePublished": "2026-08-20",
+      "dateModified": "2026-08-20",
+      "articleSection": "北上實務",
+      "author": {
+        "@type": "Organization",
+        "name": "hk_eats",
+        "url": "https://example.github.io/hk_eats/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "hk_eats",
+        "url": "https://example.github.io/hk_eats/"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "北上實務全部文章",
+      "itemListOrder": "https://schema.org/ItemListOrderAscending",
+      "numberOfItems": 3,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "深圳六大口岸點揀"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "港人北上支付設定"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "帶咩返香港"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "第一次北上，應該由邊篇睇起？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "由支付設定開始，因為佢係唯一一個有前置時間、臨急補唔到嘅步驟。搞掂之後先睇口岸，最後出發前一兩日再睇返程要帶咩。呢個順序唔係按重要性排，係按「幾時做已經太遲」排。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "一日來回同過夜，準備上有咩分別？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "一日來回嘅風險集中喺返程時間——口岸收工、人流高峰、體力。過夜就多咗住宿登記同第二日行程彈性嘅問題，但反而冇咁趕。兩者共同嘅前置準備一樣：支付同上網。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "呢度嘅資料幾時更新？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "每個會變嘅數值都獨立標明最後核實月份。結構性資料（地理位置、接駁路線）每十二個月覆核一次，一般資料（服務時間、費率）每六個月，未定案嘅政策則長期掛住變動中標示。過期未覆核，頁面會自己講出嚟。"
+          }
+        }
+      ]
     }
   ]
 }
@@ -58,33 +134,122 @@
 
 <main id="main">
 <div class="wrap">
-<h1>北上實務</h1>
+<!-- build:breadcrumb -->
+<nav class="breadcrumb" aria-label="麵包屑">
+  <ol>
+      <li><a href="../index.html">首頁</a></li>
+      <li><span aria-current="page">港人北上完整指南</span></li>
+  </ol>
+</nav>
+<!-- /build:breadcrumb -->
 
-<p class="lede">呢個分區處理嘅係操作性問題：點過關、點畀錢、點連網、點安排時間。呢類主題最容易寫得爛，因為規則同班次時時變。所以我哋嘅寫法係先寫結構——點解係咁樣設計、有咩取捨——再將會變嘅數字獨立抽出。</p>
+<h1>港人北上完整指南</h1>
+<p class="meta-line">北上實務 · 2026-08-20</p>
 
-<h2>編輯原則</h2>
+<p class="lede">北上唔難，難喺順序。大部分行程出事，唔係因為某一步做錯，而係因為次序排錯——臨出發先開錢包、揀完口岸先發現返程收咗、買完嘢先諗過唔過到關。呢一頁由頭到尾行一次全流程，每一步再連去講得深啲嗰篇。</p>
 
-<ul>
-  <li><strong>寫判斷方法，唔寫清單。</strong>與其列出所有口岸嘅開放時間，不如講清楚點樣由出發點同目的地倒推應該行邊個。前者三個月後就過期，後者可以用好多年。</li>
-  <li><strong>會變嘅數字唔入正文。</strong>時間、限額、費率一律放喺獨立資料檔，帶核實月份，頁面自動顯示。</li>
-  <li><strong>唔迴避唔確定。</strong>如果一項資料我哋未覆核，就會直接寫明係示範值，而唔係當佢係事實咁擺。</li>
-  <li><strong>寫返程。</strong>大部分跨境指南只寫去程，但出事嘅通常係返程。</li>
-</ul>
+<h2>全流程一覽</h2>
 
-<h2>文章</h2>
+<p>由決定去到返到屋企，實際上得四個決策點。其餘所有嘢都係呢四點嘅衍生。</p>
 
-<ul class="post-list">
+<ol>
+  <li><strong>出發前：唔補得返嘅嘢。</strong>支付認證要審核時間、上網要事先安排。呢兩樣現場補唔到。</li>
+  <li><strong>過關：揀口岸。</strong>由出發點同目的地倒推，唔係由習慣倒推。</li>
+  <li><strong>喺深圳：畀錢。</strong>用邊個容器，同埋唔好觸發風控。</li>
+  <li><strong>返程：帶咩過關。</strong>類別比金額重要，返程時間比去程更難計。</li>
+</ol>
+
+<p>四點入面，第一點嘅失敗成本最高，因為佢係唯一一個「今日唔做，出發日補唔返」嘅步驟。所以本指南嘅順序刻意由佢開始，唔係由口岸開始。</p>
+
+<h2>一、出發前：兩樣要提早搞</h2>
+
+<p><strong>支付認證。</strong>香港錢包嘅實名認證需要審核，唔係即開即用。臨行前一晚開，好大機會到咗深圳仲係一個未驗證嘅錢包，掃咩都唔得。具體幾耐、綁邊種卡、有咩限額，睇 <a href="./payment-setup.html">港人北上支付設定</a>。</p>
+
+<p><strong>上網。</strong>所有掃碼支付都建基於有網。冇網嘅時候你唔止畀唔到錢，連地圖、叫車、搵路都做唔到。呢一項唔算複雜，但佢係單點故障——電話冇電同電話冇網，後果一樣。</p>
+
+<p>其餘嘢——換唔換錢、帶唔帶現金、搭邊班車——全部可以出發當日先決定，唔會因為遲咗而做唔到。</p>
+
+<h2>二、過關：口岸係轉車位，唔係目的地</h2>
+
+<p>過關嘅總時間由三段組成：香港側去口岸、過關本身、深圳側去目的地。過關本身最難壓縮，真正慳到嘅係頭尾兩段。所以問題唔係「邊個口岸最快」，係「邊個口岸令我頭尾兩段加埋最短」。</p>
+
+<p>六個主要口岸嘅服務範圍幾乎唔重疊：東鐵沿綫對羅湖同福田，新界西對深圳灣，新界東北對蓮塘，深夜只剩皇崗。逐個口岸嘅位置、兩側接駁、服務時間，同埋刷臉通關、港鐵特惠站、新皇崗口岸嘅最新狀態，全部喺 <a href="./border-crossings.html">深圳六大口岸點揀</a>。</p>
+
+<p>要記住嘅一條原則：<strong>返程比去程更值得計。</strong>去程你有得揀時間，返程通常冇；而且口岸有收工時間，遲咗就唔係等耐啲咁簡單。</p>
+
+<h2>三、喺深圳：畀錢係容器問題</h2>
+
+<p>北上畀唔到錢，好少係因為冇錢，係因為錢擺錯咗容器。香港錢包、內地錢包、實體卡、現金，四樣嘢喺唔同場景嘅接受度可以差天共地。</p>
+
+<p>最多人中招嘅一點：香港版嘅支付寶同內地版係兩套獨立系統，介面似樣但唔通用。喺細舖掃唔到，好多時唔係你設定錯，係嗰個商戶根本冇開通接收境外錢包。</p>
+
+<p>第二個容易忽略嘅係風控。用找換店代充值、短時間頻繁大額增值、頻繁換綁多張卡——呢三樣都會令帳戶凍結，而你人喺內地嗰陣被凍，處理成本遠大過你想慳嗰啲手續費。</p>
+
+<h2>四、返程：類別先於金額</h2>
+
+<p>好多人以為過關被查係睇你買咗幾多錢，其實主要係睇你帶緊咩類別。同一個價錢，一部電子產品同一包肉類製品，風險完全唔同級。</p>
+
+<p>返程仲有一個時間陷阱：你會喺人流最集中嘅時段、拎住最多嘢、體力最差嘅狀態下過關。所以返程規劃唔應該係去程嘅倒轉，而係一個獨立決定。詳細嘅類別分野同常見伏位，睇 <a href="./bring-back.html">帶咩返香港</a>。</p>
+
+<h2>全部文章</h2>
+
+<ul class="cluster-list">
   <li>
-    <a href="./border-crossings.html">深圳六大口岸點揀？由出發點倒推的選關邏輯</a>
-    <p>六個口岸的地理位置、兩側接駁同服務時間，加上刷臉通關、港鐵特惠站扣減同新皇崗口岸的未定案狀態。</p>
+    <span class="step">01</span>
+    <a href="./payment-setup.html">港人北上支付設定：先預留七個工作天</a>
+    <p>審核時間、AlipayHK 同大陸支付寶嘅分別、年度免手續費限額、綁卡限制，同三條會令帳戶凍結嘅風控紅線。出發前最早要做嘅一步。</p>
   </li>
   <li>
-    <a href="./payment-setup.html">港人北上支付設定：先預留七個工作天</a>
-    <p>認證要七個工作天、AlipayHK 唔等於大陸支付寶、WeChat Pay HK 有年度免手續費限額、大陸支付寶可綁香港卡但唔可以充值，以及三條會令帳戶凍結嘅風控紅線。</p>
+    <span class="step">02</span>
+    <a href="./border-crossings.html">深圳六大口岸點揀？由出發點倒推的選關邏輯</a>
+    <p>六個口岸嘅地理位置、兩側接駁、服務時間，加上刷臉通關、港鐵特惠站扣減，同新皇崗口岸嘅未定案狀態。</p>
+  </li>
+  <li>
+    <span class="step">03</span>
+    <a href="./bring-back.html">帶咩返香港：類別先於金額</a>
+    <p>返程過關嘅分類邏輯、香港入境嘅免稅概念、常見伏位，同綠色紅色通道嘅實際分別。</p>
   </li>
 </ul>
 
 <div class="ad-slot" data-ad-slot="ad-hub-grid"></div>
+
+<h2>呢個分區點寫</h2>
+
+<ul>
+  <li><strong>寫判斷方法，唔寫清單。</strong>與其列晒所有口岸嘅開放時間，不如講清楚點樣由出發點倒推。前者三個月後就過期，後者可以用好多年。</li>
+  <li><strong>會變嘅數字唔入正文。</strong>時間、限額、費率一律放喺獨立資料檔，帶核實月份同變動速度，頁面自動顯示。核實過期會自己出提示。</li>
+  <li><strong>唔確定就標明，唔填數。</strong>未核實嘅數值會以待核實標記出現，唔會用一個似層層嘅數字填位。</li>
+  <li><strong>寫返程。</strong>大部分跨境指南只寫去程，但出事嘅通常係返程。</li>
+</ul>
+
+<h2>幾個常見誤解</h2>
+
+<ul>
+  <li><strong>「揀最近嘅口岸就最快」</strong>——近嘅係香港側距離，過關後嘅車程可能長好多。</li>
+  <li><strong>「有支付寶就得」</strong>——要睇係香港版定內地版，兩者唔通用。</li>
+  <li><strong>「所有口岸都通宵」</strong>——六個之中得一個係 24 小時。</li>
+  <li><strong>「買嘢唔超值就唔使報」</strong>——決定要唔要申報嘅係類別，唔係價錢。</li>
+</ul>
+
+<section class="faq">
+  <h2>常見問題</h2>
+
+  <h3 data-faq-q>第一次北上，應該由邊篇睇起？</h3>
+  <div data-faq-a>
+    <p>由支付設定開始，因為佢係唯一一個有前置時間、臨急補唔到嘅步驟。搞掂之後先睇口岸，最後出發前一兩日再睇返程要帶咩。呢個順序唔係按重要性排，係按「幾時做已經太遲」排。</p>
+  </div>
+
+  <h3 data-faq-q>一日來回同過夜，準備上有咩分別？</h3>
+  <div data-faq-a>
+    <p>一日來回嘅風險集中喺返程時間——口岸收工、人流高峰、體力。過夜就多咗住宿登記同第二日行程彈性嘅問題，但反而冇咁趕。兩者共同嘅前置準備一樣：支付同上網。</p>
+  </div>
+
+  <h3 data-faq-q>呢度嘅資料幾時更新？</h3>
+  <div data-faq-a>
+    <p>每個會變嘅數值都獨立標明最後核實月份。結構性資料（地理位置、接駁路線）每十二個月覆核一次，一般資料（服務時間、費率）每六個月，未定案嘅政策則長期掛住變動中標示。過期未覆核，頁面會自己講出嚟。</p>
+  </div>
+</section>
+
 </div>
 </main>
 

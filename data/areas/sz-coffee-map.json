@@ -1,0 +1,37 @@
+{
+  "title": "深圳咖啡店分區 — 易耗芯資料",
+  "belongsTo": "/areas/sz-coffee-map.html",
+  "_status": "unverified",
+  "_note": "深圳嘅咖啡聚落、本土連鎖品牌、園區出入規則變動快，而且本站唔喺現場，可核實程度比香港嗰篇更低。正文只寫商場／園區／街區三種載體嘅結構邏輯，所有具體名單留待核實。",
+  "entries": {
+    "venue.mall": {
+      "needsVerify": "商場型咖啡集中嘅實際商圈名單，同一般所在樓層",
+      "volatility": "normal"
+    },
+    "venue.park": {
+      "needsVerify": "創意園區／文創園型咖啡聚落嘅實際名單同所在區",
+      "volatility": "normal"
+    },
+    "venue.street": {
+      "needsVerify": "街區型獨立咖啡店集中嘅實際街區名單",
+      "volatility": "normal"
+    },
+    "chain.local": {
+      "needsVerify": "深圳本土連鎖咖啡品牌嘅名單同定位（價位帶、主打產品）",
+      "volatility": "high",
+      "volatileNote": "內地連鎖咖啡市場正處於高速擴張同洗牌期，品牌名單、門店數同定位變動非常快，任何名單都應該當成短期快照。"
+    },
+    "access.park": {
+      "needsVerify": "創意園區嘅出入管制、開放時間同泊車安排",
+      "volatility": "normal"
+    },
+    "hours.mall": {
+      "needsVerify": "商場型咖啡店嘅一般營業時間，同商場整體開關門時間嘅關係",
+      "volatility": "normal"
+    },
+    "payment.gap": {
+      "needsVerify": "獨立小店對境外錢包嘅接受程度（有冇明顯集中喺某類載體）",
+      "volatility": "normal"
+    }
+  }
+}

@@ -18,7 +18,10 @@
  *         "value": "06:30–24:00",          // 必需；字串／數字／陣列
  *         "verifiedOn": "2026-08",          // 必需；YYYY-MM
  *         "volatility": "low"|"normal"|"high",   // 可選，預設 normal
- *         "volatileNote": "…"               // volatility=high 時的橫幅文案
+ *         "volatileNote": "…",              // volatility=high 時的橫幅文案
+ *         "needsVerify": "…"                // 未核實：呢個 entry 有 needsVerify
+ *                                           // 就唔要 value / verifiedOn，
+ *                                           // 頁面會出 {{NEEDS_VERIFY: …}} 標記
  *       }
  *     }
  *   }
@@ -108,6 +111,19 @@
     el.removeAttribute("aria-busy");
   }
 
+  /* ---- 未核實標記：寧願留白，唔好作 ---- */
+
+  function fillNeedsVerify(el, description) {
+    el.textContent = "";
+    var mark = document.createElement("span");
+    mark.className = "needs-verify";
+    mark.setAttribute("role", "note");
+    mark.textContent = "{{NEEDS_VERIFY: " + description + "}}";
+    el.appendChild(mark);
+    el.setAttribute("data-verify-state", "pending");
+    el.removeAttribute("aria-busy");
+  }
+
   /* ---- 「正在變動中」橫幅：放喺區塊最頂 ---- */
 
   function renderVolatileBanner(block, notes) {
@@ -132,7 +148,7 @@
 
   /* ---- 註腳：核實月份 + 「可能已過時」警告 ---- */
 
-  function renderFooter(block, oldest, worst, now, missingKeys) {
+  function renderFooter(block, oldest, worst, now, missingKeys, unverifiedKeys) {
     var foot = document.createElement("p");
     foot.className = "freshness";
 
@@ -140,6 +156,13 @@
     label.className = "verified";
     label.textContent = oldest ? "資料核實於 " + oldest.raw : "資料核實日期不詳";
     foot.appendChild(label);
+
+    if (unverifiedKeys && unverifiedKeys.length) {
+      var uv = document.createElement("span");
+      uv.className = "unverified-note";
+      uv.textContent = "（" + unverifiedKeys.length + " 項待核實，未填數值）";
+      foot.appendChild(uv);
+    }
 
     if (missingKeys.length) {
       var miss = document.createElement("span");
@@ -180,11 +203,18 @@
     var worst = null;       // 超出各自門檻最多嗰項
     var notes = [];         // high 類嘅 volatileNote，去重
     var missing = [];
+    var unverified = [];    // 有 needsVerify 嘅 key
 
     Array.prototype.forEach.call(targets, function (el) {
       var key = el.getAttribute("data-fresh-key");
       var entry = entries[key];
-      if (!entry || typeof entry.value === "undefined") {
+      if (entry && entry.needsVerify) {
+        // 未核實：唔當佢係缺失，亦唔計入核實月份 —— 佢係一個明示嘅空位。
+        fillNeedsVerify(el, entry.needsVerify);
+        unverified.push(key);
+        return;
+      }
+      if (!entry || typeof entry.value === "undefined" || entry.value === null) {
         missing.push(key);
         el.textContent = "—";
         return;
@@ -222,7 +252,11 @@
       block.classList.add("is-volatile");
       renderVolatileBanner(block, notes);
     }
-    renderFooter(block, oldest, worst, now, missing);
+    if (unverified.length) {
+      block.classList.add("is-unverified");
+      block.setAttribute("data-unverified-count", String(unverified.length));
+    }
+    renderFooter(block, oldest, worst, now, missing, unverified);
     block.setAttribute("data-fresh-state", "ready");
   }
 
