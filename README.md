@@ -105,6 +105,8 @@
 ```
 index.html                 首頁：四個 pillar 入口 + 全部文章列表
 about.html                 關於本站：常青／易耗嘅做法（由首頁搬出）
+sources/                   內容來源檔（.md 草稿）。放喺呢度而唔係網站根目錄，
+                           因為 GitHub Pages 會照樣把根目錄嘅檔案公開
 guides/index.html          pillar：港人北上完整指南（+ 3 篇 cluster）
 areas/index.html           pillar：港深食飲地圖（+ 3 篇）
 coffee/index.html          pillar：港深咖啡入門（+ 3 篇）
