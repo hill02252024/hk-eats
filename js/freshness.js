@@ -208,6 +208,19 @@
     Array.prototype.forEach.call(targets, function (el) {
       var key = el.getAttribute("data-fresh-key");
       var entry = entries[key];
+
+      // volatility 要喺 needsVerify 之前處理：一個「未核實 + 高變動」嘅項目
+      // 兩件事都要講 —— 待核實講「而家仲未有數」，變動中橫幅講「就算有咗
+      // 都會好快變」。之前呢度早退，令 volatileNote 靜靜咁被丟棄。
+      var volatility = normalizeVolatility(entry && entry.volatility);
+      if (entry) {
+        el.setAttribute("data-volatility", volatility);
+        if (isVolatile(volatility)) {
+          var note = entry.volatileNote || "呢項資料標記為正在變動中，請以官方最新公布為準。";
+          if (notes.indexOf(note) === -1) notes.push(note);
+        }
+      }
+
       if (entry && entry.needsVerify) {
         // 未核實：唔當佢係缺失，亦唔計入核實月份 —— 佢係一個明示嘅空位。
         fillNeedsVerify(el, entry.needsVerify);
@@ -220,14 +233,6 @@
         return;
       }
       fillElement(el, entry.value);
-
-      var volatility = normalizeVolatility(entry.volatility);
-      el.setAttribute("data-volatility", volatility);
-
-      if (isVolatile(volatility)) {
-        var note = entry.volatileNote || "呢項資料標記為正在變動中，請以官方最新公布為準。";
-        if (notes.indexOf(note) === -1) notes.push(note);
-      }
 
       var ym = parseYearMonth(entry.verifiedOn);
       if (!ym) { missing.push(key); return; }

@@ -1,0 +1,31 @@
+{
+  "title": "北上同行街，手機要裝咩 — 易耗芯資料",
+  "belongsTo": "/trips/trip-tools.html",
+  "_status": "mixed",
+  "_note": "披露聲明同資料覆蓋範圍屬結構性陳述（low，已核實）。app 嘅實際功能、商店連結、口岸最遲進入時間三項未核實，一律唔填值、唔寫 verifiedOn。apps.disclosure 嘅文字同時寫喺 HTML 正文（利益披露唔應該依賴 JS 先顯示得到），build 有 W12 檢查兩邊一致。",
+  "entries": {
+    "apps.disclosure": {
+      "value": "本站作者係九巴通、港鐵通、香港泊車王、香港天氣通嘅開發者。呢一頁寫嘅係使用場景，唔係產品推廣；同類工具市面上仲有其他選擇，揀啱你自己習慣嗰個就得。",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "apps.coverage": {
+      "value": "香港嘅公共資料只覆蓋香港，過咗關就用唔到。",
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "apps.parking.feature": {
+      "needsVerify": "香港泊車王實際提供嘅資料類型：係咪有即時空位資料？如果有就應該寫明「即時空位」；如果冇，就只寫「位置同收費」",
+      "volatility": "normal"
+    },
+    "apps.storeLinks": {
+      "needsVerify": "九巴通、港鐵通、香港泊車王、香港天氣通各自嘅 App Store 同 Google Play 連結",
+      "volatility": "normal"
+    },
+    "return.lastEntry": {
+      "needsVerify": "各口岸返港方向嘅最遲進入時間（同公布嘅服務結束時間可能唔同）；呢項同 data/trips/day-trip.json 嘅 lastEntry.byPort 係同一件事，補資料嗰陣兩邊要一齊改",
+      "volatility": "high",
+      "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。"
+    }
+  }
+}

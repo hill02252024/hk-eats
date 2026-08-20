@@ -839,6 +839,48 @@ function checkPageData(relPath, html) {
 }
 
 /* ------------------------------------------------------------------ */
+/* E13 利益披露：HTML 同 data 唔准行開                                  */
+/* ------------------------------------------------------------------ */
+
+/* 利益披露（例如「本站作者係呢個 app 嘅開發者」）唔應該淨靠 freshness.js
+ * 載入 —— fetch 一失敗，聲明就會消失，但文章照睇得到。所以披露文字直接
+ * 寫喺 HTML；同時佢亦係 data 入面嘅一個 entry（方便統一維護）。
+ * 兩邊必須一致，否則改一邊會靜靜地留低另一邊嘅舊版本。 */
+function checkDisclosure(relPath, html) {
+  const m = /<div[^>]*class="[^"]*\bcallout-disclosure\b[^"]*"[^>]*>([\s\S]*?)<\/div>/i.exec(html);
+
+  const base = relPath.replace(/\.html$/, "");
+  const dataPath = path.join(DATA_DIR, base + ".json");
+  let entry = null;
+  if (fs.existsSync(dataPath)) {
+    try {
+      const doc = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+      const hit = Object.entries(doc.entries || {})
+        .find(([k, v]) => /(^|\.)disclosure$/.test(k) && v && typeof v.value === "string");
+      if (hit) entry = { key: hit[0], value: hit[1].value };
+    } catch { /* JSON 壞咗由 E6 處理 */ }
+  }
+
+  if (!m && !entry) return;
+  if (m && !entry) {
+    warn(`W12 ${relPath}: 有 .callout-disclosure 但 data/${base}.json 冇對應嘅 *.disclosure entry`);
+    return;
+  }
+  if (!m && entry) {
+    err(`E13 ${relPath}: data/${base}.json 有披露聲明「${entry.key}」，但頁面冇 .callout-disclosure —— 披露唔可以只存喺資料檔`);
+    return;
+  }
+  const got = stripTags(m[1]).replace(/\s+/g, "");
+  const want = String(entry.value).replace(/\s+/g, "");
+  if (!got.includes(want)) {
+    err(
+      `E13 ${relPath}: 披露 callout 嘅文字同 data 嘅「${entry.key}」唔一致 —— ` +
+      `改咗一邊冇改另一邊。頁面：「${stripTags(m[1]).slice(0, 40)}…」 / 資料：「${String(entry.value).slice(0, 40)}…」`
+    );
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* E12 唔准寫死絕對網址                                                 */
 /* ------------------------------------------------------------------ */
 
@@ -1261,6 +1303,7 @@ console.log(`      全站最新 verifiedOn：${latestUpdate || "（冇）"}`);
 for (const { relPath, html } of pages) {
   checkUniqueIds(relPath, html);
   checkNoHardcodedOrigin(relPath, html);
+  checkDisclosure(relPath, html);
 }
 
 /* W9：文章頭嘅日期要用「最後更新：」而且同 jsonld:dateModified 一致 */

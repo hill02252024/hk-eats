@@ -62,11 +62,15 @@
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/trips/</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-21</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/trips/overnight.html</loc>
     <lastmod>2026-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://example.github.io/hk_eats/trips/trip-tools.html</loc>
+    <lastmod>2026-08-21</lastmod>
   </url>
   <url>
     <loc>https://example.github.io/hk_eats/trips/with-family.html</loc>

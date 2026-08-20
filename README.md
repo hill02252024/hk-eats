@@ -201,6 +201,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | E10 | 同一頁有重複 `id`、或者有 `<h2>` 冇 `id`（會令錨點目錄斷鏈） |
 | E11 | 頁面冇 `<title>` 或者冇 `</head>`（`<title>` 同 Open Graph 注入唔到） |
 | E12 | 寫死咗絕對網址：站內絕對 URL（換網域唔會跟住變）或者唔喺白名單嘅外部網址 |
+| E13 | 利益披露文字喺 HTML 同 data 之間唔一致，或者 data 有披露聲明但頁面冇 `.callout-disclosure` |
 
 警告（唔會 exit 1）：
 
@@ -213,6 +214,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | W9 | 文章日期行冇「最後更新：」前綴，或者日期同 `jsonld:dateModified` 唔一致 |
 | W10 | cluster 頁嘅中文字數**超出所屬 pillar 40% 或以上**（見下面「幾時要把 cluster 升格」） |
 | W11 | `SITE_ORIGIN` 仲係佔位網域（含 `example.`）——未設定正式網域，唔好發布 |
+| W12 | 頁面有 `.callout-disclosure` 但 data 冇對應嘅 `*.disclosure` entry |
 
 ## 點樣加一篇新文章
 
@@ -441,6 +443,29 @@ node scripts/build.mjs
 1440px 時 wrap 左右留白各 352px，2560px 時各 912px，
 內容框 696px，段落／標題／清單／資料塊／圖解嘅左右偏移全部 0.00px。
 廣告位刻意固定闊度並置中，所以驗嘅係左右偏移相等而唔係貼齊。
+
+## 利益披露
+
+如果一篇文提到本站作者有份開發、擁有或者收錢嘅嘢，披露**必須**用
+`.callout-disclosure` 獨立卡片，唔可以埋喺正文段落入面。三種 callout
+刻意分得開：
+
+| class | 顏色 | 意思 |
+|---|---|---|
+| `.callout` | 灰 | 補充說明 |
+| `.callout-alert` | 琥珀 | 警告，會出事嗰種 |
+| `.callout-disclosure` | 粗邊 + 標籤 | 身分聲明，唔係警告亦唔係補充 |
+
+披露文字**同時**寫兩個地方：
+
+1. **HTML 正文**（主體）—— 因為利益披露唔應該淨靠 `freshness.js` 載入。
+   fetch 一失敗，聲明就會消失，但文章照睇得到，咁就變成冇披露。
+2. **`data/<section>/<name>.json` 嘅 `*.disclosure` entry** —— 方便統一維護。
+
+兩邊必須逐字一致，`build` 會用 **E13** 攔住 drift；只有 HTML 冇 data 就出
+**W12**。呢個係全站唯一一處刻意重複嘅內容，理由就係上面第一點。
+
+實例：`trips/trip-tools.html`（作者係文中提到嘅幾個 app 嘅開發者）。
 
 ## 幾時要把 cluster 升格成子 pillar
 
