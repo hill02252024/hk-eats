@@ -2,7 +2,7 @@
   "title": "北上同行街，手機要裝咩 — 易耗芯資料",
   "belongsTo": "/trips/trip-tools.html",
   "_status": "mixed",
-  "_note": "披露聲明同資料覆蓋範圍屬結構性陳述（low，已核實）。四個 *.diff 係「同其他同類 app 有咩唔同」，由編輯填 —— 本站唔會自己寫比較，因為呢類判斷需要實際用過同類產品。app 功能描述、商店連結、口岸最遲進入時間亦未核實，一律唔填值、唔寫 verifiedOn。apps.disclosure 嘅文字同時寫喺 HTML 正文（利益披露唔應該依賴 JS 先顯示得到），build 有 E13 檢查兩邊一致。",
+  "_note": "披露聲明同資料覆蓋範圍屬結構性陳述（low，已核實）。四個 *.highlight 係「特別之處」——關於自己嘅事實，代碼驗證得到。原本叫 *.diff（同其他有咩唔同），但比較宣稱要驗證對手，本站驗證唔到，所以改咗個角度。app 功能描述、商店連結、口岸最遲進入時間亦未核實，一律唔填值、唔寫 verifiedOn。apps.disclosure 嘅文字同時寫喺 HTML 正文（利益披露唔應該依賴 JS 先顯示得到），build 有 E13 檢查兩邊一致。",
   "entries": {
     "apps.disclosure": {
       "value": "本站作者係九巴通、港鐵通、香港泊車王、香港天氣通嘅開發者。呢一頁寫嘅係使用場景，唔係產品推廣；同類工具市面上仲有其他選擇，揀啱你自己習慣嗰個就得。",
@@ -14,24 +14,24 @@
       "verifiedOn": "2026-08",
       "volatility": "low"
     },
-    "apps.kmb.diff": {
-      "needsVerify": "九巴通同其他實時到站 app 嘅實際分別",
+    "apps.kmb.highlight": {
+      "needsVerify": "九巴通長者版嘅特別之處（由代碼核實，唔係同對手比較）",
       "volatility": "low"
     },
-    "apps.mtr.diff": {
-      "needsVerify": "港鐵通同其他鐵路資訊 app 嘅實際分別",
+    "apps.mtr.highlight": {
+      "needsVerify": "鐵路通／港鐵通嘅特別之處（由代碼核實，唔係同對手比較）",
       "volatility": "low"
     },
     "apps.parking.feature": {
       "needsVerify": "香港泊車王實際提供嘅資料類型：係咪有即時空位資料？如果有就應該寫明「即時空位」；如果冇，就只寫「位置同收費」",
       "volatility": "normal"
     },
-    "apps.parking.diff": {
-      "needsVerify": "香港泊車王同其他泊車 app 嘅實際分別",
+    "apps.parking.highlight": {
+      "needsVerify": "香港泊車王嘅特別之處（由代碼核實，唔係同對手比較）",
       "volatility": "low"
     },
-    "apps.weather.diff": {
-      "needsVerify": "香港天氣通同其他天氣 app 嘅實際分別",
+    "apps.weather.highlight": {
+      "needsVerify": "香港天氣通嘅特別之處（由代碼核實，唔係同對手比較）",
       "volatility": "low"
     },
     "apps.storeLinks": {
