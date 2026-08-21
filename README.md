@@ -226,7 +226,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | E13 | 利益披露文字喺 HTML 同 data 之間唔一致，或者 data 有披露聲明但頁面冇 `.callout-disclosure` |
 | E15 | **（只喺 `--publish`）**頁面仲會渲染 `{{NEEDS_VERIFY}}` 標記 |
 | E16 | **（只喺 `--publish`）**`SITE_ORIGIN` 仲係佔位網域 |
-| E17 | 頁面入面嘅商店連結（`play.google.com` / `apps.apple.com`）喺同名 data 檔搵唔到 —— 卡片同資料檔行開 |
+| E17 | 頁面入面嘅外部連結，**如果佢個 host 喺同名 data 檔出現過**，全條 URL 就必須對得上 —— 防止頁面同資料檔行開 |
 | E14 | 顯示層走樣：**nav 品牌位／footer／`<title>` 三個品牌槽位**同 `SITE_NAME` 唔一致、nav 分區名同 `SECTIONS` 唔一致、nav 少咗分區連結、或者顯示槽位仲有舊字串 |
 
 警告（唔會 exit 1）：
@@ -633,6 +633,23 @@ https://play.google.com/store/apps/details?id=<applicationId>
 卡片入面嘅 Google Play 係真嘅 `<a href>`（白名單放行），因為連結要逐個
 app 唔同，一個共用 entry render 唔到；但同一條 URL 亦一定要喺 data 檔
 出現，**E17** 就係防止兩邊行開。
+
+### E17 點決定邊條連結要對數
+
+唔用寫死嘅網域名單，而係睇 **「呢個 host 有冇喺同名 data 檔出現過」**：
+
+- **有** → 代表呢類連結由 data 管，全條 URL 必須對得上（例：商店連結、
+  口岸通嘅 `sb.gov.hk`）。
+- **冇** → 代表佢淨係一條參考連結（例：`bring-back` 引嘅海關頁），唔管。
+
+咁樣加新一類受管連結唔使改守衛：你一將 URL 放入 data，佢自動開始受檢。
+
+### 查詢參數：唔好靠估，逐個實測
+
+外部連結帶 query 參數嗰陣，**一定要跑一次 build 確認冇被 `TRACKING_PARAM_RE` 誤攔**。
+已經實測過通過嘅：`?id=`（Google Play）、`?type=`（口岸通出／入境）。
+兩者都唔喺追蹤參數名單，所以放行。**唔准為咗遷就守衛而改官方 URL** ——
+要改就改守衛。
 
 ### 硬規則：香港天氣通張卡唔准提通知
 

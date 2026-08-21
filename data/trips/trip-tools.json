@@ -53,6 +53,13 @@
       "needsVerify": "四個 app 嘅 App Store 連結（數字 ID 冇得由 bundle id 推出嚟）",
       "volatility": "normal"
     },
+    "return.lastEntry": {
+      "value": "冇官方公布嘅「最遲進入時間」。實際約束係兩樣疊埋：口岸本身嘅服務結束時間，加上香港側嘅尾班車。羅湖同落馬洲支線唔會通宵運作，所以尾班車通常先係真正嘅死線；要深夜過關就要用皇崗或者港珠澳大橋。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。",
+      "_sharedWith": "data/trips/day-trip.json → lastEntry.byPort（同一件事，改就兩邊一齊改）"
+    },
     "hkbcp.what": {
       "value": "保安局嘅一站式過關資訊平台「口岸通」，用紅黃綠燈顯示各陸路口岸實時輪候：綠＝少於 15 分鐘、黃＝15–30 分鐘、紅＝多於 30 分鐘，每 15 分鐘更新。",
       "verifiedOn": "2026-08",
@@ -77,16 +84,17 @@
       "verifiedOn": "2026-08",
       "volatility": "normal"
     },
-    "hkbcp.url": {
-      "needsVerify": "口岸通官方網址",
-      "volatility": "low"
-    },
-    "return.lastEntry": {
-      "value": "冇官方公布嘅「最遲進入時間」。實際約束係兩樣疊埋：口岸本身嘅服務結束時間，加上香港側嘅尾班車。羅湖同落馬洲支線唔會通宵運作，所以尾班車通常先係真正嘅死線；要深夜過關就要用皇崗或者港珠澳大橋。",
+    "hkbcp.url.inbound": {
+      "value": "https://www.sb.gov.hk/chi/bwt/status.html?type=inbound",
       "verifiedOn": "2026-08",
-      "volatility": "high",
-      "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。",
-      "_sharedWith": "data/trips/day-trip.json → lastEntry.byPort（同一件事，改就兩邊一齊改）"
+      "volatility": "low",
+      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改"
+    },
+    "hkbcp.url.outbound": {
+      "value": "https://www.sb.gov.hk/chi/bwt/status.html?type=outbound",
+      "verifiedOn": "2026-08",
+      "volatility": "low",
+      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改"
     }
   }
 }

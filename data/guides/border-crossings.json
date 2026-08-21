@@ -167,9 +167,34 @@
       "verifiedOn": "2026-08",
       "volatility": "normal"
     },
-    "hkbcp.url": {
-      "needsVerify": "口岸通官方網址",
-      "volatility": "low"
+    "hkbcp.url.inbound": {
+      "value": "https://www.sb.gov.hk/chi/bwt/status.html?type=inbound",
+      "verifiedOn": "2026-08",
+      "volatility": "low",
+      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改"
+    },
+    "hkbcp.url.outbound": {
+      "value": "https://www.sb.gov.hk/chi/bwt/status.html?type=outbound",
+      "verifiedOn": "2026-08",
+      "volatility": "low",
+      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改"
+    },
+    "hkbcp.source": {
+      "value": "口岸通嘅資料由入境事務處、香港警務處及運輸署提供；下一階段會引入實時影像，用人工智能評估實時過關情況。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "「下一階段引入實時影像同人工智能評估」屬未落實嘅計劃，未有時間表，實際推出形式可能同現時公布唔同。"
+    },
+    "hkbcp.alternative": {
+      "value": "備選：香港入境事務處 App →「所有服務」→「陸路邊境管制站等候時間」，涵蓋羅湖、福田、皇崗、深圳灣、港珠澳大橋、文錦渡、沙頭角、蓮塘八個口岸。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "crossing.specialArrangement": {
+      "value": "大時大節會有特別通關安排（例如除夕曾經延長羅湖清關時間、深圳灣改 24 小時），唔會事先寫死喺任何攻略。出發前一定要睇口岸通。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "特別通關安排逐次公布、逐次唔同，冇固定模式。任何攻略（包括本站）都唔會有最新版本，出發前一定要睇官方公布。"
     }
   }
 }

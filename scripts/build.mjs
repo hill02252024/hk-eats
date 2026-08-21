@@ -1024,33 +1024,42 @@ function checkDisclosure(relPath, html) {
 /* E17 商店連結唔准同 data 行開                                          */
 /* ------------------------------------------------------------------ */
 
-/* 商店連結要逐個 app 唔同，所以喺卡片入面係真嘅 <a href>（白名單放行）。
- * 但佢同時要有一份 data 記錄，方便一次過睇晒同更新。兩邊一行開，
- * 就會出現「卡片指去 A、資料檔寫住 B」而冇人發現。
- * 所以：頁面入面每一條商店連結，都必須喺同名 data 檔搵得返。 */
-const STORE_URL_RE = /https:\/\/(?:play\.google\.com|apps\.apple\.com)\/[^\s"'<>)]+/g;
+/* 有啲外部連結要同時存在兩個地方：HTML（因為要撳得到、而且逐個唔同）
+ * 同 data（因為要一次過睇晒同更新）。兩邊一行開，就會出現「頁面指去 A、
+ * 資料檔寫住 B」而冇人發現。
+ *
+ * 判斷邊條要對數：唔用寫死嘅網域名單，而係睇「呢個 host 有冇喺同名
+ * data 檔出現過」。有 → 代表呢類連結係由 data 管嘅，全條 URL 必須對得上；
+ * 冇 → 代表佢淨係一條參考連結（例如 bring-back 嘅海關頁），唔管。
+ * 咁樣加新一類連結唔使改守衛。 */
+const EXT_URL_RE = /https?:\/\/[^\s"'<>)]+/g;
 
 function checkStoreLinks(relPath, html) {
-  STORE_URL_RE.lastIndex = 0;
-  const inHtml = [...new Set([...html.matchAll(STORE_URL_RE)].map((m) => m[0]))];
+  const stripped = html.replace(OG_BLOCK_RE, "").replace(LD_BLOCK_RE, "");
+  OG_BLOCK_RE.lastIndex = 0;
+  LD_BLOCK_RE.lastIndex = 0;
+
+  EXT_URL_RE.lastIndex = 0;
+  const inHtml = [...new Set([...stripped.matchAll(EXT_URL_RE)].map((m) => m[0]))]
+    .filter((u) => { try { return new URL(u).host !== SITE_HOST; } catch { return false; } });
   if (!inHtml.length) return;
 
   const base = relPath.replace(/\.html$/, "");
   const dataPath = path.join(DATA_DIR, base + ".json");
-  if (!fs.existsSync(dataPath)) {
-    err(`E17 ${relPath}: 有 ${inHtml.length} 條商店連結，但冇對應嘅 data/${base}.json 做記錄`);
-    return;
-  }
+  if (!fs.existsSync(dataPath)) return;
   let doc;
   try { doc = JSON.parse(fs.readFileSync(dataPath, "utf8")); }
   catch { return; }  // JSON 壞咗由 E6 處理
 
   const haystack = JSON.stringify(doc.entries || {});
   for (const url of inHtml) {
+    let host;
+    try { host = new URL(url).host; } catch { continue; }
+    if (!haystack.includes(host)) continue;          // 唔係由 data 管嗰類
     if (!haystack.includes(url)) {
       err(
-        `E17 ${relPath}: 商店連結「${url}」喺 data/${base}.json 搵唔到 —— ` +
-        `卡片同資料檔行開咗，改一邊要兩邊一齊改`
+        `E17 ${relPath}: 連結「${url}」嘅網域喺 data/${base}.json 出現過，` +
+        `但全條 URL 對唔上 —— 頁面同資料檔行開咗，改一邊要兩邊一齊改`
       );
     }
   }
