@@ -21,8 +21,11 @@
       "volatility": "low"
     },
     "lastEntry.byPort": {
-      "needsVerify": "各口岸返港方向嘅最遲進入時間（同公布嘅服務結束時間可能唔同）",
-      "volatility": "normal"
+      "value": "冇官方公布嘅「最遲進入時間」。實際約束係兩樣疊埋：口岸本身嘅服務結束時間，加上香港側嘅尾班車。羅湖同落馬洲支線唔會通宵運作，所以尾班車通常先係真正嘅死線；要深夜過關就要用皇崗或者港珠澳大橋。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。",
+      "_sharedWith": "data/trips/trip-tools.json → return.lastEntry（同一件事，改就兩邊一齊改）"
     }
   }
 }

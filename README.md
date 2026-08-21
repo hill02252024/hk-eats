@@ -226,6 +226,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | E13 | 利益披露文字喺 HTML 同 data 之間唔一致，或者 data 有披露聲明但頁面冇 `.callout-disclosure` |
 | E15 | **（只喺 `--publish`）**頁面仲會渲染 `{{NEEDS_VERIFY}}` 標記 |
 | E16 | **（只喺 `--publish`）**`SITE_ORIGIN` 仲係佔位網域 |
+| E17 | 頁面入面嘅商店連結（`play.google.com` / `apps.apple.com`）喺同名 data 檔搵唔到 —— 卡片同資料檔行開 |
 | E14 | 顯示層走樣：**nav 品牌位／footer／`<title>` 三個品牌槽位**同 `SITE_NAME` 唔一致、nav 分區名同 `SECTIONS` 唔一致、nav 少咗分區連結、或者顯示槽位仲有舊字串 |
 
 警告（唔會 exit 1）：
@@ -342,6 +343,16 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
   「唔好發布」，一個發布模式冇理由當佢冇到。
 
 **平時 build 唔受影響** —— 施工中有標記係正常，日常只會見到 W7 列表。
+
+### 跨檔共用嘅事實：兩邊都要標
+
+同一件事寫喺兩個資料檔嗰陣（架構冇跨檔引用機制），兩個 entry 都要加
+`_sharedWith` 指返對方，提醒改嘅人兩邊一齊改。現時有兩組：
+
+| 事實 | 檔 A | 檔 B |
+|---|---|---|
+| 口岸最遲進入時間 | `trips/trip-tools.json` → `return.lastEntry` | `trips/day-trip.json` → `lastEntry.byPort` |
+| 口岸通實時輪候 | `trips/trip-tools.json` → `hkbcp.*` | `guides/border-crossings.json` → `hkbcp.*` |
 
 ### 未核實嘅資料：寧願留白，唔好作
 
@@ -604,6 +615,24 @@ node scripts/build.mjs
 | 香港天氣通 | `com.hkwww.www` | `com.hkwww.www` |
 
 **前兩個 iOS 同 Android 唔一致**（camelCase vs snake_case），砌商店連結時要分開攞，唔可以共用一個 id。
+
+### 商店連結：Android 推得到，iOS 推唔到
+
+Google Play 嘅 URL 由 `applicationId` 直接組成，所以知道 bundle id
+就砌得出，唔使查商店：
+
+```
+https://play.google.com/store/apps/details?id=<applicationId>
+```
+
+**App Store 唔同**——佢用數字 ID（`id123456789`），同 bundle id 冇任何
+推導關係，一定要去商店攞。所以 `data/trips/trip-tools.json` 將商店連結
+拆成兩個 entry：`apps.storeLinks.android`（已核實，四條）同
+`apps.storeLinks.ios`（`needsVerify`）。
+
+卡片入面嘅 Google Play 係真嘅 `<a href>`（白名單放行），因為連結要逐個
+app 唔同，一個共用 entry render 唔到；但同一條 URL 亦一定要喺 data 檔
+出現，**E17** 就係防止兩邊行開。
 
 ### 硬規則：香港天氣通張卡唔准提通知
 

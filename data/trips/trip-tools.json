@@ -1,8 +1,8 @@
 {
   "title": "北上同行街，手機要裝咩 — 易耗芯資料",
   "belongsTo": "/trips/trip-tools.html",
-  "_status": "verified",
-  "_note": "四個 *.highlight 係「特別之處」——關於自己嘅事實，由 app 原始碼核實，唔係同對手比較。比較宣稱要驗證對手，本站驗證唔到，所以唔會寫。apps.weather.highlight 硬規則：唔准提及任何通知／提醒／推送／背景警告功能 —— 該 app 嘅通知只喺前景或 resume 時發，app 完全關閉就唔會有，寫落去就係講大咗。apps.storeLinks 仍然未有連結，保持 needsVerify。apps.disclosure 嘅文字同時寫喺 HTML 正文（利益披露唔應該依賴 JS 先顯示得到），build 有 E13 檢查兩邊一致。",
+  "_status": "mixed",
+  "_note": "四個 *.highlight 係「特別之處」——關於自己嘅事實，由 app 原始碼核實，唔係同對手比較。比較宣稱要驗證對手，本站驗證唔到，所以唔會寫。apps.weather.highlight 硬規則：唔准提及任何通知／提醒／推送／背景警告功能 —— 該 app 嘅通知只喺前景或 resume 時發，app 完全關閉就唔會有，寫落去就係講大咗。商店連結拆成兩個：Android 四條由 applicationId 直接組成，已核實；iOS 嘅數字 ID 冇得由 bundle id 推，仍然 needsVerify。卡片入面嘅 Google Play 連結同 apps.storeLinks.android 之間由 E17 防止行開。apps.disclosure 嘅文字同時寫喺 HTML 正文（利益披露唔應該依賴 JS 先顯示得到），build 有 E13 檢查兩邊一致。",
   "entries": {
     "apps.disclosure": {
       "value": "本站作者係九巴通 — 長者版、鐵路通、香港泊車王、香港天氣通嘅開發者。呢一頁寫嘅係使用場景，唔係產品推廣；同類工具市面上仲有其他選擇，揀啱你自己習慣嗰個就得。",
@@ -39,14 +39,54 @@
       "verifiedOn": "2026-08",
       "volatility": "low"
     },
-    "apps.storeLinks": {
-      "needsVerify": "App Store 同 Google Play 連結（四個 app 各自一組）",
+    "apps.storeLinks.android": {
+      "value": [
+        "九巴通 — 長者版：https://play.google.com/store/apps/details?id=com.hkwww.kmb_app",
+        "鐵路通：https://play.google.com/store/apps/details?id=com.hkwww.mtr_real_time_info",
+        "香港泊車王：https://play.google.com/store/apps/details?id=com.hkwww.carpart",
+        "香港天氣通：https://play.google.com/store/apps/details?id=com.hkwww.www"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "low"
+    },
+    "apps.storeLinks.ios": {
+      "needsVerify": "四個 app 嘅 App Store 連結（數字 ID 冇得由 bundle id 推出嚟）",
       "volatility": "normal"
     },
+    "hkbcp.what": {
+      "value": "保安局嘅一站式過關資訊平台「口岸通」，用紅黃綠燈顯示各陸路口岸實時輪候：綠＝少於 15 分鐘、黃＝15–30 分鐘、紅＝多於 30 分鐘，每 15 分鐘更新。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "hkbcp.coverage": {
+      "value": [
+        "羅湖",
+        "落馬洲支線",
+        "高鐵西九龍",
+        "深圳灣",
+        "港珠澳大橋",
+        "香園圍",
+        "落馬洲",
+        "文錦渡"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "hkbcp.extra": {
+      "value": "另有皇巴、金巴嘅輪候時間同突發事故提示。",
+      "verifiedOn": "2026-08",
+      "volatility": "normal"
+    },
+    "hkbcp.url": {
+      "needsVerify": "口岸通官方網址",
+      "volatility": "low"
+    },
     "return.lastEntry": {
-      "needsVerify": "各口岸返港方向嘅最遲進入時間（同公布嘅服務結束時間可能唔同）；呢項同 data/trips/day-trip.json 嘅 lastEntry.byPort 係同一件事，補資料嗰陣兩邊要一齊改",
+      "value": "冇官方公布嘅「最遲進入時間」。實際約束係兩樣疊埋：口岸本身嘅服務結束時間，加上香港側嘅尾班車。羅湖同落馬洲支線唔會通宵運作，所以尾班車通常先係真正嘅死線；要深夜過關就要用皇崗或者港珠澳大橋。",
+      "verifiedOn": "2026-08",
       "volatility": "high",
-      "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。"
+      "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。",
+      "_sharedWith": "data/trips/day-trip.json → lastEntry.byPort（同一件事，改就兩邊一齊改）"
     }
   }
 }

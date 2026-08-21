@@ -1021,6 +1021,42 @@ function checkDisclosure(relPath, html) {
 }
 
 /* ------------------------------------------------------------------ */
+/* E17 商店連結唔准同 data 行開                                          */
+/* ------------------------------------------------------------------ */
+
+/* 商店連結要逐個 app 唔同，所以喺卡片入面係真嘅 <a href>（白名單放行）。
+ * 但佢同時要有一份 data 記錄，方便一次過睇晒同更新。兩邊一行開，
+ * 就會出現「卡片指去 A、資料檔寫住 B」而冇人發現。
+ * 所以：頁面入面每一條商店連結，都必須喺同名 data 檔搵得返。 */
+const STORE_URL_RE = /https:\/\/(?:play\.google\.com|apps\.apple\.com)\/[^\s"'<>)]+/g;
+
+function checkStoreLinks(relPath, html) {
+  STORE_URL_RE.lastIndex = 0;
+  const inHtml = [...new Set([...html.matchAll(STORE_URL_RE)].map((m) => m[0]))];
+  if (!inHtml.length) return;
+
+  const base = relPath.replace(/\.html$/, "");
+  const dataPath = path.join(DATA_DIR, base + ".json");
+  if (!fs.existsSync(dataPath)) {
+    err(`E17 ${relPath}: 有 ${inHtml.length} 條商店連結，但冇對應嘅 data/${base}.json 做記錄`);
+    return;
+  }
+  let doc;
+  try { doc = JSON.parse(fs.readFileSync(dataPath, "utf8")); }
+  catch { return; }  // JSON 壞咗由 E6 處理
+
+  const haystack = JSON.stringify(doc.entries || {});
+  for (const url of inHtml) {
+    if (!haystack.includes(url)) {
+      err(
+        `E17 ${relPath}: 商店連結「${url}」喺 data/${base}.json 搵唔到 —— ` +
+        `卡片同資料檔行開咗，改一邊要兩邊一齊改`
+      );
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* E12 唔准寫死絕對網址                                                 */
 /* ------------------------------------------------------------------ */
 
@@ -1537,6 +1573,7 @@ for (const { relPath, html } of pages) {
   checkNoHardcodedOrigin(relPath, html);
   checkDisclosure(relPath, html);
   checkDisplayConsistency(relPath, html);
+  checkStoreLinks(relPath, html);
 }
 
 /* W9：文章頭嘅日期要用「最後更新：」而且同 jsonld:dateModified 一致 */
