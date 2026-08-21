@@ -822,3 +822,15 @@ h2[id] { scroll-margin-top: 4.5rem; }
   .app-card dl { grid-template-columns: 1fr; gap: .1rem; }
   .app-card dt { padding-top: .35rem; }
 }
+
+/* App 卡片嘅補充註腳（例如兩個平台上架名唔同）。
+   刻意細過 dd，因為佢係澄清，唔係賣點。 */
+.app-card .app-note {
+  margin: .55rem 0 0;
+  padding-top: .45rem;
+  border-top: 1px dashed var(--line);
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  max-width: none;
+}

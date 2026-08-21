@@ -583,6 +583,39 @@ node scripts/build.mjs
 
 實例：`trips/trip-tools.html`（四張卡分別喺實時到站、泊車、天氣三節之後）。
 
+### App 名一定要用商店實際名
+
+寫落卡片同正文嘅名，必須係商店上架名，唔可以用口語簡稱：
+
+| 卡片名 | 註 |
+|---|---|
+| 九巴通 — 長者版 | **冇一個叫淨「九巴通」嘅 app。**pubspec／Info.plist／AndroidManifest 三處都寫住「長者版」 |
+| 鐵路通 | **兩個平台唔同名。**App Store 叫「鐵路通」，Google Play 叫「港鐵通 — 實時列車資訊」。卡片用 App Store 名，另加一行 `.app-note` 說明 Play 上架名 |
+| 香港泊車王 | 兩邊同名 |
+| 香港天氣通 | 兩邊同名 |
+
+### Bundle ID（對商店連結用）
+
+| App | iOS | Android |
+|---|---|---|
+| 九巴通 — 長者版 | `com.hkwww.kmbApp` | `com.hkwww.kmb_app` |
+| 鐵路通 | `com.hkwww.mtrRealTimeInfo` | `com.hkwww.mtr_real_time_info` |
+| 香港泊車王 | `com.hkwww.carpart` | `com.hkwww.carpart` |
+| 香港天氣通 | `com.hkwww.www` | `com.hkwww.www` |
+
+**前兩個 iOS 同 Android 唔一致**（camelCase vs snake_case），砌商店連結時要分開攞，唔可以共用一個 id。
+
+### 硬規則：香港天氣通張卡唔准提通知
+
+**`apps.weather.highlight` 同該卡任何位置，唔准出現通知／提醒／推送／
+背景警告相關嘅字眼。**
+
+理由唔係措辭偏好，係事實：該 app 嘅警告通知由自己 polling 驅動，
+只喺前景或者 resume 時發，app 完全關閉就唔會有，而且 pubspec 冇任何
+背景排程套件。寫「唔使開任何嘢都知道八號要掛」係講大咗。
+
+其餘三個 app 嘅通知功能可以寫，但要標清楚係 [需要開啟]（全部預設關）。
+
 ## 幾時要把 cluster 升格成子 pillar
 
 Pillar 應該係一個分區入面最高層、最闊嘅一頁。當某篇 cluster 寫到比
