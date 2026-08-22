@@ -100,6 +100,40 @@
 兩者刻意唔共用 class、唔共用顏色、唔共用位置。一個區塊可以同時中兩樣。
 `volatility: "high"` 嘅 entry 要提供 `volatileNote`，就係橫幅嘅文案。
 
+## 檢查器紀律（寫任何掃描／守衛之前睇一次）
+
+本站資料存在**三層**：
+
+| 層 | 係咩 | 例 |
+|---|---|---|
+| **HTML 硬寫** | 直接寫喺 `.html` 檔嘅字 | `<a href="https://www.sb.gov.hk/…">`、`.callout-disclosure` 內文 |
+| **JSON data** | `data/**/*.json` 嘅 `entries` | `{"value": "…", "verifiedOn": "2026-08"}` |
+| **runtime 渲染** | `js/freshness.js` 喺瀏覽器填入去嘅字 | `{{NEEDS_VERIFY: …}}` 標記、`data-fresh-key` 嘅內容 |
+
+**過去四次盤點全部因為只掃一層而下錯結論。逐個記低，唔係為咗自責，係因為每一個都會再犯：**
+
+1. `grep hk_eats` 報 0 —— 但原始碼係 `hk<span>_</span>eats`，字面上永遠唔會連續出現。**掃 HTML 層但冇 strip tag。**
+2. `grep '{{NEEDS_VERIFY}}'` 報 0 —— 但呢個標記係 `freshness.js` 喺 runtime 生成，靜態檔案入面根本冇。**掃 HTML 層，但目標喺 runtime 層。**
+3. FAQ schema 掃描只認 `<details class="faq-item">` —— 漏咗冇 class 嗰批，於是把「措辭唔同」誤報成「頁面完全冇呢條」。**掃 HTML 層但 selector 太窄。**
+4. 「孤兒 entry」只計 `data-fresh-key` 引用 —— 冇計 E13／E17 守衛引用，於是把守衛錨點誤報成可刪資料。**掃 JSON↔HTML 綁定層，但漏咗守衛層。**
+
+### 三條規則
+
+**1. 檢查器要講明掃邊層。只掃一層唔可以下「全站零命中」結論。**
+報告要寫「掃 HTML 層」定「掃 JSON 層」定「掃 runtime 層」。想講「全站零」，就三層都要掃過，或者明講「只掃咗 X 層，Y 層未掃」。
+
+**2. 寫完即刻反向驗證。冇驗過嘅綠燈唔當數。**
+注入一個**應該被抓到**嘅個案 → 確認檢查器會響 → 還原 → 確認回復乾淨。三步缺一不可。只做「注入→響」唔夠，因為可能佢對咩都響；只做「還原→綠」更加唔夠，因為嗰個綠可能係假嘅。
+
+反向驗證要喺副本做（`cp -R . /tmp/probe`），唔好喺 working tree 度改完再靠 git 還原 —— 中途出錯就會污染。
+
+**3. 刪除／改數／改架構唔可以只憑一次掃描，要逐個開檔人手核對。**
+掃描負責**收窄範圍**，唔負責**下判決**。任何「呢 N 個可以刪」嘅結論，N 個都要逐個開返個檔睇上下文。第 4 條錯誤就係跳咗呢步。
+
+### 反向驗證做唔到嘅情況
+
+有啲嘢冇辦法注入（例如「呢個 URL 線上係咪 200」）。嗰陣要改為用**正對照**：搵一個一定會命中嘅目標，確認檢查器搵得到，先至可以講「另一個搵唔到 = 真係冇」。正對照同反向驗證只可以二選一，唔可以兩樣都冇。
+
 ## 目錄結構
 
 ```
@@ -750,6 +784,75 @@ cluster，超出所屬 pillar 七成以上。**暫時唔拆**——因為佢嘅�
 
 只要有 entry 超過自己嘅門檻，前端就會喺該區塊出過時提示，
 所以「有冇人維護」係讀者睇得到嘅，唔係靠自律。
+
+## A 類待核實：19 個可以喺電腦前查完嘅
+
+「A 類」＝ 官方／政府／商戶公布嘅資料，唔使落場就查得到。逐個一行，照住做就得。
+URL 後面嘅括號係 **2026-08-23 由本機實測嘅 HTTP 狀態**；`200` = 通，`404`／`000` = 嗰條路徑試過唔通，改用旁邊嗰條。
+
+查到之後：把 `needsVerify` 換成 `value` + `verifiedOn`（`YYYY-MM`），保留原本嘅 `volatility`。**唔好順手改其他 key。**
+
+### 深圳商圈（`data/areas/shenzhen-malls.json`）
+
+| key | 要查咩 | 去邊度 |
+|---|---|---|
+| `list.gateway` | 緊貼羅湖／福田／深圳灣口岸、步行或一程車可達嘅商圈名 | 高德地圖以各口岸為圓心搜「购物中心」，半徑 2 km：https://amap.com （200） |
+| `list.cbd` | CBD 型商圈名單同所屬行政區 | 深圳市政府《商業網點規劃 2023-2035》新聞稿，列明五個地標商圈同所屬區：http://www.sz.gov.cn/cn/xxgk/zfxxgj/tpxw/content/post_10857804.html （200） |
+| `list.destination.candidates` | 商圈名單同所屬行政區（**只填名單，唔好落「值唔值得專程」判斷**） | 同上 |
+| `list.local.candidates` | 非核心商圈名單同所屬行政區 | 同上 |
+| `access.byPort` | 六個口岸到各商圈嘅最短路線同大概車程 | 路線：https://www.szmc.net/map/ （200）；逐段車程：https://amap.com （200） |
+| `hours.mall` | 大型商場一般營業時間區間，同餐飲樓層收工差異 | **冇單一官方頁**。逐個商場官網／公眾號抄，或 https://www.dianping.com （200）睇「营业时间」再抽樣核 |
+
+### 深圳咖啡（`data/areas/sz-coffee-map.json`）
+
+| key | 要查咩 | 去邊度 |
+|---|---|---|
+| `venue.mall` | 咖啡集中嘅商圈名單同一般所在樓層 | 同上批商場嘅樓層指引（商場官網 floor guide） |
+| `venue.park` | 創意園區／文創園名單同所在區 | 深圳市政府入口網站站內搜「文化創意園區」：http://www.sz.gov.cn/ （200） |
+| `venue.street.candidates` | 深圳街區名單同所屬行政區（**只填名單**） | 同上（行政區劃） |
+| `chain.local` | 深圳本土連鎖咖啡品牌名單同定位（價位帶、主打） | **冇官方名錄**。https://www.dianping.com （200）搜「咖啡」按連鎖篩，再入品牌官網／小程序核價位 |
+| `access.park.published` | 創意園區官方公布嘅開放時間（**唔包出入管制同泊車，嗰兩樣係實地層**） | 各園區官網 |
+| `hours.mall` | 商場型咖啡店營業時間，同商場開關門嘅關係 | 由上面 `hours.mall` 同一批資料推導 |
+
+### 行程（`data/trips/*.json`）
+
+| key | 要查咩 | 去邊度 |
+|---|---|---|
+| `day-trip / duration.clearance.weekday` | 平日各主要口岸嘅一般過關等候時間區間 | 保安局口岸通（出境）：https://www.sb.gov.hk/chi/bwt/status.html?type=outbound （200）。連續抽樣幾日先歸納區間 |
+| `day-trip / duration.clearance.weekend` | 週末及長假期嘅過關等候時間區間 | 同上（入境版換 `?type=inbound`） |
+| `day-trip / duration.hkSide` | 由新界東／新界西／九龍到各口岸嘅一般車程 | https://amap.com （200）或 Google Maps 路線規劃 |
+| `day-trip / duration.szSide` | 由各口岸到主要商圈嘅一般車程 | 同上 |
+| `overnight / lodging.registration` | 境外旅客喺內地住宿嘅登記要求（酒店代辦定自行申報、要咩證件） | 公安機關出入境管理公布。⚠️ https://www.mps.gov.cn 由本機試到 **521**、https://www.nhc.gov.cn **412**，即係要換網絡或改用地方公安局網站 |
+| `overnight / lodging.foreignerAccept` | 接待境外旅客嘅住宿類型限制 | 同上，同一份規定 |
+| `overnight / checkin.hours` | 一般入住與退房時間，同提早寄存行李嘅慣例 | 酒店官網逐間抄，抽樣歸納 |
+| `overnight / luggage.storage.published` | 提供行李寄存嘅場所名單同**公布收費**（實際可得性係實地層） | 口岸／地鐵／商場官網 |
+| `trip-tools / apps.storeLinks.ios` | 四個 app 嘅 App Store 數字 ID | https://apps.apple.com （200）逐個搜 app 名，抄網址嘅數字 ID |
+| `with-family / fare.child` | 兒童及長者喺跨境交通同深圳地鐵嘅票價優惠同年齡／身高門檻 | 港鐵票務：https://www.mtr.com.hk/ch/customer/tickets/concessionary_fares.html （200）；深圳地鐵：https://www.szmc.net/szmc_m （200） |
+| `with-family / docs.child` | 小童過關所需嘅證件同隨行人要求 | 入境事務處：https://www.immd.gov.hk/hkt/ （200）；政府一站通：https://www.gov.hk/tc/residents/immigration/ （200） |
+| `with-family / access.toilets.mapped` | 口岸同商場平面圖上標示嘅廁所位置（**育嬰設施實況係實地層**） | 各口岸／商場官方平面圖 |
+
+### 咖啡（`data/coffee/*.json`）
+
+| key | 要查咩 | 去邊度 |
+|---|---|---|
+| `brewing-basics / freshness.window` | 唔同烘焙度嘅最佳賞味窗口（由烘焙日起計嘅日數區間） | 烘焙商公布嘅賞味期 + 業界文獻，兩個獨立來源夾 |
+| `reading-menu / menu.pricing.samples` | 抽樣店舖嘅單品手沖標價（**記低抽樣間數、地區、日期**；歸納區間係另一個 key） | 店舖餐牌／官網／點評 |
+
+### 香港咖啡（`data/areas/hk-coffee-map.json`）
+
+| key | 要查咩 | 去邊度 |
+|---|---|---|
+| `district.industrial.list` | 香港工業區嘅實際名單（**只填名單，「有冇咖啡聚落」係判斷層**） | 規劃署分區計劃大綱圖：https://www.pland.gov.hk/ |
+
+⚠️ **呢頁其餘 5 個 key 全部唔係 A 類**：`district.street`、`district.upstairs`、`hours.industrial` 標咗「必須實地」，`hours.street.observed` 同 `.typical` 要抽樣。詳見下一節。
+
+### 由本機試唔通嘅 URL
+
+| URL | 狀態 | 點算 |
+|---|---|---|
+| `https://www.mps.gov.cn` | 521 | 內地公安部主站由本機連唔到。改用深圳市公安局或地方出入境管理處嘅頁 |
+| `https://www.nhc.gov.cn` | 412 | 同上 |
+| `https://commerce.sz.gov.cn/` | 000 | 深圳市商務局主站連唔到，但 `www.sz.gov.cn` 嘅新聞稿（200）已經覆蓋同一份規劃 |
 
 ## 資料來源狀態
 

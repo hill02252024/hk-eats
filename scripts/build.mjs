@@ -12,6 +12,14 @@
  *   - 每頁嘅 inline SVG（由 assets/svg/ 注入，唯一來源）
  *
  * 檢查（error 會 exit 1）：
+ * ⚠️ 有啲 data entry 冇 data-fresh-key，係俾 E13/E17 對數用，唔係孤兒，唔准刪。
+ *    E17 靠「呢個 host 有冇喺同名 data 檔出現過」決定要唔要對數 —— 刪咗
+ *    data 嗰邊，守衛就會靜靜放行所有嗰個網域嘅連結。E13 同理：披露聲明
+ *    嘅正本存喺 data，頁面必須有 .callout-disclosure，兩邊對唔上就 error。
+ *    而家嘅守衛錨點：guides/border-crossings 同 trips/trip-tools 各自嘅
+ *    hkbcp.url.inbound / .outbound、trips/trip-tools 嘅 apps.storeLinks.android
+ *    同 apps.disclosure。做「孤兒 entry」盤點時要當佢哋有引用。
+ *
  *   E1 外部連結白名單     任何指向站外嘅 <a href> 都係 error，除非喺 allowlist。
  *                        affiliate 連結唯一合法途徑係 runtime 由 affiliates.js 注入。
  *   E2 外部圖片          <img src="http…"> 或 inline style url(http…) 即 error。

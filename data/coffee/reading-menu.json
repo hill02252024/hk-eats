@@ -44,9 +44,15 @@
       "verifiedOn": "2026-08",
       "volatility": "low"
     },
-    "menu.pricing": {
-      "needsVerify": "港深兩地精品咖啡店單品手沖嘅常見價位帶",
-      "volatility": "normal"
+    "menu.pricing.samples": {
+      "needsVerify": "抽樣店舖嘅單品手沖標價（記低抽樣間數、地區同日期）",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到"
+    },
+    "menu.pricing.band": {
+      "needsVerify": "由抽樣歸納出嚟嘅常見價位帶",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
     }
   }
 }

@@ -12,13 +12,25 @@
       "needsVerify": "CBD 型商圈嘅實際名單同所屬行政區",
       "volatility": "normal"
     },
-    "list.destination": {
-      "needsVerify": "目的地型商圈（值得專程去、單獨佔一日）嘅實際名單",
-      "volatility": "normal"
+    "list.destination.candidates": {
+      "needsVerify": "商圈名單同所屬行政區（官方商業網點規劃有）",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到"
     },
-    "list.local": {
-      "needsVerify": "生活型商圈（本地客為主）嘅實際名單",
-      "volatility": "normal"
+    "list.destination.judgement": {
+      "needsVerify": "入面邊幾個真係值得專程去、單獨佔一日",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
+    },
+    "list.local.candidates": {
+      "needsVerify": "非核心商圈名單同所屬行政區",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到"
+    },
+    "list.local.judgement": {
+      "needsVerify": "入面邊幾個真係以本地客為主",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
     },
     "access.byPort": {
       "needsVerify": "各商圈由六個主要口岸出發嘅最短路線同大概車程",

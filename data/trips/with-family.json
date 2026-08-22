@@ -8,9 +8,15 @@
       "needsVerify": "各口岸嘅步行距離、有冇電梯／扶手電梯、有冇輪椅通道",
       "volatility": "low"
     },
-    "access.toilets": {
-      "needsVerify": "各口岸及主要商圈嘅廁所分佈同育嬰設施",
-      "volatility": "normal"
+    "access.toilets.mapped": {
+      "needsVerify": "口岸同商場平面圖上標示嘅廁所位置",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到"
+    },
+    "access.toilets.reality": {
+      "needsVerify": "育嬰設施實況同廁所間距體感",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
     },
     "fare.child": {
       "needsVerify": "兒童及長者喺跨境交通同深圳地鐵嘅票價優惠同年齡／身高門檻",

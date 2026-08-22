@@ -6,23 +6,38 @@
   "entries": {
     "district.street": {
       "needsVerify": "香港街舖型咖啡店密度較高嘅實際分區名單",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_layer": "必須實地：拆唔開，冇客觀部分可以獨立查"
     },
     "district.upstairs": {
       "needsVerify": "樓上舖型咖啡店集中嘅實際分區名單",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_layer": "必須實地：拆唔開，冇客觀部分可以獨立查"
     },
-    "district.industrial": {
-      "needsVerify": "工廈型咖啡店集中嘅實際工業區名單，同各區嘅出入管制情況",
-      "volatility": "normal"
+    "district.industrial.list": {
+      "needsVerify": "香港工業區嘅實際名單（規劃署分區大綱圖／地政總署有官方劃分）",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到"
+    },
+    "district.industrial.judgement": {
+      "needsVerify": "邊幾個工業區真係有咖啡店聚落，以及各區嘅出入管制實況",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
     },
     "hours.industrial": {
       "needsVerify": "工廈型咖啡店嘅一般營業日同時間（尤其週末開唔開）",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_layer": "必須實地：拆唔開，冇客觀部分可以獨立查"
     },
-    "hours.street": {
-      "needsVerify": "街舖型咖啡店嘅一般開門同尾單時間",
-      "volatility": "normal"
+    "hours.street.observed": {
+      "needsVerify": "抽樣街舖型咖啡店嘅實際開門同尾單時間（逐間由店方公布抄，記低抽樣間數同日期）",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到"
+    },
+    "hours.street.typical": {
+      "needsVerify": "由抽樣歸納出嚟嘅「一般」時間區間",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
     },
     "access.upstairs": {
       "needsVerify": "樓上舖常見嘅入口形式同上落方式（有冇管理處登記、電梯限制）",

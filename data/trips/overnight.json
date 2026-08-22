@@ -14,9 +14,15 @@
       "volatility": "high",
       "volatileNote": "住宿登記同證件要求屬制度性規定，唔同城市同酒店嘅執行方式可能有差異，亦會調整。出發前應以你訂嘅住宿方直接確認為準。"
     },
-    "luggage.storage": {
-      "needsVerify": "口岸、地鐵站同商場嘅行李寄存服務可得性同收費方式",
-      "volatility": "normal"
+    "luggage.storage.published": {
+      "needsVerify": "提供行李寄存嘅場所名單同公布收費",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到"
+    },
+    "luggage.storage.reality": {
+      "needsVerify": "實際可得性（開唔開、有冇位、要唔要證件）",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
     },
     "checkin.hours": {
       "needsVerify": "一般入住與退房時間，同提早寄存行李嘅慣例",
