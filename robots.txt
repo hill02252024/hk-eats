@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://example.github.io/hk_eats/sitemap.xml
+Sitemap: https://taanworld.com/sitemap.xml
