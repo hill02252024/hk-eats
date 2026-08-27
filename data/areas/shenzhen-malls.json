@@ -2,6 +2,8 @@
   "title": "深圳北上商圈 — 易耗芯資料",
   "belongsTo": "/areas/shenzhen-malls.html",
   "_status": "unverified",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "商圈嘅具體名單、各自最近嘅口岸同地鐵站、營業時間慣例，編輯冇提供核實資料，本站亦冇能力喺現場核實。正文只寫分類框架（四種商圈類型）同判斷方法，具體名單一律留待核實，唔填估算值。",
   "entries": {
     "list.gateway": {

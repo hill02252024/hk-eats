@@ -843,3 +843,11 @@ h2[id] { scroll-margin-top: 4.5rem; }
   color: var(--fg-muted);
   max-width: none;
 }
+
+/* 首頁副標題下面嘅「做法有咩唔同」段落。唔係口號，係三條規則嘅摘要，
+   所以排版同正文一致，只係字重輕少少同上下留白清楚。 */
+.site-difference {
+  margin: 0.9rem 0 0;
+  color: var(--fg);
+  line-height: 1.75;
+}

@@ -2,6 +2,8 @@
   "title": "北上過夜兩日 — 易耗芯資料",
   "belongsTo": "/trips/overnight.html",
   "_status": "unverified",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "境外旅客住宿登記嘅規定、酒店對證件嘅要求、行李寄存嘅可得性，全部係會變嘅制度性資料，本站冇核實。行程結構本身係本站設計，寫喺正文。",
   "entries": {
     "lodging.registration": {

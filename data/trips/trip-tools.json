@@ -2,6 +2,8 @@
   "title": "北上同行街，手機要裝咩 — 易耗芯資料",
   "belongsTo": "/trips/trip-tools.html",
   "_status": "mixed",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "四個 *.highlight 係「特別之處」——關於自己嘅事實，由 app 原始碼核實，唔係同對手比較。比較宣稱要驗證對手，本站驗證唔到，所以唔會寫。apps.weather.highlight 硬規則：唔准提及任何通知／提醒／推送／背景警告功能 —— 該 app 嘅通知只喺前景或 resume 時發，app 完全關閉就唔會有，寫落去就係講大咗。商店連結拆成兩個：Android 四條由 applicationId 直接組成，已核實；iOS 嘅數字 ID 冇得由 bundle id 推，仍然 needsVerify。卡片入面嘅 Google Play 連結同 apps.storeLinks.android 之間由 E17 防止行開。apps.disclosure 嘅文字同時寫喺 HTML 正文（利益披露唔應該依賴 JS 先顯示得到），build 有 E13 檢查兩邊一致。",
   "entries": {
     "apps.disclosure": {

@@ -287,6 +287,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | E16 | **（只喺 `--publish`）**`SITE_ORIGIN` 仲係佔位網域 |
 | E17 | 頁面入面嘅外部連結，**如果佢個 host 喺同名 data 檔出現過**，全條 URL 就必須對得上 —— 防止頁面同資料檔行開 |
 | E18 | 平台帳號連結（`PLATFORM_HOSTS`）出現喺 `about.html` 以外嘅任何頁 |
+| E19 | 標咗 `_draft` 嘅頁，出現喺 `sitemap.xml`、首頁 `.post-list`、或者任何 pillar 嘅 `.cluster-list`；另外 pillar 嘅 `jsonld:itemList` 條數同佢畫面 `.cluster-list` 條數對唔上 |
 | E14 | 顯示層走樣：**nav 品牌位／footer／`<title>` 三個品牌槽位**同 `SITE_NAME` 唔一致、nav 分區名同 `SECTIONS` 唔一致、nav 少咗分區連結、或者顯示槽位仲有舊字串 |
 
 警告（唔會 exit 1）：
@@ -298,7 +299,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | W7 | 待核實標記（逐個列出，同時掃 HTML 同 data） |
 | W8 | cluster 冇用含 pillar 關鍵字嘅 anchor、喺上半部連返 pillar；正文內連唔喺 3–5 條 |
 | W9 | 文章日期行冇「最後更新：」前綴，或者日期同 `jsonld:dateModified` 唔一致 |
-| W10 | cluster 頁嘅中文字數**超出所屬 pillar 40% 或以上**（見下面「幾時要把 cluster 升格」） |
+| W10 | cluster 頁嘅中文字數**超出所屬 pillar 40% 或以上**（見下面「幾時要把 cluster 升格」）。`_draft` 頁跳過 —— 佢唔喺清單亦唔喺 sitemap，爭唔到關鍵字 |
 | W11 | `SITE_ORIGIN` 仲係佔位網域（含 `example.`）——未設定正式網域，唔好發布 |
 | W12 | 頁面有 `.callout-disclosure` 但 data 冇對應嘅 `*.disclosure` entry |
 | W13 | Pillar 嘅 `<h1>` 同分區名一模一樣（H1 要係一句，唔係重複一個標籤） |
@@ -751,6 +752,99 @@ W7 清單度，把真正做得到嘅待辦沖淡。
 指去任何深圳 key 都係假嘅。指一條斷咗嘅線比留白更差，因為佢永遠
 唔會閂。
 
+## 分段發布：`_draft`
+
+一次過推二十篇文出去，入面十篇仲有「待核實」標記，等於叫 Google 用最差
+嗰批頁去評估成個站。上線嗰陣佢見到嘅應該係一批填實咗嘅文，唔係一個工地。
+
+所以資料檔可以標：
+
+```json
+{
+  "_status": "…",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
+  …
+}
+```
+
+`_draft: true` 之後：
+
+| 會點 | 唔會點 |
+|---|---|
+| 由 `sitemap.xml` 排除 | 檔案照樣喺 repo |
+| 由首頁 `.post-list` 排除 | URL 照樣打得開 |
+| 由 pillar `.cluster-list` 排除 | nav、麵包屑照樣有（見下） |
+| E9 孤兒／到唔到達唔會報 | |
+| W10 體量比較跳過 | |
+| `--publish` 嘅 E15 暫緩檢查 | |
+
+**唔係隱藏，係唔推薦。** 頁面唔會 404、唔會 noindex、唔會由 repo 消失。
+只係本站唔會主動指路過去，亦唔會叫搜尋引擎去收錄佢。有人攞住條 URL
+入嚟一樣睇得到 —— 佢見到嘅係一頁清楚標住邊格未核實嘅文，呢個係誠實嘅
+狀態，唔使遮。
+
+### nav 同麵包屑刻意唔排除
+
+E19 掃四層：sitemap、`.post-list`、`.cluster-list`，加上 pillar 嘅
+`jsonld:itemList` 條數（佢唔載 URL，所以要用條數對，唔係對名 —— meta 入面
+係標題，`<li>` 入面係入口文案，兩者本來就唔同寫法，但「有幾多篇」冇得唔同）。
+**唔掃 nav，唔掃麵包屑。** 因為 draft 講嘅係「呢篇未夠皮推出去」，唔係「呢個分區唔存在」。
+分區入口一定要行得通，否則麵包屑會斷、pillar 會變孤兒 —— 攞住條 URL
+入嚟嗰個人會撞牆。
+
+### E15 點解要跳過 draft
+
+E15 問嘅係「會唔會有待核實標記出到街」。Draft 頁唔喺 sitemap、唔喺任何
+清單，本站唔會指路過去 —— 佢仲有標記係預期之內，正正就係佢標咗 draft
+嘅原因。如果連佢都封鎖，`--publish` 就要成個站填晒先過到，分段發布等於
+冇做過。
+
+**唔係鬆咗手：拆走 `_draft` 嗰一刻，E15 對嗰頁即刻重新武裝。** 所以
+「放一頁出街」同「嗰頁冇待核實標記」依然係綁死嘅 —— 你冇得一邊放出去
+一邊留住標記。Build 亦會逐次數返有幾多頁被暫緩，唔會靜靜雞放過。
+
+### 一篇一篇放
+
+流程係：填實一頁嘅待核實項 → 拆走嗰兩個 key → 跑 build → 佢自動返入
+sitemap 同各清單 → commit。唔使改任何清單 HTML？**唔係**，清單 HTML 要
+自己加返 —— E19 只保證「draft 唔喺清單」，唔會幫你把出咗街嘅文塞返入去。
+拆走 `_draft` 之後記得同時把 `<li>` 加返落首頁同 pillar。
+
+### 清單變空嗰陣
+
+`areas/` 同 `trips/` 而家全部 cluster 都係 draft，清單係空嘅。空 `<ul>`
+睇落似壞咗，所以嗰兩頁改成一句說明：呢個分區嘅文仲有資料未核實，未放
+出嚟；上面嘅寫法同框架本身已經完整，照睇得。**唔准**為咗填滿個清單而
+把未核實嘅文推出去 —— 咁樣就等於冇做過呢個機制。
+
+### `about.html` 係例外
+
+`/about` 有五條平台帳號 URL 未填，但佢係一頁必要頁：披露、聯絡、平台
+帳號都喺嗰度，唔可以由 sitemap 拆走。所以佢照樣出街，五條 URL 用待核實
+標記照樣顯示。填得返幾時就填。
+
+
+## 首頁文章排序：最新行先，食評擺最前
+
+首頁本來按分區分五組排。改咗做一條 flat 清單、最新行先，三篇實食紀錄
+擺最前。
+
+理由唔係「最新比較好」，係兩種文嘅作用唔同：
+
+- **實用文**（支付設定、口岸、帶咩返香港）答得到一條具體問題。答完就完 ——
+  讀者攞到答案，走。佢唔會記得係邊個站答嘅。
+- **食評**有第一身視角：邊日去、叫咗咩、邊樣好邊樣唔好、同香港邊間比。
+  呢種嘢冇得抄，亦冇得由別處查返嚟。記唔記得住一個站，靠嘅係呢啲。
+
+所以實用文負責接搜尋流量，食評負責令人記得返轉頭。搜尋流量本來就唔經
+首頁 —— 佢由 Google 直接落到內頁。首頁見到嘅係已經入到嚟嘅人，佢哋值得
+見到最有辨識度嗰批，唔係一份分區目錄（分區目錄喺上面「五個分區」個
+card-grid 已經有咗）。
+
+分區分組唔係冇用，係擺錯位：佢係導覽，唔係文章清單。
+
+
 ## 利益披露
 
 如果一篇文提到本站作者有份開發、擁有或者收錢嘅嘢，披露**必須**用
@@ -1059,9 +1153,49 @@ sitemap、唔出現喺 nav、亦冇任何 `hreflang` 指住佢**——冇內容�
 
 ## 部署到 GitHub Pages
 
-1. `git remote add origin …` 然後 push
-2. repo Settings → Pages → Source 揀 branch（`main`）同 `/ (root)`
-3. 用真 origin 再跑一次 build，commit `sitemap.xml` 同 `robots.txt`
-
 冇 CI build step，因為產物（注入咗嘅 JSON-LD 同 SVG、sitemap、robots）
 係直接 commit 入 repo 嘅。
+
+### 上線 checklist：十一步，次序唔可以亂
+
+**依家未做第一步。GitHub Pages 仲係熄咗嘅，`SITE_ORIGIN` 仲係
+`example.github.io`，兩樣都係刻意。** 未買域名之前唔好開 Pages ——
+一開，`hill02252024.github.io/hk-eats/` 就上線，Google 收咗，之後轉自訂
+網域要 301，而 GitHub Pages 做唔到真正嘅 301。等於一開始就送咗一批
+重複內容出去。
+
+1. **買域名。** 呢步做唔到，下面十步全部唔好做。
+2. **填 `/about` 五條平台帳號 URL。**（見「A 類待核實」）填完 `--publish`
+   先過到 E15。
+3. **用真網域重跑 build：**
+   ```
+   SITE_ORIGIN=https://你嘅域名 node scripts/build.mjs
+   ```
+   佢會改寫全部 canonical、`og:url`、JSON-LD、`sitemap.xml`、`robots.txt`。
+   跑完打開 `sitemap.xml` 肉眼確認一次 host 對。
+4. **寫 CNAME 檔：**
+   ```
+   echo "你嘅域名" > CNAME
+   ```
+   （淨係域名，冇 `https://`，冇尾 slash。）
+5. **commit + push** —— 產物同 `CNAME` 一齊入。
+6. **Settings → Pages** → Source 揀 `main` / `(root)` → Custom domain 填
+   同一個域名 → 等佢驗證 → 剔 Enforce HTTPS（憑證要幾分鐘至幾個鐘先發到）。
+7. **DNS：四條 A + 一條 CNAME。**
+   - apex（`@`）→ 四條 A record，指向 GitHub Pages 嘅四個 IP
+   - `www` → CNAME 指向 `hill02252024.github.io`
+
+   **四個 IP 自己去 GitHub 官方文件核實返，唔好照抄任何二手清單。**
+   GitHub 換過 IP，網上一堆過期教學。查呢頁：
+   `https://docs.github.com/pages` → 「Managing a custom domain for your
+   GitHub Pages site」→ apex domain 嗰節。
+8. **Search Console 加 Domain property**（唔係 URL prefix）。驗證方式係
+   加一條 TXT record，同第 7 步一次過落 DNS 慳時間。
+9. **交 sitemap**：Search Console → Sitemaps → 填 `sitemap.xml`。
+10. **對七篇乾淨文逐篇 Request indexing。** 只做七篇 —— draft 嗰批本來就
+    唔喺 sitemap，唔好手動推佢哋。
+11. **由 todays-tasks 同 pdfloveme 各加一條連結入嚟。** 兩個站都係你自己
+    嘅，唔係買連結。加喺有上文下理嘅位，唔好開一個 footer 連結農場。
+
+第 3 步同第 4 步之間唔好 push；第 6 步之前 DNS 未落都唔好剔 Enforce HTTPS
+—— 憑證簽唔到會卡住，要等佢自己 retry。

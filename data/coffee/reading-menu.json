@@ -2,6 +2,8 @@
   "title": "豆單解讀 — 對照表",
   "belongsTo": "/coffee/reading-menu.html",
   "_status": "principles",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "處理法同烘焙度嘅風味傾向係業界通用嘅粗略對照，唔係精確規則 —— 同一種處理法喺唔同產區同莊園可以差好遠。呢度寫嘅係方向性期望，方便你落單前有個預判。因為冇時效性，全部標記 volatility: low。",
   "entries": {
     "process.washed": {

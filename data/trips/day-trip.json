@@ -2,6 +2,8 @@
   "title": "深圳一日遊骨架 — 易耗芯資料",
   "belongsTo": "/trips/day-trip.html",
   "_status": "mixed",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "段落劃分同緩衝比例係本站嘅設計，唔係外部事實，所以直接寫喺正文。實際時長（過關等候、車程）係現實世界嘅量度值，本站冇核實，一律留待核實 —— 讀者應該用自己量到嘅時間填。",
   "entries": {
     "duration.clearance.weekday": {

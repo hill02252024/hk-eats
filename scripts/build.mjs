@@ -1142,6 +1142,33 @@ function checkNoHardcodedOrigin(relPath, html) {
 }
 
 /* ------------------------------------------------------------------ */
+/* 分段發布：_draft                                                     */
+/* ------------------------------------------------------------------ */
+
+/* 一頁只要喺佢嘅資料檔標咗 `"_draft": true`，就會由 sitemap、首頁文章
+ * 清單同 pillar cluster list 排除 —— 但檔案照樣喺 repo，URL 照樣開得到。
+ *
+ * 點解要呢個機制：仲有待核實標記嘅頁面唔應該俾 Google 索引。一次過等
+ * 全部填實先上線，會拖幾個星期；但把未完成嘅頁放出去，讀者會撞到一堆
+ * 空位，而搜尋引擎會把「呢個站有好多缺口」記低。分段發布嘅意思係：
+ * 乾淨嘅先出，填實一頁就拆一個標記，逐頁放出去。
+ *
+ * 排除範圍**唔包括** nav 同麵包屑 —— 嗰兩樣係結構，唔係推薦位。
+ * 亦唔包括 robots.txt：唔入 sitemap 已經夠，加 disallow 反而會令
+ * 之後放出去嗰陣要多做一步。 */
+const draftCache = new Map();
+function isDraft(relPath) {
+  if (draftCache.has(relPath)) return draftCache.get(relPath);
+  let v = false;
+  const f = path.join(DATA_DIR, relPath.replace(/\.html$/, "") + ".json");
+  if (fs.existsSync(f)) {
+    try { v = JSON.parse(fs.readFileSync(f, "utf8"))._draft === true; } catch { v = false; }
+  }
+  draftCache.set(relPath, v);
+  return v;
+}
+
+/* ------------------------------------------------------------------ */
 /* E9 孤兒頁 / W6 點擊深度                                              */
 /* ------------------------------------------------------------------ */
 
@@ -1195,6 +1222,9 @@ function checkLinkStructure(pageList) {
   const orphans = [];
   for (const relPath of all) {
     if (relPath === "index.html") continue;   // 首頁係入口，唔需要入連
+    // draft 頁係**刻意**冇人連入 —— 佢就係要暫時唔出現喺任何清單。
+    // 當佢係孤兒會令分段發布同 E9 永遠打交。
+    if (isDraft(relPath)) continue;
     const inb = inbound.get(relPath);
     if (!inb || inb.size === 0) orphans.push(relPath);
   }
@@ -1211,7 +1241,7 @@ function checkLinkStructure(pageList) {
       queue.push(next);
     }
   }
-  const unreachable = [...all].filter((p) => !depth.has(p));
+  const unreachable = [...all].filter((p) => !depth.has(p) && !isDraft(p));
   for (const u of unreachable) err(`E9 由首頁去唔到：${u}`);
   const deep = [...depth.entries()].filter(([, d]) => d > 3);
   for (const [p, d] of deep) warn(`W6 ${p}: 由首頁要 ${d} click 先去到（超過 3）`);
@@ -1288,10 +1318,22 @@ function checkPillarLinks(pageList) {
  * 所以要逐頁解析佢引用嘅 key，再對返 data，先知邊頁會出標記。
  * 順便都掃埋 HTML 入面直接手寫嘅字面標記。 */
 function checkPublishReady(pageList) {
-  if (!PUBLISH) return { pages: [], total: 0 };
+  if (!PUBLISH) return { pages: [], total: 0, deferred: [] };
 
   const offenders = [];
+  const deferred = [];
   for (const { relPath, html } of pageList) {
+    /* draft 頁跳過。
+     *
+     * E15 問嘅係「會唔會有待核實標記出到街」。draft 頁唔喺 sitemap、唔喺
+     * 任何清單，本站唔會指路過去 —— 佢仲有標記係預期之內，正正就係佢
+     * 標咗 draft 嘅原因。如果連佢都封鎖，就變成「要成個站填晒先發到」，
+     * 分段發布等於冇做過。
+     *
+     * 呢個唔係鬆咗手：拆走 `_draft` 嗰一刻，E15 對嗰頁即刻重新武裝，
+     * 所以「放一頁出街」同「嗰頁冇待核實標記」依然係綁死嘅。
+     * 下面照樣數返有幾多頁被延後，唔會靜靜雞放過。 */
+    if (isDraft(relPath)) { deferred.push(relPath); continue; }
     const files = new Set();
     let m;
     const fre = /data-fresh=["']([^"']+)["']/gi;
@@ -1325,7 +1367,7 @@ function checkPublishReady(pageList) {
       );
     }
   }
-  return { pages: offenders, total: offenders.reduce((n, o) => n + o.found.length, 0) };
+  return { pages: offenders, total: offenders.reduce((n, o) => n + o.found.length, 0), deferred };
 }
 
 /* 附帶（超出原本要求，但同一個道理）：SITE_ORIGIN 仲係佔位網域嗰陣，
@@ -1341,6 +1383,93 @@ function checkPublishOrigin() {
     return true;
   }
   return false;
+}
+
+/* ------------------------------------------------------------------ */
+/* E19 draft 頁唔准出現喺 sitemap 或者任何推薦清單                       */
+/* ------------------------------------------------------------------ */
+
+/* 標咗 _draft 但仲留喺清單度，等於「以為收埋咗，其實冇」—— 而呢種
+ * 失手係靜嘅：頁面照樣睇得到、build 照樣過，你要開 sitemap 逐條對先
+ * 發現。所以要一條每次 build 都行嘅檢查。
+ *
+ * 掃三個層：
+ *   1. sitemap.xml 嘅 <loc>（生成物）
+ *   2. 首頁 .post-list 嘅 <a href>（手寫）
+ *   3. pillar .cluster-list 嘅 <a href>（手寫）
+ *
+ * nav 同麵包屑**唔掃** —— 嗰兩樣係結構導覽，唔係推薦位；而且麵包屑
+ * 係 build 由路徑生成，draft 頁自己嗰條麵包屑一定會連返 pillar。 */
+function checkDraftNotListed(pageList) {
+  const drafts = new Set(pageList.filter((p) => isDraft(p.relPath)).map((p) => p.relPath));
+  if (!drafts.size) return;
+
+  // 2 + 3. 首頁 .post-list 同 pillar .cluster-list
+  const LIST_RE = /<ul[^>]*class="[^"]*\b(post-list|cluster-list)\b[^"]*"[^>]*>([\s\S]*?)<\/ul>/gi;
+  for (const { relPath, html } of pageList) {
+    let m;
+    LIST_RE.lastIndex = 0;
+    while ((m = LIST_RE.exec(html))) {
+      const kind = m[1];
+      const inner = m[2];
+      const aRe = /<a\b[^>]*?\bhref\s*=\s*["']([^"']*)["']/gi;
+      let a;
+      while ((a = aRe.exec(inner))) {
+        const t = resolveInternal(relPath, a[1]);
+        if (t && drafts.has(t)) {
+          err(`E19 ${relPath}: .${kind} 入面仲有 draft 頁「${t}」—— 標咗 draft 就要由清單拆走`);
+        }
+      }
+    }
+  }
+
+  /* 4. Pillar 嘅 jsonld:itemList 條數 vs 佢畫面上 .cluster-list 條數。
+   *
+   * ItemList 唔載 URL，所以上面第 2、3 層掃唔到佢 —— 但佢一樣係一份俾
+   * 機器讀嘅清單。由清單拆走 draft 嘅時候好易淨係改 HTML、唔記得改個
+   * meta，結果變成同 Google 講「呢頁列住三篇」但頁面一篇都冇。
+   *
+   * 唔逐個名對，淨係對條數：名嘅寫法可以同 <li> 入面唔一樣（一個係
+   * 標題、一個係入口文案），但「有幾多篇」冇得唔一樣。 */
+  for (const { relPath, html } of pageList) {
+    const parts = relPath.split("/");
+    if (parts.length !== 2 || parts[1] !== "index.html" || !SECTIONS[parts[0]]) continue;
+    const meta = html.match(/<meta\s+name="jsonld:itemList"\s+content="([^"]*)"/i);
+    const ul = html.match(/<ul[^>]*class="[^"]*\bcluster-list\b[^"]*"[^>]*>([\s\S]*?)<\/ul>/i);
+    const listed = meta ? meta[1].split("|").filter((x) => x.trim()).length : 0;
+    const shown = ul ? (ul[1].match(/<li\b/gi) || []).length : 0;
+    if (listed !== shown) {
+      err(
+        `E19 ${relPath}: jsonld:itemList 寫住 ${listed} 篇，但畫面 .cluster-list 得 ${shown} 篇` +
+        ` —— 由清單拆走 draft 嘅時候要一齊改個 meta`
+      );
+    }
+  }
+}
+
+/* E19 嘅 sitemap 層。
+ *
+ * 呢段刻意同清單層分開：清單層驗嘅係倉入面嘅 HTML，隨時可以驗；
+ * sitemap 層驗嘅係「今次 build 正正寫咗落 sitemap.xml 嗰份」。
+ * 讀舊檔會錯兩次 —— 第一次 build（未有 sitemap.xml）會靜靜跳過，
+ * 而有舊檔嗰陣報嘅係上一次嘅狀態，唔係今次。所以要接住 writeSitemap
+ * 之後即刻讀返出嚟驗。 */
+function checkDraftNotInSitemap(pageList) {
+  const drafts = pageList.filter((p) => isDraft(p.relPath)).map((p) => p.relPath);
+  if (!drafts.length) return;
+  const smPath = path.join(ROOT, "sitemap.xml");
+  if (!fs.existsSync(smPath)) {
+    err("E19 sitemap.xml: 應該已經生成但搵唔到 —— draft 排除做咗未無從驗證");
+    return;
+  }
+  const locs = [...fs.readFileSync(smPath, "utf8").matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]);
+  for (const d of drafts) {
+    const tails = [d];
+    if (d.endsWith("/index.html")) tails.push(d.replace(/index\.html$/, ""));
+    if (locs.some((u) => tails.some((t) => u.endsWith("/" + t)))) {
+      err(`E19 sitemap.xml: 收錄咗 draft 頁「${d}」—— draft 唔應該俾搜尋引擎索引`);
+    }
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -1472,6 +1601,9 @@ function checkClusterVsPillar(pageList) {
   for (const [section, { pillar, clusters }] of bySection) {
     if (!pillar) continue;
     for (const c of clusters) {
+      /* draft 頁唔喺 sitemap、亦唔喺任何清單，爭唔到關鍵字，所以體量
+       * 比較對佢冇意義。拆走 _draft 放出去嗰陣，呢條 warning 會自動返嚟。 */
+      if (isDraft(c.relPath)) continue;
       const pct = Math.round((c.chars / pillar.chars - 1) * 100);
       if (pct >= CLUSTER_OVERSIZE_PCT) {
         over.push({ relPath: c.relPath, chars: c.chars, pillarChars: pillar.chars, section, pct });
@@ -1726,6 +1858,7 @@ console.log(`      cluster → pillar 內連：${pillarLinks.filter((r) => r.ok)
 
 checkH1NotSectionName(pages);
 checkNotesFeedsInto();
+checkDraftNotListed(pages);   // 清單層；sitemap 層喺 writeSitemap 之後先驗
 const overSized = checkClusterVsPillar(pages);
 console.log(`      cluster 體量 vs pillar：${overSized.length} 頁超出`);
 
@@ -1734,14 +1867,24 @@ const pub = checkPublishReady(pages);
 checkPublishOrigin();
 if (PUBLISH) {
   console.log(`      發布守衛：${pub.pages.length} 頁仲有待核實標記（共 ${pub.total} 個）`);
+  if (pub.deferred.length) {
+    console.log(`      發布守衛：${pub.deferred.length} 頁標咗 draft，暫緩檢查（${pub.deferred.join("、")}）`);
+  }
 }
 console.log(`[7/8] 待核實標記：${nv.length} 個（HTML ${nv.filter((x) => x.kind === "HTML").length} / data ${nv.filter((x) => x.kind === "data").length}）`);
 
-const sitemapPages = pages.filter((p) => !RESERVED_DIRS.has(p.relPath.split("/")[0]));
+const sitemapPages = pages.filter(
+  (p) => !RESERVED_DIRS.has(p.relPath.split("/")[0]) && !isDraft(p.relPath)
+);
+const draftPages = pages.filter((p) => isDraft(p.relPath)).map((p) => p.relPath);
+if (draftPages.length) {
+  console.log(`      sitemap 排除 draft：${draftPages.length} 頁（${draftPages.join("、")}）`);
+}
 if (sitemapPages.length !== pages.length) {
   console.log(`      sitemap 排除預留目錄：${pages.length - sitemapPages.length} 頁`);
 }
 writeSitemap(sitemapPages);
+checkDraftNotInSitemap(pages);
 writeRobots();
 console.log(`[8/8] sitemap.xml（${sitemapPages.length} 條 URL）、robots.txt：已生成`);
 

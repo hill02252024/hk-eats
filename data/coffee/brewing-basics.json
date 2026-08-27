@@ -2,6 +2,8 @@
   "title": "手沖參數 — 起手範圍",
   "belongsTo": "/coffee/brewing-basics.html",
   "_status": "principles",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "呢度嘅數字係業界通用嘅起手範圍，唔係本站量度出嚟嘅數據，亦唔係邊個機構嘅標準。佢哋嘅作用係畀你一個可重複嘅起點，然後靠自己一次改一個變數收窄。因為冇時效性，全部標記 volatility: low；verifiedOn 記錄嘅係最後覆核措辭嘅月份，唔係「數據核實」。",
   "entries": {
     "ratio.range": {

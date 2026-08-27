@@ -2,6 +2,8 @@
   "title": "香港咖啡店分區 — 易耗芯資料",
   "belongsTo": "/areas/hk-coffee-map.html",
   "_status": "unverified",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "具體分區名單、店舖密度、工廈區嘅實際情況會隨租金同城市更新變化，而且本站唔喺現場。正文只寫三種舖位型態嘅結構邏輯，具體分區同名單一律留待核實。",
   "entries": {
     "district.street": {

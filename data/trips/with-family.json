@@ -2,6 +2,8 @@
   "title": "帶長輩或小朋友 — 易耗芯資料",
   "belongsTo": "/trips/with-family.html",
   "_status": "unverified",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "無障礙設施、電梯位置、廁所分佈同兒童票規則，係現場設施同營運規定，本站冇能力核實。行程節奏設計本身係本站設計，寫喺正文。",
   "entries": {
     "access.ports": {

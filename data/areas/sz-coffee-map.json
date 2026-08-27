@@ -2,6 +2,8 @@
   "title": "深圳咖啡店分區 — 易耗芯資料",
   "belongsTo": "/areas/sz-coffee-map.html",
   "_status": "unverified",
+  "_draft": true,
+  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "深圳嘅咖啡聚落、本土連鎖品牌、園區出入規則變動快，而且本站唔喺現場，可核實程度比香港嗰篇更低。正文只寫商場／園區／街區三種載體嘅結構邏輯，所有具體名單留待核實。",
   "entries": {
     "venue.mall": {
