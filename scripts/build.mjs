@@ -54,7 +54,7 @@ const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://example.github.io/hk_ea
 const SITE_NAME = "歎世界";
 const SITE_TAGLINE = "香港出發的食飲與旅行指南";
 const SITE_LANG = "zh-HK";
-const LEGACY_DISPLAY_STRINGS = ["hk_eats", "港深食飲指南", "香港出發行程設計", "行程模板"];
+const LEGACY_DISPLAY_STRINGS = ["hk_eats", "港深食飲指南", "香港出發行程設計", "行程模板", "港深食飲地圖"];
 const SITE_HOST = (() => { try { return new URL(SITE_ORIGIN).host; } catch { return ""; } })();
 
 const SKIP_DIRS = new Set([".git", "node_modules", "scripts", ".github", "assets"]);
@@ -63,7 +63,8 @@ const SKIP_DIRS = new Set([".git", "node_modules", "scripts", ".github", "assets
  * 麵包屑（可見 + JSON-LD）全部由呢度生成，唔會同頁面寫嘅內容行開。 */
 const SECTIONS = {
   guides: { pillar: "港人北上完整指南", nav: "北上實務" },
-  areas:  { pillar: "港深食飲地圖",     nav: "分區地圖" },
+  areas:  { pillar: "內地食飲地圖",     nav: "分區地圖" },
+  notes:  { pillar: "實食紀錄",         nav: "實食紀錄" },
   coffee: { pillar: "港深咖啡入門",     nav: "咖啡" },
   trips:  { pillar: "北上行程",         nav: "北上行程" },
 };
@@ -101,8 +102,26 @@ const EXTERNAL_ALLOWLIST = {
     // 先開定，等資料補齊即刻用得。呢兩個網域係商店官方頁，唔帶佣金。
     "apps.apple.com",        // App Store
     "play.google.com",       // Google Play
+    // 本站自己喺各平台嘅帳號。只可以喺 about.html 出現 —— E18 會攔住
+    // 佢哋走入任何文章頁。放行嘅係「本站帳號主頁」，唔係平台上面
+    // 任何一間店嘅頁；後者屬於會過期嘅內容，應該入資料檔而唔係硬連。
+    "www.dianping.com",      // 大眾點評：香港人美食家
+    "www.xiaohongshu.com",   // 小紅書：香港人｜美食實測
+    "www.youtube.com",       // YouTube：Wandering Chef's Fork
+    "space.bilibili.com",    // B站：香港人美食家
+    "www.douyin.com",        // 抖音：港仔咖啡旅行食記
   ],
 };
+
+/* 平台帳號網域：放行，但只限 about.html。E18 靠呢個表判斷。 */
+const PLATFORM_HOSTS = new Set([
+  "www.dianping.com",
+  "www.xiaohongshu.com",
+  "www.youtube.com",
+  "space.bilibili.com",
+  "www.douyin.com",
+]);
+const PLATFORM_ONLY_PAGE = "about.html";
 
 /* 就算網域喺白名單，帶追蹤參數一樣攔 —— 白名單放行嘅係「參考連結」，
  * 唔係「帶 tracking 嘅參考連結」。 */
@@ -197,6 +216,16 @@ function checkExternalLinks(file, text) {
       err(
         `E1 ${r}:${lineOf(text, m.index)} 白名單網域「${host}」但帶追蹤參數` +
         `（${href.slice(0, 70)}）→ 參考連結唔應該有 tracking`
+      );
+    }
+    /* E18 平台帳號連結只准出現喺 about.html。
+     * 文章頁嘅角色係「用香港人嘅尺量外面嘅世界」，唔係導流去自己嘅
+     * 社交帳號；而且平台連結一旦散落各篇，改一個帳號就要全站搵。
+     * 集中喺一版，改一次就得。 */
+    if (PLATFORM_HOSTS.has(host.toLowerCase()) && r !== PLATFORM_ONLY_PAGE) {
+      err(
+        `E18 ${r}:${lineOf(text, m.index)} 平台帳號連結「${host}」只准出現喺 ` +
+        `${PLATFORM_ONLY_PAGE}，唔准出現喺文章頁`
       );
     }
   }
@@ -1315,6 +1344,82 @@ function checkPublishOrigin() {
 }
 
 /* ------------------------------------------------------------------ */
+/* W14 notes 嘅 feedsInto 指住一條仲係待核實嘅 areas key                 */
+/* ------------------------------------------------------------------ */
+
+/* 實食紀錄同分區地圖係一個循環：一次到訪嘅觀察，用嚟填實分區資料檔
+ * 入面「冇得喺電腦前查」嗰啲 key。feedsInto 就係嗰條線。
+ *
+ * 但寫低咗一條線唔等於行過。如果一篇紀錄聲稱佢餵緊某條 areas key，
+ * 而嗰條 key 到今日仍然係 needsVerify，即係嗰個循環未閂 —— 觀察擺喺
+ * 度冇人收。呢個唔係 error（篇文本身冇問題），係一張待辦：
+ * 有幾多篇紀錄喺度等緊人去把佢哋歸納返落分區檔。
+ *
+ * 同時亦驗 feedsInto 指嘅目標存唔存在。指去一個唔存在嘅檔或者 key，
+ * 係一條斷咗嘅線 —— 比「未閂」更差，因為佢永遠唔會閂。 */
+function checkNotesFeedsInto() {
+  const notesDir = path.join(DATA_DIR, "notes");
+  if (!fs.existsSync(notesDir)) return;
+
+  const cache = new Map();
+  const loadData = (target) => {
+    if (cache.has(target)) return cache.get(target);
+    const f = path.join(DATA_DIR, target + ".json");
+    let doc = null;
+    if (fs.existsSync(f)) {
+      try { doc = JSON.parse(fs.readFileSync(f, "utf8")); } catch { doc = null; }
+    }
+    cache.set(target, doc);
+    return doc;
+  };
+
+  for (const name of fs.readdirSync(notesDir).sort()) {
+    if (!name.endsWith(".json")) continue;
+    const relData = `data/notes/${name}`;
+    let doc;
+    try { doc = JSON.parse(fs.readFileSync(path.join(notesDir, name), "utf8")); }
+    catch { continue; }   // JSON 壞咗由 E6 處理
+
+    if (!doc.visitDate) {
+      warn(`W14 ${relData}: 實食紀錄冇 visitDate —— 冇到訪日期嘅紀錄冇有效期`);
+    }
+    for (const [k, v] of Object.entries(doc.entries || {})) {
+      if (v && v.volatility !== "high") {
+        warn(`W14 ${relData}: entry「${k}」係「${v.volatility || "normal"}」—— 實食紀錄一律要 high`);
+      }
+    }
+
+    const feeds = Array.isArray(doc.feedsInto) ? doc.feedsInto : [];
+    if (!feeds.length) continue;
+
+    for (const f of feeds) {
+      const target = f && f.target;
+      const key = f && f.key;
+      if (!target || !key) {
+        warn(`W14 ${relData}: feedsInto 有一項冇 target 或者 key`);
+        continue;
+      }
+      const targetDoc = loadData(target);
+      if (!targetDoc) {
+        warn(`W14 ${relData}: feedsInto 指住「${target}」，但 data/${target}.json 唔存在 —— 斷咗嘅線`);
+        continue;
+      }
+      const entry = (targetDoc.entries || {})[key];
+      if (!entry) {
+        warn(`W14 ${relData}: feedsInto 指住「${target} → ${key}」，但嗰個 key 唔存在 —— 斷咗嘅線`);
+        continue;
+      }
+      if (entry.needsVerify) {
+        warn(
+          `W14 ${relData}: feedsInto 指住「${target} → ${key}」，但嗰條 key 仍然係待核實 —— ` +
+          `呢篇紀錄嘅觀察未歸納返落分區檔`
+        );
+      }
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* W13 H1 唔可以同分區名一模一樣                                        */
 /* ------------------------------------------------------------------ */
 
@@ -1620,6 +1725,7 @@ const pillarLinks = checkPillarLinks(pages);
 console.log(`      cluster → pillar 內連：${pillarLinks.filter((r) => r.ok).length}/${pillarLinks.length} 篇合格`);
 
 checkH1NotSectionName(pages);
+checkNotesFeedsInto();
 const overSized = checkClusterVsPillar(pages);
 console.log(`      cluster 體量 vs pillar：${overSized.length} 頁超出`);
 

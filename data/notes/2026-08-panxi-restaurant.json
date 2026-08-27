@@ -1,0 +1,82 @@
+{
+  "title": "廣州泮溪酒家 — 易耗芯資料",
+  "belongsTo": "/notes/2026-08-panxi-restaurant.html",
+  "_status": "mixed",
+  "_note": "實食紀錄一律 volatility high。編輯提供咗埋單金額、點咗嘅嘢同假日人流嘅體感；營業時間同實際等位時間當日冇記低，唔填估算值。",
+  "visitDate": "2026-08",
+  "feedsInto": [],
+  "_feedsIntoNote": "呢篇冇 feedsInto：本站而家嘅分區頁只覆蓋深圳同香港，冇廣州。篇文所有觀察都係廣州荔灣，冇一條填得實現有嘅 areas key。將來開咗廣州分區頁先補返，唔會夾硬指去一條唔相干嘅 key。",
+  "entries": {
+    "visit.date": {
+      "value": "2026 年 8 月，假日",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "呢篇係一次到訪嘅紀錄。價錢、人流、出品水準隨時變，日期之後嘅嘢本站冇再核實。"
+    },
+    "price.paid": {
+      "value": "埋單約 220 港元（兩人份，自費，冇任何招待）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "點心價目同匯率都會變，呢個係到訪當日嘅埋單金額。"
+    },
+    "queue.holiday": {
+      "value": "假日超多人，建議早啲去攞位",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "人流同假期、天氣、旅遊旺季高度相關，單次觀察唔代表常態。"
+    },
+    "order.items": {
+      "value": [
+        "八寶冬瓜盅（細）",
+        "蝦餃",
+        "燒賣",
+        "馬蹄糕",
+        "腸粉"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "菜單隨季節同廚房調整，呢個係到訪當日點到嘅嘢。"
+    },
+    "hours.daily": {
+      "value": "週一至週日 07:30–16:00、17:00–21:00",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "營業時間隨時變，而且呢個係平台資料唔係商戶公布 —— 出發前自己再確認。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 6 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "queue.waitTime": {
+      "value": "到訪當日冇計時。可以講嘅係：假日人非常多，建議早啲去攞位。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "呢個係一次到訪嘅觀察，唔係量度。本站冇打算返去計時，所以呢項唔會有數字。"
+    },
+    "hours.gap": {
+      "value": "早／午市之間 16:00–17:00 休息，唔營業",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "休息時段隨時變，出發前自己再確認。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 6 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "platform.perCapita": {
+      "value": "大眾點評顯示人均 ¥92（平台統計，唔等於本次埋單）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "人均係平台按用戶帳單計嘅滾動統計，逐日變。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 6 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "platform.subScores": {
+      "value": "口味 3.9／環境 4.4／服務 3.8（平台分項評分）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "平台評分逐日變。呢個係到訪當日嘅數，唔係本站評分。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 6 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "access.metro": {
+      "value": "距地鐵中山八站 A 口步行約 860 米；設停車場",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "步行距離本身好穩定，但呢個數係平台計嘅，出口編號同封閉情況會變。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 6 月前更新；非商戶官方公布，出發前建議自行確認。"
+    }
+  }
+}

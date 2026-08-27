@@ -17,3 +17,7 @@ npm-debug.log*
 
 # 無頭瀏覽器測試嘅臨時 profile
 .chrome-profile/
+
+# 內容來源草稿。放喺 repo 入面方便寫作，但唔應該上傳 ——
+# GitHub Pages 會把 repo 入面所有檔案公開，包括呢啲未成文嘅稿。
+sources/

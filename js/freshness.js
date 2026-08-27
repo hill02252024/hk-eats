@@ -148,7 +148,7 @@
 
   /* ---- 註腳：核實月份 + 「可能已過時」警告 ---- */
 
-  function renderFooter(block, oldest, worst, now, missingKeys, unverifiedKeys) {
+  function renderFooter(block, oldest, worst, now, missingKeys, unverifiedKeys, sourceNotes) {
     var foot = document.createElement("p");
     foot.className = "freshness";
 
@@ -170,6 +170,17 @@
       miss.textContent = "（" + missingKeys.length + " 項資料未載入）";
       foot.appendChild(miss);
       block.classList.add("is-error");
+    }
+
+    if (sourceNotes && sourceNotes.length) {
+      // 二手資料唔可以同官方來源同一個視覺重量 —— 佢係一句出處聲明，
+      // 唔係警告，所以用獨立 class，唔會同 .stale-warning 撈亂。
+      for (var si = 0; si < sourceNotes.length; si++) {
+        var src = document.createElement("span");
+        src.className = "source-note";
+        src.textContent = "來源：" + sourceNotes[si];
+        foot.appendChild(src);
+      }
     }
 
     if (worst) {
@@ -204,6 +215,7 @@
     var notes = [];         // high 類嘅 volatileNote，去重
     var missing = [];
     var unverified = [];    // 有 needsVerify 嘅 key
+    var sources = [];       // 二手來源標示（去重）
 
     Array.prototype.forEach.call(targets, function (el) {
       var key = el.getAttribute("data-fresh-key");
@@ -219,6 +231,12 @@
           var note = entry.volatileNote || "呢項資料標記為正在變動中，請以官方最新公布為準。";
           if (notes.indexOf(note) === -1) notes.push(note);
         }
+      }
+
+      if (entry && typeof entry.sourceNote === "string" && entry.sourceNote) {
+        // 二手來源（例如平台商戶頁）要同官方公布分得開。收集起嚟，
+        // 喺區塊註腳統一列出去重之後嘅版本 —— 同一個來源唔使重複講幾次。
+        if (sources.indexOf(entry.sourceNote) === -1) sources.push(entry.sourceNote);
       }
 
       if (entry && entry.needsVerify) {
@@ -261,7 +279,7 @@
       block.classList.add("is-unverified");
       block.setAttribute("data-unverified-count", String(unverified.length));
     }
-    renderFooter(block, oldest, worst, now, missing, unverified);
+    renderFooter(block, oldest, worst, now, missing, unverified, sources);
     block.setAttribute("data-fresh-state", "ready");
   }
 

@@ -1,0 +1,87 @@
+{
+  "title": "廣州北京路民記煲仔飯 — 易耗芯資料",
+  "belongsTo": "/notes/2026-08-manji-claypot-rice.html",
+  "_status": "mixed",
+  "_note": "實食紀錄一律 volatility high。編輯提供咗套餐內容、實付金額、兩段等候時間同平台評分；營業時間當日冇記低，唔填估算值。",
+  "visitDate": "2026-08",
+  "feedsInto": [
+    {
+      "target": "areas/shenzhen-malls",
+      "key": "list.local.judgement",
+      "note": "篇文入面同深圳蛇口「老顧客煲仔飯」嘅對比（排隊短、人均低、調味濃）係一個蛇口片區嘅觀察點。只有對比嗰半截餵得到呢條 key，廣州嗰半截餵唔到 —— 本站暫時冇廣州分區頁。"
+    }
+  ],
+  "entries": {
+    "visit.date": {
+      "value": "2026 年 8 月，週末中午",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "呢篇係一次到訪嘅紀錄。價錢、等候時間、出品水準隨時變，日期之後嘅嘢本站冇再核實。"
+    },
+    "order.set": {
+      "value": "大眾點評「超贊招牌雙人餐」：鮮嫩瘦肉飯 + 冬菇滑雞飯 + 兩份生滾湯（豬肝杞子、瘦肉杞子）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "套餐內容由平台同商戶決定，隨時調整或者落架。"
+    },
+    "price.paid": {
+      "value": "實付 ¥53.8（自費，冇任何招待）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "套餐定價隨時變。"
+    },
+    "queue.door": {
+      "value": "門口已坐滿等位嘅人，等咗十幾分鐘",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "等位時間同時段、季節、假期高度相關，單次觀察唔代表常態。"
+    },
+    "queue.toTable": {
+      "value": "入座後約 15 分鐘上枱",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "出餐時間同當日人手同煲數有關，單次觀察唔代表常態。"
+    },
+    "platform.rating": {
+      "value": "大眾點評 4.4 分",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "平台評分逐日變。呢個係到訪當日嘅數，唔係本站評分。"
+    },
+    "hours.daily": {
+      "value": "週一至週日 10:30–21:00",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "營業時間隨時變，而且呢個係平台資料唔係商戶公布 —— 出發前自己再確認。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 4 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "platform.perCapita": {
+      "value": "大眾點評顯示人均 ¥33（平台統計，唔等於本次實付）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "人均係平台按用戶帳單計嘅滾動統計，逐日變。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 4 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "platform.subScores": {
+      "value": "口味 4.4／環境 4.0／服務 4.1（平台分項評分）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "平台評分逐日變。呢個係到訪當日嘅數，唔係本站評分。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 4 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "platform.award": {
+      "value": "2026 年 6 月入選大眾點評必吃榜（平台獎項名稱，非本站結論）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "榜單每年重選，入唔入選逐年變。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 4 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "access.metro": {
+      "value": "距地鐵公園前站 J 口步行約 580 米",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "步行距離本身好穩定，但呢個數係平台計嘅，出口編號同封閉情況會變。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 4 月前更新；非商戶官方公布，出發前建議自行確認。"
+    }
+  }
+}

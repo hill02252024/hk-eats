@@ -602,6 +602,15 @@ a[data-aff]:not([href]) {
 .data-block.is-unverified { border-style: dashed; }
 .freshness .unverified-note { color: var(--warn-fg); }
 
+/* 二手來源標示。刻意用 muted 而唔係警告色 —— 佢答嘅係「呢啲數邊度嚟」，
+   唔係「呢啲數有問題」。同 .stale-warning（琥珀）同 .volatile-banner（藍）
+   分得開，三者答三條唔同嘅問題。 */
+.freshness .source-note {
+  display: block;
+  color: var(--fg-muted);
+  font-style: italic;
+}
+
 /* ================================================================
    Pillar 頁：cluster 連結清單
    ================================================================ */

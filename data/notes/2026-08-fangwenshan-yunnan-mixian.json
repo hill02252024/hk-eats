@@ -1,0 +1,98 @@
+{
+  "title": "深圳桃園芳雯山雲南小鍋米線 — 易耗芯資料",
+  "belongsTo": "/notes/2026-08-fangwenshan-yunnan-mixian.html",
+  "_status": "mixed",
+  "_note": "實食紀錄一律 volatility high：一次到訪嘅價錢、評分、榜單位置隨時變，永遠掛變動中橫幅，唔會有「已過期」呢個狀態。編輯提供咗套餐內容、原價、平台評分同榜單位置；營業時間同等位情況當日冇記低，唔填估算值。",
+  "visitDate": "2026-08",
+  "feedsInto": [
+    {
+      "target": "areas/shenzhen-malls",
+      "key": "list.local.candidates",
+      "note": "桃園係南山一個非核心、以住宅為主嘅生活型片區 —— 可以填入生活型商圈名單同所屬行政區。"
+    },
+    {
+      "target": "areas/shenzhen-malls",
+      "key": "list.local.judgement",
+      "note": "一間冇分店、主打地方口味嘅單店開一個月就上到平台小食榜，係『呢個片區以本地客為主』嘅一個佐證點。要幾個同類觀察先夠落判斷。"
+    }
+  ],
+  "entries": {
+    "meal.disclosure": {
+      "value": "呢一餐係大眾點評提供嘅試單套餐，套餐原價 ¥54，平台全免，我冇畀過錢。呢篇唔係推薦文，係一次到訪嘅紀錄；你睇嘅時候應該自己扣返呢個折頭。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "呢個披露描述嘅係一次特定到訪嘅安排，唔適用於其他到訪。"
+    },
+    "visit.date": {
+      "value": "2026 年 8 月",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "呢篇係一次到訪嘅紀錄。價錢、評分、榜單位置同出品水準隨時變，日期之後嘅嘢本站冇再核實。"
+    },
+    "shop.age": {
+      "value": "兩個來源唔一致：我到訪時老闆話開咗約一個月；大眾點評顯示收錄日期係 2026 年 5 月。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "本站冇能力判定邊個啱，兩個都照列。收錄日期唔一定等於開業日期。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 1 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "shop.branches": {
+      "value": "冇分店，單店經營",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "分店數目隨時變。"
+    },
+    "price.set": {
+      "value": "大眾點評試單套餐，原價 ¥54；本次由平台全免，實付 ¥0",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "套餐內容同定價由平台同商戶決定，隨時調整或者落架。"
+    },
+    "platform.rating": {
+      "value": "大眾點評 4.6 分",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "平台評分逐日變。呢個係到訪當日嘅數，唔係本站評分。"
+    },
+    "platform.rank": {
+      "value": "大眾點評小食榜第一（平台排名，非本站結論）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "榜單位置逐日變，而且新店評價基數細，排名穩定度未夠。"
+    },
+    "hours.daily": {
+      "value": "週一至週日 08:00–22:30（點餐時間相同）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "營業時間隨時變，而且呢個係平台資料唔係商戶公布 —— 出發前自己再確認。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 1 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "queue.observed": {
+      "value": "到訪當日冇計時，亦冇排隊。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "呢個係一次到訪嘅觀察，唔係量度。本站冇打算返去計時，所以呢項唔會有數字。"
+    },
+    "platform.perCapita": {
+      "value": "大眾點評顯示人均 ¥28（平台統計；本次套餐原價 ¥54，由平台全免）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "人均係平台按用戶帳單計嘅滾動統計，逐日變。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 1 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "platform.subScores": {
+      "value": "口味 4.6／環境 4.6／服務 4.7（平台分項評分）",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "平台評分逐日變。新店評價基數細，分數波動大過老店。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 1 月前更新；非商戶官方公布，出發前建議自行確認。"
+    },
+    "access.metro": {
+      "value": "距地鐵南山站 G 口步行約 370 米；免費停車",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "步行距離本身好穩定，但呢個數係平台計嘅，出口編號同封閉情況會變。",
+      "sourceNote": "大眾點評商戶資訊頁，平台顯示 1 月前更新；非商戶官方公布，出發前建議自行確認。"
+    }
+  }
+}
