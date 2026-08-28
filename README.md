@@ -912,6 +912,12 @@ node scripts/optimize-images.mjs <slug> --html      # 順便印 HTML 出嚟
 原圖擺 `assets/photos/_raw/<article-slug>/`，一篇文一個資料夾。輸出
 `assets/photos/<slug>-NN-1200.webp` 同 `-800.webp`，質素 80。
 
+**唔會放大。** 原圖細過目標闊度嗰陣，就照原圖闊度出 —— sips 嘅
+`--resampleWidth` 唔理呢樣，照樣拉大（實測：一張 1136px 原圖上到
+1200px，壓完 119%，即係大過原圖，而畫質淨係差咗）。`--html` 印出嚟嘅
+`srcset` descriptor 亦都用**實際**闊度（例如 `1136w`），唔係名義上
+嗰個 —— 寫死 1200w 就係呃緊瀏覽器揀圖。
+
 **唔使 `npm install`。** 用 macOS 內置 `sips` 解碼＋縮放，`cwebp`
 （libwebp）編碼 —— 呢部機兩樣都有（`/opt/homebrew/bin/cwebp` 1.6.0）。
 如果 `node_modules` 入面搵到 `sharp` 就會自動改用 sharp（快啲、少一次

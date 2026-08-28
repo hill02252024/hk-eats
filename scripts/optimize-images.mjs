@@ -124,10 +124,15 @@ function sipsDimensions(src) {
  * 唔直接 jpeg → cwebp，因為 jpeg 中間檔會帶住原本嘅 EXIF，變成
  * 淨係靠 cwebp 一道防線。 */
 function encodeWithSips(src, width, dest, cwebp) {
+  /* **唔准放大。** sips 嘅 --resampleWidth 唔理原圖細過目標，照樣拉大 ——
+   * 出嚟嘅檔會大過原圖（實測：1136px 原圖上 1200px，壓完 117%），而且
+   * 畫質淨係差咗。sharp 嗰條路本身就有 withoutEnlargement，呢度要自己補。 */
+  const srcWidth = sipsDimensions(src).w;
+  const target = srcWidth > 0 ? Math.min(width, srcWidth) : width;
   const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "hk-eats-img-")), "step.png");
   try {
     execFileSync("/usr/bin/sips", [
-      "--resampleWidth", String(width),
+      "--resampleWidth", String(target),
       "--setProperty", "format", "png",
       src, "--out", tmp,
     ], { stdio: "ignore" });
@@ -251,16 +256,19 @@ for (const slug of slugs) {
 
 /* 圖片喺文章頁（分區/檔名.html），所以相對路徑要 ../ */
 function figureHtml(slug, s) {
-  const small = s.variants[WIDTHS[1]].name;
-  const big = s.big.name;
+  const small = s.variants[WIDTHS[1]];
+  const big = s.variants[WIDTHS[0]];
+  /* descriptor 用**實際**闊度，唔係名義上嗰個。原圖細過 1200 嗰陣
+   * 我哋唔會放大（見 encodeWithSips），所以個檔可能係 1136 闊 ——
+   * 寫死 1200w 就係呃緊瀏覽器揀圖。 */
   return `<figure class="photo-figure">
   <picture>
     <source
       type="image/webp"
-      srcset="../assets/photos/${small} 800w, ../assets/photos/${big} 1200w"
+      srcset="../assets/photos/${small.name} ${small.w}w, ../assets/photos/${big.name} ${big.w}w"
       sizes="(max-width: 720px) 100vw, 720px">
-    <img src="../assets/photos/${big}"
-         width="${s.big.w}" height="${s.big.h}"
+    <img src="../assets/photos/${big.name}"
+         width="${big.w}" height="${big.h}"
          loading="lazy" decoding="async"
          alt="">
   </picture>
