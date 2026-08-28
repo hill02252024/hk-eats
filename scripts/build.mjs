@@ -48,7 +48,28 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
  * 任何一頁仲有標記就唔應該出街。 */
 const PUBLISH = process.argv.includes("--publish");
 
-const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://example.github.io/hk_eats").replace(/\/+$/, "");
+/* 網域嘅單一來源，優先次序：
+ *
+ *   1. 環境變數 SITE_ORIGIN（一次性覆蓋，例如試另一個網域）
+ *   2. repo 入面嘅 CNAME 檔  ← 上咗線之後日常就係行呢條
+ *   3. 佔位網域（未買域名嗰陣）
+ *
+ * 加第 2 條係因為一個真陷阱：上線之後，任何一次 `node scripts/build.mjs`
+ * 冇帶 SITE_ORIGIN，就會把全站 canonical／og:url／JSON-LD／sitemap／
+ * robots 一次過改返做佔位網域，而且 build 唔會報錯 —— 佢以為你就係想
+ * 咁。scripts/new-post.mjs 每次開新文都會跑一次 bare build，即係開一篇
+ * 文就打回原形一次。
+ *
+ * CNAME 就係 GitHub Pages 自己嘅網域來源（Settings 填 custom domain 嗰陣
+ * 佢會 commit 呢個檔），所以攞佢做預設唔係猜，係讀返同一個事實。 */
+function readCnameOrigin() {
+  const f = path.join(ROOT, "CNAME");
+  if (!fs.existsSync(f)) return null;
+  const host = fs.readFileSync(f, "utf8").trim();
+  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(host)) return null;
+  return `https://${host}`;
+}
+const SITE_ORIGIN = (process.env.SITE_ORIGIN || readCnameOrigin() || "https://example.github.io/hk_eats").replace(/\/+$/, "");
 /* 顯示層品牌。目錄名／repo 名／SITE_ORIGIN 入面嘅 hk_eats 係基建標識，
  * 唔喺顯示層，所以唔改。 */
 const SITE_NAME = "歎世界";
@@ -271,6 +292,78 @@ function checkExternalImages(file, text) {
     let m;
     while ((m = p.re.exec(text))) {
       err(`E2 ${r}:${lineOf(text, m.index)} ${p.why}：「${m[0].slice(0, 70)}」→ 本站零外部圖片，圖解一律 inline SVG`);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* E20 相片 alt / W15 相片防 CLS 屬性                                    */
+/* ------------------------------------------------------------------ */
+
+/* 相片同圖解唔同：圖解係 inline SVG，本身帶 <title>；相片係 <img>，
+ * 冇 alt 就係一格靜音。對用螢幕閱讀器嘅人嚟講，一張冇 alt 嘅相等於
+ * 一個「圖片」二字，佢唔知走漏咗咩。
+ *
+ * 呢個站放相係有理由嘅（見 README「相片規則」）—— 每張相要撐得住文
+ * 中某個判斷。撐唔撐得住，寫 alt 嗰陣就知：寫唔出「呢張相畀人睇到
+ * 咩」，即係嗰張相唔應該喺度。所以 alt 係 error，唔係 warning。
+ *
+ * alt="" 喺 HTML 標準入面係「純裝飾，故意唔讀」。本站唔容許 ——
+ * 純裝飾相唔應該存在。所以空 alt 一樣攔。
+ *
+ * W15 攔 width/height/loading。少咗 width/height，圖未載入時高度係 0，
+ * 載入嗰刻成頁跳一跳（CLS）；少咗 loading="lazy"，五張相會同正文爭
+ * 頻寬。呢兩樣係 warning 唔係 error —— 佢哋整壞體驗，但唔會令內容
+ * 讀唔到。 */
+const PLACEHOLDER_ALT = /^(?:圖|相|相片|圖片|photo|image|img|picture|todo|待填)[\s。.，,、]*$/i;
+
+function checkPhotos(file, text) {
+  const r = rel(file);
+  const figRe = /<figure\b[^>]*class="[^"]*\bphoto-figure\b[^"]*"[^>]*>([\s\S]*?)<\/figure>/gi;
+  let f;
+  figRe.lastIndex = 0;
+  while ((f = figRe.exec(text))) {
+    const inner = f[1];
+    const line = lineOf(text, f.index);
+    const imgs = inner.match(/<img\b[^>]*>/gi) || [];
+    if (!imgs.length) {
+      err(`E20 ${r}:${line} .photo-figure 入面冇 <img> —— <picture> 一定要有一個 <img> 做落腳點`);
+      continue;
+    }
+    for (const img of imgs) {
+      const am = /\balt\s*=\s*["']([^"']*)["']/i.exec(img);
+      const src = (/\bsrc\s*=\s*["']([^"']*)["']/i.exec(img) || [, "?"])[1];
+      if (!am) {
+        err(`E20 ${r}:${line} 相片冇 alt：「${src}」`);
+      } else if (!am[1].trim()) {
+        err(`E20 ${r}:${line} 相片 alt 係空：「${src}」—— 本站唔放純裝飾相，寫唔出 alt 即係嗰張相唔應該喺度`);
+      } else if (PLACEHOLDER_ALT.test(am[1].trim())) {
+        err(`E20 ${r}:${line} 相片 alt 係佔位字「${am[1].trim()}」：「${src}」—— 寫張相畀人睇到咩，唔係寫「圖片」`);
+      } else if (/^[\w-]+\.(?:webp|jpe?g|png|avif)$/i.test(am[1].trim())) {
+        err(`E20 ${r}:${line} 相片 alt 係檔名「${am[1].trim()}」—— 檔名唔係描述`);
+      }
+      for (const attr of ["width", "height"]) {
+        if (!new RegExp(`\\b${attr}\\s*=`, "i").test(img)) {
+          warn(`W15 ${r}:${line} 相片冇 ${attr} 屬性：「${src}」→ 圖載入嗰刻成頁會跳（CLS）`);
+        }
+      }
+      if (!/\bloading\s*=\s*["']lazy["']/i.test(img)) {
+        warn(`W15 ${r}:${line} 相片冇 loading="lazy"：「${src}」→ 會同正文爭頻寬`);
+      }
+    }
+    if (!/<figcaption\b[^>]*>\s*\S/i.test(inner)) {
+      warn(`W15 ${r}:${line} .photo-figure 冇 figcaption（或者係空）→ 講唔到張相支撐緊咩判斷`);
+    }
+  }
+
+  /* .photo-figure 以外嘅 <img>。本站唔應該有 —— 圖解係 inline SVG，
+   * 相片一律入 .photo-figure。有就講清楚係邊一句。 */
+  const stripped = text.replace(figRe, "");
+  figRe.lastIndex = 0;
+  const loose = stripped.match(/<img\b[^>]*>/gi) || [];
+  for (const img of loose) {
+    if (!/\balt\s*=\s*["'][^"']+["']/i.test(img)) {
+      err(`E20 ${r} .photo-figure 以外有冇 alt 嘅 <img>：「${img.slice(0, 80)}」`);
     }
   }
 }
@@ -1702,6 +1795,7 @@ for (const file of [...htmlFiles, ...jsFiles]) {
   if (file.endsWith(".html")) {
     extLinks += checkExternalLinks(file, text);
     checkExternalImages(file, text);
+    checkPhotos(file, text);
     checkAdOrdering(file, text);
     checkNoBilingualClaims(file, text);
   }

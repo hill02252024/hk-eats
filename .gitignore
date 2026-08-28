@@ -21,3 +21,9 @@ npm-debug.log*
 # 內容來源草稿。放喺 repo 入面方便寫作，但唔應該上傳 ——
 # GitHub Pages 會把 repo 入面所有檔案公開，包括呢啲未成文嘅稿。
 sources/
+
+# 相片原檔。手機原圖帶 EXIF（GPS 座標、拍攝時間、機型），而且動輒
+# 幾 MB —— 兩個理由都唔應該入版本控制。
+# scripts/optimize-images.mjs 會由呢度讀，輸出剝乾淨咗嘅 WebP 落
+# assets/photos/（嗰啲先入 git）。原圖自己留一份喺 repo 以外。
+assets/photos/_raw/

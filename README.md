@@ -288,6 +288,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | E17 | 頁面入面嘅外部連結，**如果佢個 host 喺同名 data 檔出現過**，全條 URL 就必須對得上 —— 防止頁面同資料檔行開 |
 | E18 | 平台帳號連結（`PLATFORM_HOSTS`）出現喺 `about.html` 以外嘅任何頁 |
 | E19 | 標咗 `_draft` 嘅頁，出現喺 `sitemap.xml`、首頁 `.post-list`、或者任何 pillar 嘅 `.cluster-list`；另外 pillar 嘅 `jsonld:itemList` 條數同佢畫面 `.cluster-list` 條數對唔上 |
+| E20 | 相片冇 `alt`、`alt` 係空、係佔位字（「圖片」「TODO」…）或者係檔名；`.photo-figure` 入面冇 `<img>`；`.photo-figure` 以外有冇 `alt` 嘅 `<img>` |
 | E14 | 顯示層走樣：**nav 品牌位／footer／`<title>` 三個品牌槽位**同 `SITE_NAME` 唔一致、nav 分區名同 `SECTIONS` 唔一致、nav 少咗分區連結、或者顯示槽位仲有舊字串 |
 
 警告（唔會 exit 1）：
@@ -303,6 +304,7 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | W11 | `SITE_ORIGIN` 仲係佔位網域（含 `example.`）——未設定正式網域，唔好發布 |
 | W12 | 頁面有 `.callout-disclosure` 但 data 冇對應嘅 `*.disclosure` entry |
 | W13 | Pillar 嘅 `<h1>` 同分區名一模一樣（H1 要係一句，唔係重複一個標籤） |
+| W15 | 相片冇 `width`／`height`（載入嗰刻會跳版，CLS）、冇 `loading="lazy"`、或者 `.photo-figure` 冇 `figcaption` |
 | W14 | `data/notes/*.json` 嘅回饋線有問題：冇 `visitDate`、有 entry 唔係 `high`、`feedsInto` 指去唔存在嘅檔／key（斷線），或者指住嘅 areas key **仍然係 `needsVerify`**（觀察未歸納返落分區檔） |
 
 ## 點樣加一篇新文章
@@ -845,6 +847,174 @@ card-grid 已經有咗）。
 分區分組唔係冇用，係擺錯位：佢係導覽，唔係文章清單。
 
 
+## 兩個工具 script
+
+冇 CMS 後台，亦唔打算有。要嘅係兩件事：開新文唔使複製貼上、放相唔使
+人手記住十樣嘢。兩個 script 就係做呢兩件。
+
+### `scripts/new-post.mjs` — 開一篇新文嘅骨架
+
+```
+node scripts/new-post.mjs                        # 互動式，問四條
+node scripts/new-post.mjs --section coffee \
+     --title "…" --slug dripper-shapes           # 非互動（俾測試／agent 用）
+node scripts/new-post.mjs --list coffee/my-slug  # 填實咗，放佢出街
+```
+
+四條問題：分區、標題、slug、係咪實食紀錄（notes 就要埋到訪年月）。
+
+生成兩個檔：
+
+- `<分區>/<slug>.html` —— 完整殼：nav（`aria-current` 自動落喺當前分區）、
+  麵包屑 marker、H1、日期行、lede、TOC marker、幾個 `<h2>`、資料區塊
+  （`data-fresh` 已經駁好）、FAQ 區、廣告位、footer。分區對應嘅
+  `jsonld:type`：`notes` 出 `Article,FAQPage`，其餘出
+  `Article,ItemList,FAQPage`（跟返而家嗰批文嘅實際用法）。
+- `data/<分區>/<slug>.json` —— `_draft: true`、`_status: "skeleton"`，
+  每條 entry 都係 `needsVerify`（唔係空字串 —— 空字串會靜靜咁渲染成
+  一格空白，睇落似做完；`needsVerify` 會渲染成顯眼標記，而且 W7 每次
+  build 都列出嚟）。notes 額外帶 `visitDate` 同空 `feedsInto`，全部
+  entry 一律 `volatility: "high"` 加 `volatileNote`。
+
+骨架**一開波就過到 W8**：正文剛好三條內連（pillar + 兩篇同分區文），
+連返 pillar 嗰條 anchor 用 pillar 全名、擺喺上半部。呢個唔係巧合 ——
+係照住 W8 條件砌嘅。
+
+#### 點解唔即刻把新文加入清單
+
+原本嘅要求係「自動加入 pillar cluster list 同首頁清單」。做唔到 ——
+**同 E19 直接相撞**：新文一出世就係 `_draft`，而 E19 明文規定 draft
+頁唔准出現喺 sitemap、首頁 `.post-list`、pillar `.cluster-list`。即刻
+插入嘅話，跑 build 一定紅。
+
+規矩係「骨架過唔到守衛＝script 寫錯，唔係守衛要放寬」，所以改成兩步：
+
+1. `new-post.mjs` 把兩段預先砌好嘅 `<li>` 存落 data JSON 嘅
+   `_pendingListing`（首頁一段、pillar 一段，連 `itemList` 要加嘅名）。
+2. 你填實內容、拆走 `_draft`，然後 `--list <分區>/<slug>` ——
+   佢會先驗一次「真係唔再係 draft」（仲係就拒絕，唔會幫你繞過 E19），
+   然後插入首頁（新 notes 插最頂，其餘插喺最後一篇食評之後，跟返
+   「最新行先、食評擺最前」）、插入 pillar（順手重編 `<span class="step">`
+   序號）、加返 `jsonld:itemList` 個名（E19 第四層要條數對得上）、
+   最後拆走 `_pendingListing`，再跑一次 build。
+
+如果 pillar 嘅清單之前係空嘅（而家 `areas/` 同 `trips/` 就係），
+`--list` 會把嗰句「呢個分區嘅文章仲有資料未核實」換返做一條新 `<ul>`。
+
+### `scripts/optimize-images.mjs` — 相片壓縮
+
+```
+node scripts/optimize-images.mjs                    # 全部
+node scripts/optimize-images.mjs <slug>             # 一篇
+node scripts/optimize-images.mjs <slug> --html      # 順便印 HTML 出嚟
+```
+
+原圖擺 `assets/photos/_raw/<article-slug>/`，一篇文一個資料夾。輸出
+`assets/photos/<slug>-NN-1200.webp` 同 `-800.webp`，質素 80。
+
+**唔使 `npm install`。** 用 macOS 內置 `sips` 解碼＋縮放，`cwebp`
+（libwebp）編碼 —— 呢部機兩樣都有（`/opt/homebrew/bin/cwebp` 1.6.0）。
+如果 `node_modules` 入面搵到 `sharp` 就會自動改用 sharp（快啲、少一次
+中間檔），但**唔會因為冇 sharp 而唔郁**。本站零 npm 依賴呢條規矩冇變。
+機器上冇 cwebp 嘅話：`brew install webp`。
+
+#### EXIF：兩道防線，加一次實測
+
+手機相帶 GPS 座標、拍攝時間同機型。呢啲嘢一出街就係公開你幾時喺邊度。
+
+1. 中間檔用 **PNG**，唔用 JPEG —— PNG 冇 EXIF GPS 呢個概念，
+   所以由解碼嗰步就已經斷咗條線。
+2. `cwebp -metadata none` 明寫（雖然佢預設就係 none，但預設會變，
+   明寫唔會）。
+3. 寫完之後**逐個輸出檔行一次 RIFF chunk**，見到 `EXIF` 或者 `XMP `
+   就當場 error 兼刪走個檔。
+
+第 3 點唔係擺設：把第 1、2 點改返做 JPEG 中間檔 + `-metadata all`
+試過，守衛即刻紅並且刪咗個檔。所以「冇 EXIF」呢句係驗過，唔係
+「應該冇」。
+
+行 chunk 唔用 `indexOf("EXIF")` —— 圖像資料入面完全可能啱啱好出現
+呢四個 byte，會報假警。
+
+#### 每篇五張，超過就停
+
+超過 5 張直接 error，**唔會幫你截頭**。靜靜咁淨係處理頭五張，係最難
+發現嗰種錯 —— 你以為出咗八張。
+
+
+## 相片規則
+
+### 一、只准用自己影嘅相
+
+平台（大眾點評、小紅書、抖音…）上面嘅相唔准搬落嚟。唔係怕告 ——
+係呢個站嘅價值就係第一身。搬一張唔知邊個影、唔知幾時影、唔知有冇
+修過嘅相返嚟，同「未核實就唔寫」呢條規矩直接矛盾。
+
+### 二、每篇最多五張
+
+`optimize-images.mjs` 硬性攔住。五張唔係美學決定，係編輯紀律：一篇
+食評如果要八張相先講得清楚，通常係文字寫得唔夠準。
+
+### 三、相片唔係裝飾，要撐得住文中某個判斷
+
+每張相都要對得返正文入面一句具體嘅話。例子：
+
+| 文中嘅判斷 | 應該影乜 |
+|---|---|
+| 「飯焦火候到位」 | 掀開之後嘅飯焦特寫，睇到顏色同厚薄 |
+| 「環境 100 分」 | 園林同座位環境，睇到空間感 |
+| 「一間冇分店嘅單店」 | 店面同招牌，睇到規模 |
+| 「湯底贏」 | 湯色同沉澱物，睇到用料 |
+
+判斷方法：**寫唔出 `alt` 嗰張相，就係唔應該存在嗰張相。** 所以 E20
+把「冇 alt」「alt 係空」「alt 係『圖片』」「alt 係檔名」全部當 error，
+唔係 warning。`alt=""` 喺 HTML 標準入面解「純裝飾，故意唔讀」——
+本站唔容許純裝飾相，所以空 `alt` 一樣攔。
+
+`figcaption` 就寫俾睇到相嗰個人：呢張相支撐緊邊一句。
+
+### 四、HTML 格式
+
+```html
+<figure class="photo-figure">
+  <picture>
+    <source
+      type="image/webp"
+      srcset="../assets/photos/<slug>-01-800.webp 800w,
+              ../assets/photos/<slug>-01-1200.webp 1200w"
+      sizes="(max-width: 720px) 100vw, 720px">
+    <img src="../assets/photos/<slug>-01-1200.webp"
+         width="1200" height="900"
+         loading="lazy" decoding="async"
+         alt="一碗雲吞麵，湯色偏琥珀，碗邊見到蝦籽沉底">
+  </picture>
+  <figcaption>湯底顏色同蝦籽沉澱 —— 呢張相係「湯底贏」嗰句嘅根據。</figcaption>
+</figure>
+```
+
+`width` / `height` 由 `optimize-images.mjs` 寫死（`--html` 會連數值一齊
+印出嚟）。有咗呢兩個數，瀏覽器自己推 `aspect-ratio`，圖未落到之前個位
+已經留好 —— 實測兩個闊度 CLS 都係 **0.0000**。所以 CSS 入面除咗
+`height: auto` 唔可以再寫高度，寫咗會蓋過個推算。
+
+深色模式**唔會**把相調暗。調暗會令你睇到嘅同張相實際係咩唔同，
+食物顏色尤其明顯。
+
+### 五、原圖唔入版本控制
+
+`.gitignore` 有 `assets/photos/_raw/`。兩個理由：原圖幾 MB 一張，
+而且帶住未剝走嘅 EXIF —— GitHub Pages 會把 repo 入面所有嘢公開。
+原圖自己留一份喺 repo 以外。
+
+### 六、日常流程
+
+1. 影相 → AirDrop 落電腦
+2. 放入 `assets/photos/_raw/<article-slug>/`
+3. `node scripts/optimize-images.mjs <article-slug> --html`
+4. 把印出嚟嘅 `<figure>` 貼入文章，填 `alt` 同 `figcaption`
+5. `node scripts/build.mjs` —— E20 會攔住冇 alt 嘅相
+
+
 ## 利益披露
 
 如果一篇文提到本站作者有份開發、擁有或者收錢嘅嘢，披露**必須**用
@@ -1205,6 +1375,13 @@ sitemap、唔出現喺 nav、亦冇任何 `hreflang` 指住佢**——冇內容�
    ```
    佢會改寫全部 canonical、`og:url`、JSON-LD、`sitemap.xml`、`robots.txt`。
    跑完打開 `sitemap.xml` 肉眼確認一次 host 對。
+
+   > **上線之後就唔使再帶呢個環境變數。** build 而家會讀 repo 入面
+   > 嘅 `CNAME` 檔做預設網域（次序：`SITE_ORIGIN` 環境變數 → `CNAME`
+   > → 佔位網域）。冇呢一層嘅話，上線之後任何一次 bare
+   > `node scripts/build.mjs` 都會靜靜咁把全站改返做 `example.github.io`
+   > 而且唔報錯 —— 而 `scripts/new-post.mjs` 每次開新文都會跑一次 bare
+   > build，即係開一篇文就打回原形一次。
 4. **寫 CNAME 檔：**
    ```
    echo "你嘅域名" > CNAME

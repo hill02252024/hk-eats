@@ -851,3 +851,40 @@ h2[id] { scroll-margin-top: 4.5rem; }
   color: var(--fg);
   line-height: 1.75;
 }
+
+/* ================================================================
+   相片（.photo-figure）
+
+   同 .diagram 分開：圖解係 inline SVG，畫嘅係結構，所以有底色框住
+   當一個「面板」。相片係內容本身，唔應該有面板感 —— 齊邊、圓角、
+   一條淡邊界就夠。
+
+   width/height 屬性由 optimize-images.mjs 寫死喺 <img> 度，
+   aspect-ratio 由瀏覽器自己由嗰兩個數推，所以圖未落到嗰陣位置已經
+   留好，唔會跳（CLS）。呢度唔可以寫 height: auto 以外嘅嘢，
+   否則會蓋過個推算。
+   ================================================================ */
+
+.photo-figure {
+  margin: 1.6rem 0 1.8rem;
+}
+.photo-figure picture,
+.photo-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+.photo-figure figcaption {
+  margin: .55rem .1rem 0;
+  font-size: .84rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+}
+
+/* 深色模式：相片唔調暗。調暗會令你睇到嘅同張相實際係咩唔同 ——
+   食物顏色尤其明顯。只係把邊界收淡少少，免得白邊喺深底上跳出嚟。 */
+@media (prefers-color-scheme: dark) {
+  .photo-figure img { border-color: var(--line); }
+}
