@@ -180,6 +180,121 @@
 
 <p>順推同倒推排出嚟嘅行程可以完全一樣，但兩者喺出事嗰刻嘅分別好大：順推嘅人到咗傍晚先發現唔夠時間，倒推嘅人一早知道自己有幾多緩衝、應該剪邊一段。</p>
 
+<figure class="diagram" data-svg="trip-backward">
+<!-- build:svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" role="img"
+     aria-labelledby="svg-tb-title svg-tb-desc" class="diagram-svg">
+  <title id="svg-tb-title">由返程倒推嘅一日框架，同緩衝點解要唔對稱</title>
+  <desc id="svg-tb-desc">上半部對比兩種排法。順推由「幾點出門」向右加落去，硬約束喺最右邊，所以要行到接近尾聲先知夠唔夠時間。倒推反方向：先定最遲返到屋企，再倒推最遲到口岸，再倒推最遲離開最後一站——第三個先係成日行程嘅硬界線，要喺出門之前寫低。下半部係一條由左至右嘅時間軸，分四段：上午過關同第一程車、中午主目標同正餐、下午第二目標或補貨、傍晚返程。緩衝唔平均攤分，而係集中成一嚿擺喺下午同傍晚之間，即係最貼近硬界線嘅位置；理由係早段延誤可以靠剪下午吸收，返程延誤冇嘢可以吸收。軸上另有兩個要現場判斷嘅決策點：食完午餐睇落後幾多，同離開最後一站嗰個鬧鐘。每段實際幾耐要自己量，本站唔填估算值。</desc>
+
+  <!-- ================= 上半：順推 vs 倒推 ================= -->
+  <text class="d-section" x="24" y="28" font-size="14" font-weight="700">一、順推 vs 倒推：硬約束喺尾，所以由尾行返轉頭</text>
+
+  <!-- 順推 -->
+  <g>
+    <text class="d-title" x="24" y="56" font-size="12.5" font-weight="700">順推（多數人咁排）</text>
+    <line class="d-tick" x1="140" y1="52" x2="600" y2="52" stroke-width="1.4"/>
+    <path class="d-tick" d="M594 46 L602 52 L594 58" stroke-width="1.4" fill="none"/>
+    <text class="d-note" x="150" y="44" font-size="11">幾點出門</text>
+    <text class="d-note" x="300" y="44" font-size="11">加落去…</text>
+    <text class="d-note" x="420" y="44" font-size="11">再加…</text>
+    <rect class="d-leaf" x="608" y="34" width="128" height="36" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-warn" x="672" y="49" font-size="11.5" font-weight="700" text-anchor="middle">硬約束喺呢度</text>
+    <text class="d-leaf-text" x="672" y="63" font-size="11" text-anchor="middle">行到嚟先發現唔夠</text>
+  </g>
+
+  <!-- 倒推 -->
+  <g>
+    <text class="d-title" x="24" y="106" font-size="12.5" font-weight="700">倒推（本站嘅排法）</text>
+    <line class="d-border" x1="140" y1="102" x2="600" y2="102" stroke-width="1.8"/>
+    <path class="d-border" d="M146 96 L138 102 L146 108" stroke-width="1.8" fill="none"/>
+
+    <rect class="d-node d-node-rail" x="546" y="84" width="190" height="36" rx="6" stroke-width="1.8"/>
+    <text class="d-node-text" x="641" y="107" font-size="11.5" font-weight="700" text-anchor="middle">① 最遲返到屋企</text>
+
+    <rect class="d-node d-node-rail" x="330" y="84" width="190" height="36" rx="6" stroke-width="1.8"/>
+    <text class="d-node-text" x="425" y="107" font-size="11.5" font-weight="700" text-anchor="middle">② 最遲到口岸</text>
+
+    <rect class="d-root" x="140" y="80" width="166" height="44" rx="6" stroke-width="2.2"/>
+    <text class="d-root-text" x="223" y="99" font-size="11.5" font-weight="700" text-anchor="middle">③ 最遲離開最後一站</text>
+    <text class="d-border-text" x="223" y="115" font-size="11" font-weight="700" text-anchor="middle">＝ 成日嘅硬界線</text>
+  </g>
+
+  <text class="d-note" x="24" y="146" font-size="11">③ 要喺出門之前寫低，唔係到咗現場先計。順推同倒推排出嚟嘅行程可以一樣，分別喺出事嗰刻你知唔知自己有幾多緩衝。</text>
+
+  <line class="d-leaf-rule" x1="24" y1="168" x2="736" y2="168" stroke-width="1.2"/>
+
+  <!-- ================= 下半：四段 + 緩衝 ================= -->
+  <text class="d-section" x="24" y="196" font-size="14" font-weight="700">二、四段時間軸：緩衝唔平均攤，全部推到硬界線之前</text>
+
+  <!-- 軸 -->
+  <line class="d-tick" x1="24" y1="304" x2="700" y2="304" stroke-width="1.4"/>
+
+  <!-- 四段 -->
+  <g>
+    <rect class="d-leaf" x="24" y="216" width="150" height="72" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="99" y="238" font-size="12" font-weight="700" text-anchor="middle">上午</text>
+    <text class="d-leaf-text" x="99" y="256" font-size="11" text-anchor="middle">過關 + 第一程車</text>
+    <text class="d-leaf-text" x="99" y="274" font-size="11" text-anchor="middle">最唔可控，唔好放有時限嘅嘢</text>
+
+    <rect class="d-leaf d-leaf-primary" x="182" y="216" width="150" height="72" rx="6" stroke-width="1.8"/>
+    <text class="d-leaf-title" x="257" y="238" font-size="12" font-weight="700" text-anchor="middle">中午</text>
+    <text class="d-leaf-text" x="257" y="256" font-size="11" text-anchor="middle">主目標 + 正餐</text>
+    <text class="d-leaf-text" x="257" y="274" font-size="11" text-anchor="middle">重心擺喺呢一段</text>
+
+    <rect class="d-leaf" x="340" y="216" width="150" height="72" rx="6" stroke-width="1.4"
+          stroke-dasharray="5 4"/>
+    <text class="d-leaf-title" x="415" y="238" font-size="12" font-weight="700" text-anchor="middle">下午（可剪）</text>
+    <text class="d-leaf-text" x="415" y="256" font-size="11" text-anchor="middle">第二目標或者補貨</text>
+    <text class="d-leaf-text" x="415" y="274" font-size="11" text-anchor="middle">順利就做，落後就剪</text>
+
+    <rect class="d-leaf" x="576" y="216" width="124" height="72" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="638" y="238" font-size="12" font-weight="700" text-anchor="middle">傍晚</text>
+    <text class="d-leaf-text" x="638" y="256" font-size="11" text-anchor="middle">返程三段</text>
+    <text class="d-leaf-text" x="638" y="274" font-size="11" text-anchor="middle">全部用最差情況計</text>
+  </g>
+
+  <!-- 緩衝池 -->
+  <g>
+    <rect class="d-border" x="498" y="216" width="70" height="72" rx="6" stroke-width="2"
+          fill="none"/>
+    <text class="d-border-text" x="533" y="244" font-size="11.5" font-weight="700" text-anchor="middle">緩衝</text>
+    <text class="d-border-text" x="533" y="260" font-size="11.5" font-weight="700" text-anchor="middle">全部</text>
+    <text class="d-border-text" x="533" y="276" font-size="11.5" font-weight="700" text-anchor="middle">擺呢度</text>
+  </g>
+
+  <!-- 硬界線 -->
+  <line class="d-border" x1="568" y1="204" x2="568" y2="330" stroke-width="2.4" stroke-dasharray="7 4"/>
+  <text class="d-border-text" x="568" y="346" font-size="11.5" font-weight="700" text-anchor="middle">硬界線：最遲離開最後一站</text>
+
+  <!-- 唔好咁做：平均攤 -->
+  <g>
+    <text class="d-note" x="24" y="376" font-size="11" font-weight="700">唔好咁做 —— 平均攤分：</text>
+    <rect class="d-body" x="182" y="364" width="34" height="16" rx="3" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <rect class="d-body" x="240" y="364" width="34" height="16" rx="3" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <rect class="d-body" x="298" y="364" width="34" height="16" rx="3" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <rect class="d-body" x="356" y="364" width="34" height="16" rx="3" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <text class="d-note" x="404" y="376" font-size="11">早段嘅延誤可以靠剪下午吸收；返程延誤冇嘢可以吸收。</text>
+  </g>
+
+  <!-- 兩個決策點 -->
+  <g>
+    <circle class="d-root" cx="257" cy="410" r="11" stroke-width="2"/>
+    <text class="d-root-text" x="257" y="415" font-size="11.5" font-weight="700" text-anchor="middle">1</text>
+    <text class="d-note" x="276" y="415" font-size="11">食完午餐：睇落後幾多，決定下午剪唔剪</text>
+
+    <circle class="d-root" cx="568" cy="410" r="11" stroke-width="2"/>
+    <text class="d-root-text" x="568" y="415" font-size="11.5" font-weight="700" text-anchor="middle">2</text>
+    <text class="d-note" x="587" y="415" font-size="11">鬧鐘響：走</text>
+  </g>
+  <text class="d-note" x="24" y="440" font-size="11">成日只有呢兩個位需要現場判斷，其餘事先定死。</text>
+
+  <text class="d-note" x="24" y="462" font-size="11">每段實際幾耐要你自己量一次 —— 本站唔填估算值，因為佢受口岸、時段、假期影響太大，一個平均值反而會誤導。</text>
+</svg>
+<!-- /build:svg -->
+<figcaption>上半：順推由「幾點出門」向右加，硬約束喺最右，所以行到接近尾聲先知夠唔夠；倒推由最遲返到屋企一路推返轉頭，第三個問題「最遲離開最後一站」先係成日嘅硬界線。下半：四段時間軸，緩衝唔平均攤分，全部推到硬界線之前 —— 早段延誤剪下午可以吸收，返程延誤冇嘢吸收。軸上兩個圈就係全日僅有需要現場判斷嘅位。每段實際幾耐要你自己量。</figcaption>
+</figure>
+
 <h2 id="三-時間預算-淨時間同緩衝要分開寫" data-build-id>三、時間預算：淨時間同緩衝要分開寫</h2>
 
 <p>大部分行程失敗，唔係因為某一段特別慢，而係因為每段都慢少少而冇緩衝。三段各遲十分鐘，第四段就要遲半個鐘。</p>

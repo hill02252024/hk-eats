@@ -212,6 +212,141 @@
 
 <p>要留意呢個分界線係「以量計」嘅酒精濃度，而唔係酒嘅種類名。同一類酒喺唔同產區可以跨過 30% 呢條線，所以睇標籤，唔好靠印象。實際定義同官方說明見<a href="https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html">香港海關「旅客免稅優惠」頁</a>。</p>
 
+<figure class="diagram" data-svg="bring-back">
+<!-- build:svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" role="img"
+     aria-labelledby="svg-bb-title svg-bb-desc" class="diagram-svg">
+  <title id="svg-bb-title">返程要同時滿足兩重規管，以及香港入境嘅五個類別分野</title>
+  <desc id="svg-bb-desc">上半部：由深圳返香港會經過兩重互不代表嘅規管。左邊係內地出境管制，主要管唔准帶出境嘅嘢，當中最貼身嘅係嬰幼兒配方粉。右邊係香港入境管制。兩者並列，中間標明滿足一邊唔代表另一邊。下半部：香港入境嗰邊將你買嘅嘢分入五個抽屜——日常貨品、應課稅品、食品、動植物與相關製品、藥物。應課稅品再分兩路：酒同煙草。酒以酒精濃度分界線再分兩邊，高過分界線嗰邊受數量上限、年齡門檻同短程來回門檻三重限制，不高於分界線嗰邊唔受該上限。煙草受短程來回門檻限制。另外有一類完全禁止入口嘅另類吸煙產品，唔落任何抽屜。圖中所有門檻同上限嘅實際數值唔寫喺圖入面，見文中資料格。</desc>
+
+  <!-- ================= 上半：兩重規管 ================= -->
+  <text class="d-section" x="24" y="28" font-size="14" font-weight="700">一、兩重規管：兩邊都要過，滿足一邊唔代表另一邊</text>
+
+  <!-- 左：內地出境 -->
+  <g>
+    <rect class="d-node d-node-rail" x="40" y="48" width="286" height="46" rx="8" stroke-width="1.8"/>
+    <text class="d-node-text" x="183" y="70" font-size="13.5" font-weight="700" text-anchor="middle">內地出境管制</text>
+    <text class="d-note" x="183" y="87" font-size="11" text-anchor="middle">管：唔准帶出境嘅嘢</text>
+
+    <path class="d-edge" d="M183 94 L183 118" stroke-width="1.6"/>
+    <path class="d-edge" d="M177 112 L183 120 L189 112" stroke-width="1.6" fill="none"/>
+
+    <rect class="d-leaf" x="62" y="122" width="242" height="42" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="183" y="140" font-size="12.5" font-weight="700" text-anchor="middle">嬰幼兒配方粉</text>
+    <text class="d-leaf-text" x="183" y="156" font-size="11" text-anchor="middle">出境方向嘅問題，唔係香港嗰邊管</text>
+  </g>
+
+  <!-- 中間：互不代表 -->
+  <line class="d-divider" x1="380" y1="52" x2="380" y2="166" stroke-width="1.2" stroke-dasharray="6 5"/>
+  <text class="d-note" x="380" y="182" font-size="11" text-anchor="middle">兩邊獨立</text>
+
+  <!-- 右：香港入境 -->
+  <g>
+    <rect class="d-node d-node-rail" x="434" y="48" width="286" height="46" rx="8" stroke-width="1.8"/>
+    <text class="d-node-text" x="577" y="70" font-size="13.5" font-weight="700" text-anchor="middle">香港入境管制</text>
+    <text class="d-note" x="577" y="87" font-size="11" text-anchor="middle">管：應課稅品、要許可證嘅類別、違禁品</text>
+
+    <path class="d-edge" d="M577 94 L577 118" stroke-width="1.6"/>
+    <path class="d-edge" d="M571 112 L577 120 L583 112" stroke-width="1.6" fill="none"/>
+
+    <rect class="d-leaf" x="456" y="122" width="242" height="42" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="577" y="140" font-size="12.5" font-weight="700" text-anchor="middle">分入下面五個抽屜</text>
+    <text class="d-leaf-text" x="577" y="156" font-size="11" text-anchor="middle">分完之後，處理方式自然出嚟</text>
+  </g>
+
+  <line class="d-leaf-rule" x1="24" y1="206" x2="736" y2="206" stroke-width="1.2"/>
+
+  <!-- ================= 下半：五個抽屜 ================= -->
+  <text class="d-section" x="24" y="234" font-size="14" font-weight="700">二、香港入境：五個抽屜，加兩類唔落抽屜嘅嘢</text>
+
+  <!-- 五個抽屜 -->
+  <g>
+    <rect class="d-leaf" x="24" y="248" width="132" height="58" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="90" y="270" font-size="12.5" font-weight="700" text-anchor="middle">日常貨品</text>
+    <text class="d-leaf-text" x="90" y="288" font-size="11" text-anchor="middle">睇係咪自用數量</text>
+
+    <rect class="d-leaf d-leaf-primary" x="168" y="248" width="132" height="58" rx="6" stroke-width="1.8"/>
+    <text class="d-leaf-title" x="234" y="270" font-size="12.5" font-weight="700" text-anchor="middle">應課稅品</text>
+    <text class="d-leaf-text" x="234" y="288" font-size="11" text-anchor="middle">酒同煙 —— 下面再分</text>
+
+    <rect class="d-leaf" x="312" y="248" width="132" height="58" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="378" y="270" font-size="12.5" font-weight="700" text-anchor="middle">食品</text>
+    <text class="d-leaf-text" x="378" y="288" font-size="11" text-anchor="middle">睇有冇動物源成分</text>
+
+    <rect class="d-leaf" x="456" y="248" width="132" height="58" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="522" y="270" font-size="12.5" font-weight="700" text-anchor="middle">動植物製品</text>
+    <text class="d-leaf-text" x="522" y="288" font-size="11" text-anchor="middle">理由係生物安全</text>
+
+    <rect class="d-leaf" x="600" y="248" width="136" height="58" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="668" y="270" font-size="12.5" font-weight="700" text-anchor="middle">藥物</text>
+    <text class="d-leaf-text" x="668" y="288" font-size="11" text-anchor="middle">睇有冇受管制成分</text>
+  </g>
+
+  <!-- 應課稅品往下分岔 -->
+  <path class="d-edge" d="M234 306 L234 330" stroke-width="1.6"/>
+  <path class="d-edge" d="M234 330 L120 330 L120 352" stroke-width="1.6"/>
+  <path class="d-edge" d="M114 346 L120 354 L126 346" stroke-width="1.6" fill="none"/>
+  <path class="d-edge" d="M234 330 L470 330 L470 352" stroke-width="1.6"/>
+  <path class="d-edge" d="M464 346 L470 354 L476 346" stroke-width="1.6" fill="none"/>
+
+  <!-- 左路：酒 -->
+  <g>
+    <rect class="d-node" x="24" y="356" width="192" height="38" rx="6" stroke-width="1.6"/>
+    <text class="d-node-text" x="120" y="380" font-size="12.5" font-weight="700" text-anchor="middle">酒：先睇酒精濃度</text>
+
+    <path class="d-edge" d="M120 394 L120 410 L64 410 L64 428" stroke-width="1.5"/>
+    <path class="d-edge" d="M58 422 L64 430 L70 422" stroke-width="1.5" fill="none"/>
+    <path class="d-edge" d="M120 410 L182 410 L182 428" stroke-width="1.5"/>
+    <path class="d-edge" d="M176 422 L182 430 L188 422" stroke-width="1.5" fill="none"/>
+
+    <rect class="d-leaf d-leaf-primary" x="24" y="432" width="112" height="84" rx="6" stroke-width="1.8"/>
+    <text class="d-leaf-title" x="80" y="452" font-size="12" font-weight="700" text-anchor="middle">高過分界線</text>
+    <text class="d-leaf-warn" x="80" y="470" font-size="11" font-weight="700" text-anchor="middle">三重限制：</text>
+    <text class="d-leaf-text" x="80" y="486" font-size="11" text-anchor="middle">數量上限</text>
+    <text class="d-leaf-text" x="80" y="500" font-size="11" text-anchor="middle">年齡門檻</text>
+    <text class="d-leaf-text" x="80" y="514" font-size="11" text-anchor="middle">短程來回門檻</text>
+
+    <rect class="d-leaf" x="146" y="432" width="112" height="84" rx="6" stroke-width="1.4"/>
+    <text class="d-leaf-title" x="202" y="452" font-size="12" font-weight="700" text-anchor="middle">不高於分界線</text>
+    <text class="d-leaf-text" x="202" y="474" font-size="11" text-anchor="middle">唔受嗰個數量上限</text>
+    <text class="d-leaf-text" x="202" y="500" font-size="11" text-anchor="middle">紅酒、清酒、啤酒</text>
+    <text class="d-leaf-text" x="202" y="514" font-size="11" text-anchor="middle">睇樽上標籤</text>
+  </g>
+
+  <!-- 右路：煙草 -->
+  <g>
+    <rect class="d-node" x="374" y="356" width="192" height="38" rx="6" stroke-width="1.6"/>
+    <text class="d-node-text" x="470" y="380" font-size="12.5" font-weight="700" text-anchor="middle">煙草</text>
+
+    <path class="d-edge" d="M470 394 L470 428" stroke-width="1.5"/>
+    <path class="d-edge" d="M464 422 L470 430 L476 422" stroke-width="1.5" fill="none"/>
+
+    <rect class="d-leaf d-leaf-primary" x="374" y="432" width="192" height="84" rx="6" stroke-width="1.8"/>
+    <text class="d-leaf-warn" x="470" y="454" font-size="12" font-weight="700" text-anchor="middle">受短程來回門檻限制</text>
+    <text class="d-leaf-text" x="470" y="476" font-size="11" text-anchor="middle">短程來回嗰陣，呢一格</text>
+    <text class="d-leaf-text" x="470" y="492" font-size="11" text-anchor="middle">嘅免稅額係零 ——</text>
+    <text class="d-leaf-text" x="470" y="508" font-size="11" text-anchor="middle">唔係「買少啲就得」</text>
+  </g>
+
+  <!-- 唔落抽屜：完全禁止 -->
+  <g>
+    <rect class="d-fallback" x="600" y="356" width="136" height="160" rx="6" stroke-width="1.6"
+          stroke-dasharray="5 4"/>
+    <text class="d-fallback-text" x="668" y="378" font-size="12" font-weight="700" text-anchor="middle">唔落任何抽屜</text>
+    <text class="d-leaf-text" x="668" y="400" font-size="11" text-anchor="middle">另類吸煙產品</text>
+    <text class="d-leaf-text" x="668" y="420" font-size="11" text-anchor="middle">（電子煙、加熱煙）</text>
+    <text class="d-warn" x="668" y="446" font-size="12.5" font-weight="700" text-anchor="middle">完全禁止入口</text>
+    <text class="d-leaf-text" x="668" y="468" font-size="11" text-anchor="middle">唔係「超額要報稅」，</text>
+    <text class="d-leaf-text" x="668" y="484" font-size="11" text-anchor="middle">係一支都唔可以帶</text>
+  </g>
+
+  <!-- 底註：數值唔喺圖入面 -->
+  <text class="d-note" x="24" y="544" font-size="11">分界線、數量上限、年齡門檻、來回時間門檻嘅實際數值唔寫喺圖入面 —— 見文中有邊框嘅資料格，嗰度標住核實月份。</text>
+</svg>
+<!-- /build:svg -->
+<figcaption>返程要同時滿足兩重規管：內地出境管住唔准帶出去嘅嘢，香港入境管住應課稅品、要許可證嘅類別同違禁品。過咗一邊唔代表過到另一邊。香港嗰邊將你買嘅嘢分入五個抽屜，應課稅品再按酒精濃度分界線分兩路；另類吸煙產品唔落任何抽屜，係完全禁止。所有門檻同上限嘅數值唔畫喺圖入面，見上下文嘅資料格。</figcaption>
+</figure>
+
 <h2 id="two-regimes">兩重規管，唔好撈埋</h2>
 
 <p>由深圳返香港，你其實過緊兩重關：內地嘅出境管制，同香港嘅入境管制。兩者管嘅嘢唔同，而且互不代表。</p>
