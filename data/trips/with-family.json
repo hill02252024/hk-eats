@@ -8,26 +8,31 @@
   "entries": {
     "access.ports": {
       "needsVerify": "各口岸嘅步行距離、有冇電梯／扶手電梯、有冇輪椅通道",
-      "volatility": "low"
+      "volatility": "low",
+      "_checked": "2026-08-29 查過 immd.gov.hk：搵唔到逐個管制站嘅無障礙設施頁（步行距離、電梯、輪椅通道）。immd 網站相關路徑試過 control_points / control-points / passenger-clearance 全部 404。旅遊網站有整理，但係二手來源 —— 有二手來源但未有官方確認，唔填。"
     },
     "access.toilets.mapped": {
       "needsVerify": "口岸同商場平面圖上標示嘅廁所位置",
       "volatility": "normal",
-      "_layer": "客觀：查得到就填得到"
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-29 查過：口岸同商場平面圖唔係政府公開數據，各場地自己出。冇官方匯總。"
     },
     "access.toilets.reality": {
       "needsVerify": "育嬰設施實況同廁所間距體感",
       "volatility": "normal",
-      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key"
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key",
+      "_checked": "2026-08-29：判斷層，要先有 access.toilets.mapped 嘅客觀資料。客觀嗰條查唔到，連帶做唔到。而且育嬰設施實況本質上要落場，唔會有官方來源。"
     },
     "fare.child": {
       "needsVerify": "兒童及長者喺跨境交通同深圳地鐵嘅票價優惠同年齡／身高門檻",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_checked": "2026-08-29 查過：深圳地鐵官網（szmc.net / shenzhenmc.com）由本機連唔到（HTTP 000），所以深圳半邊核實唔到。港鐵優惠票價頁連得到但係 JS 渲染，而且只覆蓋香港段。兩邊都要先齊先填得到成條 —— 有二手來源但未有官方確認，唔填。"
     },
     "docs.child": {
       "needsVerify": "小童過關所需嘅證件同隨行人要求",
       "volatility": "high",
-      "volatileNote": "小童出入境所需證件同隨行安排屬制度性規定，會調整，亦可能因家庭情況而異。出發前應向入境事務部門或旅行社直接確認。"
+      "volatileNote": "小童出入境所需證件同隨行安排屬制度性規定，會調整，亦可能因家庭情況而異。出發前應向入境事務部門或旅行社直接確認。",
+      "_checked": "2026-08-29 查過 immd.gov.hk：搵到嘅係回港證／簽證身份書嘅**申請**頁，唔係「小童過關要咩證件同隨行人要求」。而港人返內地用嘅回鄉證由中旅社簽發，唔喺 immd。有二手來源但未有官方確認，唔填。"
     }
   }
 }

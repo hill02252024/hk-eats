@@ -8,19 +8,23 @@
   "entries": {
     "duration.clearance.weekday": {
       "needsVerify": "平日各主要口岸嘅一般過關等候時間區間",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_checked": "2026-08-29 查過：政府有即時嘅邊境道路交通狀況（sb.gov.hk/chi/bwt/），但嗰個係車輛過境車流，唔係旅客過關輪候時間；亦係即時值，唔係「一般區間」。immd 冇公布逐口岸輪候時間區間。本站立場亦寫咗喺正文：呢類數字受口岸／時段／假期影響太大，一個平均值會誤導 —— 所以就算搵到二手整理都唔會填，改為叫讀者第一次北上當係量度。"
     },
     "duration.clearance.weekend": {
       "needsVerify": "週末及長假期各主要口岸嘅過關等候時間區間",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_checked": "同 duration.clearance.weekday，2026-08-29 一併查過。"
     },
     "duration.hkSide": {
       "needsVerify": "由主要出發區域（新界東／新界西／九龍）到各口岸嘅一般車程",
-      "volatility": "low"
+      "volatility": "low",
+      "_checked": "2026-08-29：由各區到口岸嘅車程冇官方公布區間（會受路況、班次、轉乘影響）。地圖 app 畀嘅係即時估算，唔係可引用嘅官方區間。唔填。"
     },
     "duration.szSide": {
       "needsVerify": "由各口岸到主要商圈嘅一般車程",
-      "volatility": "low"
+      "volatility": "low",
+      "_checked": "同 duration.hkSide，2026-08-29 一併查過。"
     },
     "lastEntry.byPort": {
       "value": "冇官方公布嘅「最遲進入時間」。實際約束係兩樣疊埋：口岸本身嘅服務結束時間，加上香港側嘅尾班車。羅湖同落馬洲支線唔會通宵運作，所以尾班車通常先係真正嘅死線；要深夜過關就要用皇崗或者港珠澳大橋。",

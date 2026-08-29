@@ -2,8 +2,6 @@
   "title": "手沖參數 — 起手範圍",
   "belongsTo": "/coffee/brewing-basics.html",
   "_status": "principles",
-  "_draft": true,
-  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
   "_note": "呢度嘅數字係業界通用嘅起手範圍，唔係本站量度出嚟嘅數據，亦唔係邊個機構嘅標準。佢哋嘅作用係畀你一個可重複嘅起點，然後靠自己一次改一個變數收窄。因為冇時效性，全部標記 volatility: low；verifiedOn 記錄嘅係最後覆核措辭嘅月份，唔係「數據核實」。",
   "entries": {
     "ratio.range": {
@@ -42,8 +40,16 @@
       "volatility": "low"
     },
     "freshness.window": {
-      "needsVerify": "唔同烘焙度嘅最佳賞味窗口（由烘焙日起計嘅日數區間）",
-      "volatility": "low"
+      "volatility": "low",
+      "value": [
+        "整包：烘焙後 2–4 星期內飲完（Counter Culture、Monastery 都係呢個講法）",
+        "大部分豆：烘焙後 3–14 日風味最清晰（Monastery）",
+        "手沖／濾泡（V60、Kalita、Chemex）：約 5–14 日（Methodical）",
+        "Espresso：約 7–21 日（Methodical）——對 CO₂ 最敏感，所以要等耐啲",
+        "按烘焙度：深焙約 3–5 日排完氣，淺焙約 7–10 日（Monastery）。中焙介乎兩者之間，但呢三個來源冇畀具體日數，所以唔寫。"
+      ],
+      "verifiedOn": "2026-08",
+      "sourceNote": "三個美國烘焙商嘅公開說明，2026-08-29 逐條讀過：Methodical Coffee《Freshly Roasted Coffee, Explained: Degassing, Rest, and Flavor》methodicalcoffee.com/blogs/coffee-culture/freshly-roasted-coffee-explained-degassing-rest-and-flavor；Monastery Coffee《How Long After Roasting Is Coffee Best?》monastery.coffee/blogs/news/how-long-after-roasting-is-coffee-best；Counter Culture Coffee《Coffee Basics: Freshness》counterculturecoffee.com/blogs/counter-culture-coffee/coffee-basics-freshness。呢啲係業界通用嘅起手範圍，唔係標準機構嘅規範，亦唔係本站量度出嚟。"
     }
   }
 }
