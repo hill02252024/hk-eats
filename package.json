@@ -1,0 +1,17 @@
+{
+  "name": "hk-eats",
+  "private": true,
+  "type": "module",
+  "description": "港深食飲網站。純靜態 —— 冇 runtime 依賴，scripts/ 全部係 node 內置模組寫嘅守衛同工具。呢個檔只係俾 npm run 做入口，唔係引入 npm 生態。",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "publish-check": "node scripts/build.mjs --publish",
+    "test:freshness": "node scripts/test-freshness.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:ads-cls": "node scripts/check-ads-cls.mjs",
+    "check:browser": "node scripts/browser-check.mjs",
+    "check:block": "node scripts/check-fresh-block.mjs",
+    "check:block:self-test": "node scripts/check-fresh-block.mjs --self-test",
+    "check:block:reading-menu": "node scripts/check-fresh-block.mjs coffee/reading-menu.html pricing. --expect-groups 2 --expect-marks 4"
+  }
+}

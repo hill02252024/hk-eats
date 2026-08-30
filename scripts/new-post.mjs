@@ -266,7 +266,9 @@ ${isNotes ? `
 <footer class="site-footer">
   <div class="wrap">
     <p>歎世界 — 香港出發的食飲與旅行指南。</p>
-    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份與變動速度。　<a href="../about.html">關於本站</a></p>
+    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份與變動速度。</p>
+<!-- footerlinks -->
+<!-- apppromo -->
   </div>
 </footer>
 </body>

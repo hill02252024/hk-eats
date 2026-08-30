@@ -1,0 +1,37 @@
+{
+  "_note": "全站級嘅自家 app 清單。footer 推廣位（<!-- build:apppromo --> 區塊，23 頁都有）唯一嘅來源 —— 個區塊由 scripts/build.mjs 生成，唔准手寫。改文案、改連結、加減 app 都係改呢個檔。",
+  "_whyGlobal": "同 ad-slots.json / affiliates.json 一樣係全站級，唔綁任何一頁。唔可以攞 data/trips/trip-tools.json 做來源 —— 嗰個係頁面級檔，E13/E17 靠「檔名 = 頁面路徑」呢條規則運作，攞佢做全站來源會令兩條守衛嘅語義糊掉。",
+  "_footerHasNoStoreLinks": "footer 推廣位刻意冇商店連結，只有一條指去 trips/trip-tools.html 嘅站內連結。兩個理由：(1) 商店連結嘅對數壓力留返喺 trip-tools 嗰版 —— 嗰版嘅 host 喺自己嘅 data 檔出現過，舊 E17 已經逐條驗緊；(2) E1 嘅 TRACKING_PARAM_RE 攔 utm_*，商店連結加唔到歸因參數，擺 23 頁只係做一個 footer 連結農場。下面 apps[].ios/.android 照留 —— 佢係守衛嘅對照表（見 _guard），亦係將來要用嗰陣嘅來源。",
+  "_guard": "E17 擴充咗：footer 入面任何一條 URL，只要個 host 喺呢個檔出現過，全條 URL 就必須喺呢個檔逐字對得上。所以就算將來有人手抄一條商店連結入 footer，對唔上就 error。同時 E17 會核 data/trips/trip-tools.json 嘅 apps.storeLinks.* 每一條都喺呢度出現過 —— 兩個檔都餵緊守衛，唔可以行開。",
+  "promo": {
+    "lead": "歎世界作者亦有開發香港交通同天氣 app：",
+    "appsJoiner": "、",
+    "tail": "。",
+    "target": "trips/trip-tools.html",
+    "linkText": "北上行程用邊幾個 app",
+    "_targetRule": "target 必須係一個非 draft 嘅站內頁。連去 draft 頁會破壞分段發布嘅前提（draft 就係要暫時冇人連入），build 會 error。喺 target 自己嗰版，推廣位會淨係出文字，唔會自己連自己。"
+  },
+  "apps": [
+    {
+      "name": "九巴通 — 長者版",
+      "ios": "https://apps.apple.com/hk/app/id6778859452",
+      "android": "https://play.google.com/store/apps/details?id=com.hkwww.kmb_app"
+    },
+    {
+      "name": "鐵路通",
+      "ios": "https://apps.apple.com/hk/app/id6779618657",
+      "android": "https://play.google.com/store/apps/details?id=com.hkwww.mtr_real_time_info",
+      "_note": "Google Play 上架名為「港鐵通 — 實時列車資訊」，同一個 app。"
+    },
+    {
+      "name": "香港泊車王",
+      "ios": "https://apps.apple.com/hk/app/id6779557505",
+      "android": "https://play.google.com/store/apps/details?id=com.hkwww.carpart"
+    },
+    {
+      "name": "香港天氣通",
+      "ios": "https://apps.apple.com/hk/app/id6779145047",
+      "android": "https://play.google.com/store/apps/details?id=com.hkwww.www"
+    }
+  ]
+}

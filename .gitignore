@@ -20,6 +20,15 @@ npm-debug.log*
 
 # 內容來源草稿。放喺 repo 入面方便寫作，但唔應該上傳 ——
 # GitHub Pages 會把 repo 入面所有檔案公開，包括呢啲未成文嘅稿。
+#
+# ⚠️ 呢條**唔覆蓋** data/_sources/。兩個目錄裝唔同嘢：
+#   sources/        —— 未成文嘅文章草稿。冇人引用，冇咗唔會影響任何斷言。
+#   data/_sources/  —— 抽樣紀錄、逐項讀數呢類**證據**。data/*.json 嘅
+#                      needsVerify 同 _checked 會引用返佢哋，所以佢哋要
+#                      同結論一齊入版本控制 —— 一條引唔到出處嘅斷言，
+#                      同冇做過分別唔大。
+# 唔好為咗「執靚啲」而把呢條改成 *sources/ 或者 **/sources*，
+# 咁樣會連證據一齊剷埋。
 sources/
 
 # 相片原檔。手機原圖帶 EXIF（GPS 座標、拍攝時間、機型），而且動輒
@@ -27,3 +36,12 @@ sources/
 # scripts/optimize-images.mjs 會由呢度讀，輸出剝乾淨咗嘅 WebP 落
 # assets/photos/（嗰啲先入 git）。原圖自己留一份喺 repo 以外。
 assets/photos/_raw/
+
+# 第三方餐牌相（店家自己排版嘅設計圖，部分帶大眾點評浮水印）。
+# 讀數入 data/_sources/，原相只留本機 —— 同 _raw/ 一樣嘅處理。
+#
+# 有版權嘅係排版，唔係個價：一份 menu 嘅設計圖係店家嘅美術作品，
+# 「一杯瑰夏賣 ¥78」係事實。要嘅價值全部喺讀數度，風險全部喺原圖度，
+# 分得開就分。冇一版嘢引用呢啲相，build 唔會輸出，sitemap 冇佢哋 ——
+# 留喺 repo 嘅唯一效果係「估到 URL 就攞到」。
+assets/photos/reading-menu/

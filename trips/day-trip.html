@@ -119,7 +119,7 @@
           "name": "點解唔畀我一個具體時間表？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "因為具體分鐘數受口岸、時段、假期、出發地影響太大，一個平均值反而會誤導。模板畀你嘅係段落劃分、緩衝擺位同倒推方法——呢啲對邊個都成立。實際數字應該由你第一次北上量返嚟。"
+            "text": "因為具體分鐘數受口岸、時段、假期、出發地影響太大，一個平均值反而會誤導 —— 而且冇一個官方渠道公布過呢種數，佢哋全部只報即時值。模板畀你嘅係段落劃分、緩衝擺位同倒推方法，呢啲對邊個都成立；即時值去邊度攞、三級燈號各自幾多分鐘，喺「你自己點量」嗰節。實際數字應該由你第一次北上量返嚟。"
           }
         },
         {
@@ -176,6 +176,9 @@
   <ol>
     <li><a href="#前提條件">前提條件</a></li>
     <li><a href="#先做倒推">先做倒推</a></li>
+    <li><a href="#點解冇一個-過關要幾耐-嘅數">點解冇一個「過關要幾耐」嘅數</a></li>
+    <li><a href="#你自己點量">你自己點量</a></li>
+    <li><a href="#真係定得到嘅嘢">真係定得到嘅嘢</a></li>
     <li><a href="#四個時段">四個時段</a></li>
     <li><a href="#緩衝點擺">緩衝點擺</a></li>
     <li><a href="#兩個決策點">兩個決策點</a></li>
@@ -189,7 +192,7 @@
 
 <h2 id="前提條件" data-build-id>前提條件</h2>
 
-<p>呢份模板假設：兩至四個成年人、走得動、由香港出發當日來回、目標係食同買而唔係景點。如果你帶長輩或者小朋友，節奏同結構要換一份，睇<a href="./with-family.html">帶長輩或小朋友嘅版本</a>。如果你打算過夜，結構亦唔同（見同分區嘅過夜模板）。</p>
+<p>呢份模板假設：兩至四個成年人、走得動、由香港出發當日來回、目標係食同買而唔係景點。如果你帶長輩或者小朋友，節奏同結構要換一份，睇<a href="./with-family.html">帶長輩或小朋友嘅版本</a>。如果你打算過夜，結構亦唔同，睇<a href="./overnight.html">北上過夜兩日</a>。</p>
 
 <p>另外假設你已經搞掂兩樣前置：支付認證同上網。呢兩樣唔係當日補得到嘅，順序點排喺<a href="../guides/index.html">港人北上完整指南</a>。</p>
 
@@ -207,18 +210,55 @@
 
 <p>好多人漏咗第三步，結果喺最後一站玩到「差唔多時間」先走，然後喺車上先發現唔夠時間。硬界線要喺出門之前就寫低，唔係現場計。</p>
 
+<h2 id="點解冇一個-過關要幾耐-嘅數" data-build-id>點解冇一個「過關要幾耐」嘅數</h2>
+
+<p>你想要嘅係一句「羅湖平日大概等 20 分鐘」。呢句嘢本站唔會寫，而且唔係因為查唔到 —— 係因為<strong>冇一個政府部門公布過呢種數</strong>，而佢真係公布咗嘅嘢，形狀同你想像嘅唔同。</p>
+
+<p>逐個查過：入境處冇逐口岸嘅「一般輪候時間區間」；開放數據平台上面同一件事嘅唯一一個數據集，係即時狀態，唔係歷史平均；保安局「口岸通」畀嘅都係即時值。即係全部官方渠道都係<strong>報而家</strong>，冇一個報<strong>通常</strong>。</p>
+
+<p>就算有人幫你整理咗一份平均值，本站都唔會抄。同一個口岸，平日朝早八點同週日下午四點可以差幾倍；一個把兩者撈埋嘅平均數，喺兩種情況下都係錯嘅，而且錯得好似有根據。</p>
+
+<h3>官方唔係報「幾多分鐘」，係報「邊一級」</h3>
+
+<p>入境處嘅做法係把輪候壓成三級燈號。呢三級唔係感覺，佢哋各自有官方定義嘅門檻 —— 而且<strong>香港居民同訪客用兩把唔同嘅尺</strong>：</p>
+
 <section class="data-block" data-fresh="trips/day-trip">
-  <h3>實際時長：用你自己量嘅數</h3>
-  <ul>
-    <li><strong>平日過關等候：</strong><span data-fresh-key="duration.clearance.weekday"></span></li>
-    <li><strong>週末／長假過關等候：</strong><span data-fresh-key="duration.clearance.weekend"></span></li>
-    <li><strong>香港側車程：</strong><span data-fresh-key="duration.hkSide"></span></li>
-    <li><strong>深圳側車程：</strong><span data-fresh-key="duration.szSide"></span></li>
-    <li><strong>返港方向最遲進入時間：</strong><span data-fresh-key="lastEntry.byPort"></span></li>
-  </ul>
+  <h3>官方燈號嘅門檻</h3>
+  <ul data-fresh-key="clearance.levels"></ul>
 </section>
 
-<p>本站唔會填一啲估出嚟嘅分鐘數。呢類數字受口岸、時段、假期影響太大，一個平均值反而會誤導。<strong>第一次北上就當係量度</strong>：每段實際用咗幾耐記低，第二次你就有一份比任何網上數字都準嘅個人資料。</p>
+<p>呢個表最有用嘅唔係「幾分鐘」，係佢話畀你聽<strong>官方眼中嘅「正常」有幾闊</strong>。香港居民見到綠燈，最壞情況都仲有 15 分鐘；訪客見到同一個綠燈，係 30 分鐘。你排緩衝嗰陣應該用嗰個上限，唔係用你上次行運嗰五分鐘。</p>
+
+<h2 id="你自己點量" data-build-id>你自己點量</h2>
+
+<p>官方唔畀通常值，但畀晒即時值，而且係免費、公開、唔使登記。三個渠道，由易到難：</p>
+
+<section class="data-block" data-fresh="trips/day-trip">
+  <h3>「口岸通」：一站式即時過關資訊</h3>
+  <p data-fresh-key="clearance.tool"></p>
+</section>
+
+<ol>
+  <li><strong>保安局「口岸通」</strong> —— <a href="https://www.sb.gov.hk/chi/bwt/status.html?type=outbound">出境版</a>同<a href="https://www.sb.gov.hk/chi/bwt/status.html?type=inbound">入境版</a>兩版。出門前睇一次，出門後上車再睇一次；15 分鐘更新一次，即係你由屋企去到口岸嗰段時間，個燈號已經換過一兩轉。</li>
+  <li><strong>入境處流動應用程式</strong> —— 官方 app 入面有「陸路邊境管制站等候時間」呢一項，同「口岸通」同源。下載連結喺<a href="https://www.immd.gov.hk/hkt/mobile/index.html">入境處流動應用程式頁</a>。要即時通知就裝呢個。</li>
+  <li><strong>直接讀開放數據</strong> —— 入境處喺 data.gov.hk 公開咗<a href="https://data.gov.hk/tc-data/dataset/hk-immd-set28-land-boundary-control-points-waiting-time">陸路邊境管制站等候時間</a>，兩條 JSON（居民一條、訪客一條），八個陸路口岸，每個有入境同出境兩個數。想自己砌通知或者記錄自己嗰條線嘅歷史，就由呢度攞。</li>
+</ol>
+
+<p><strong>用法上有一個位好易錯</strong>：三個渠道報嘅都係「而家嗰一刻」。你八點睇到羅湖綠燈，九點半到達嗰陣可能已經係紅。所以正確用法唔係「睇完決定去唔去」，而係<strong>睇完決定去邊個口岸</strong> —— 燈號嘅價值喺橫向比較，唔喺縱向預測。</p>
+
+<p>而真正屬於你嘅數，要自己儲：<strong>第一次北上就當係量度</strong>。每段實際用咗幾耐記低 —— 由屋企到口岸、過關、口岸到目的地。行兩三次之後，你手上嗰份係按你自己嘅出發點、慣用口岸同慣用時段生成嘅，比任何一個全港平均值都準。</p>
+
+<h2 id="真係定得到嘅嘢" data-build-id>真係定得到嘅嘢</h2>
+
+<p>雖然「要等幾耐」冇通常值，但倒推需要嘅另一半 —— <strong>邊個口岸幾點收</strong> —— 係硬公布，逐個口岸列明：</p>
+
+<section class="data-block" data-fresh="trips/day-trip">
+  <h3>陸路管制站辦公時間</h3>
+  <ul data-fresh-key="ports.hours"></ul>
+  <p><strong>返港方向最遲進入時間：</strong><span data-fresh-key="lastEntry.byPort"></span></p>
+</section>
+
+<p>呢個表先係倒推嘅落腳點。你嘅硬界線唔係「過關要等幾耐」，係「口岸幾點閂 + 香港側尾班車幾點」—— 兩樣都查得到，兩樣都唔會因為當日人多而變。所以正確嘅排法係：<strong>用查得到嘅收工時間定死界線，用查唔到嘅輪候時間定緩衝闊度。</strong></p>
 
 <h2 id="四個時段" data-build-id>四個時段</h2>
 
@@ -270,9 +310,9 @@
 
 <ul>
   <li><strong>返程撞正高峰。</strong>最常見。解法係倒推同鬧鐘，冇其他。</li>
-  <li><strong>口岸收工。</strong>六個口岸之中得一個 24 小時。揀口岸嗰陣就要睇埋返程時間，細節喺<a href="../guides/border-crossings.html">深圳六大口岸</a>。</li>
+  <li><strong>口岸收工。</strong>八個陸路管制站入面，得落馬洲同港珠澳大橋係 24 小時；羅湖同深圳灣旅檢大樓午夜 12:00 收，落馬洲支線 10:30 就收。揀口岸嗰陣就要睇埋返程時間（上面「真係定得到嘅嘢」有全表），兩側接駁嘅細節喺<a href="../guides/border-crossings.html">深圳六大口岸</a>。</li>
   <li><strong>買咗拎唔郁。</strong>補貨放下午，同埋事先諗清楚要拎住行幾遠。</li>
-  <li><strong>掃碼唔通。</strong>細舖尤其。要有後備支付方式，睇<a href="../guides/payment-setup.html">港人北上支付設定</a>。</li>
+  <li><strong>掃碼唔通。</strong>細舖尤其。要有後備支付方式 —— 支付設定要點排喺前提條件嗰段講咗。</li>
   <li><strong>電話冇電。</strong>冇電等於冇支付、冇地圖、冇車票。帶尿袋。</li>
 </ul>
 
@@ -305,7 +345,7 @@
 
   <h3 data-faq-q>點解唔畀我一個具體時間表？</h3>
   <div data-faq-a>
-    <p>因為具體分鐘數受口岸、時段、假期、出發地影響太大，一個平均值反而會誤導。模板畀你嘅係段落劃分、緩衝擺位同倒推方法——呢啲對邊個都成立。實際數字應該由你第一次北上量返嚟。</p>
+    <p>因為具體分鐘數受口岸、時段、假期、出發地影響太大，一個平均值反而會誤導 —— 而且冇一個官方渠道公布過呢種數，佢哋全部只報即時值。模板畀你嘅係段落劃分、緩衝擺位同倒推方法，呢啲對邊個都成立；即時值去邊度攞、三級燈號各自幾多分鐘，喺「你自己點量」嗰節。實際數字應該由你第一次北上量返嚟。</p>
   </div>
 
   <h3 data-faq-q>可唔可以晏啲出門？</h3>
@@ -322,7 +362,13 @@
 <footer class="site-footer">
   <div class="wrap">
     <p>歎世界 — 香港出發的食飲與旅行指南。</p>
-    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份與變動速度。　<a href="../about.html">關於本站</a></p>
+    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份與變動速度。</p>
+<!-- build:footerlinks -->
+<p class="footer-links"><a href="../about.html">關於本站</a>　·　<a href="../privacy.html">私隱政策</a></p>
+<!-- /build:footerlinks -->
+<!-- build:apppromo -->
+<p class="app-promo">歎世界作者亦有開發香港交通同天氣 app：九巴通 — 長者版、鐵路通、香港泊車王、香港天氣通。　<a href="./trip-tools.html">北上行程用邊幾個 app</a></p>
+<!-- /build:apppromo -->
   </div>
 </footer>
 </body>

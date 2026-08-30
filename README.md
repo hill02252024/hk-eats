@@ -195,10 +195,23 @@ node scripts/check-contrast.mjs   # WCAG 對比度量度（深／淺兩套）
 node scripts/check-ads-cls.mjs    # 靜態證明廣告位兩態高度一致
 node scripts/browser-check.mjs    # 真無頭 Chrome：量 computed 值同實際 hydration
 
+# 重建一組 data-block 渲染完會係點（唔使開瀏覽器）：邊個 <h4> 之下有邊幾條
+# key、每條出值定係出待核實標記。個 {{NEEDS_VERIFY}} 標記喺 HTML 檔入面
+# 唔存在（freshness.js runtime 先砌），所以模板係由 js/freshness.js 原始碼
+# regex 讀返出嚟，避免呢個工具同真實渲染靜靜咁分家。
+node scripts/check-fresh-block.mjs coffee/reading-menu.html pricing. \
+     --expect-groups 2 --expect-marks 4
+node scripts/check-fresh-block.mjs --self-test   # 內置 fixture 自測（含反面對照）
+
 SITE_ORIGIN=https://實際域名 node scripts/build.mjs --publish   # 發布前必跑
 
 SITE_ORIGIN=https://<user>.github.io/hk_eats node scripts/build.mjs   # 部署前
 ```
+
+以上全部有 `npm run` 入口（`package.json` 只係做入口，本站冇 npm 依賴）：
+`npm run build` / `publish-check` / `test:freshness` / `check:contrast` /
+`check:ads-cls` / `check:browser` / `check:block` / `check:block:self-test` /
+`check:block:reading-menu`。
 
 ### 外部連結白名單
 
@@ -285,10 +298,12 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 | E13 | 利益披露文字喺 HTML 同 data 之間唔一致，或者 data 有披露聲明但頁面冇 `.callout-disclosure` |
 | E15 | **（只喺 `--publish`）**頁面仲會渲染 `{{NEEDS_VERIFY}}` 標記 |
 | E16 | **（只喺 `--publish`）**`SITE_ORIGIN` 仲係佔位網域 |
-| E17 | 頁面入面嘅外部連結，**如果佢個 host 喺同名 data 檔出現過**，全條 URL 就必須對得上 —— 防止頁面同資料檔行開 |
+| E17 | 頁面入面嘅外部連結，**如果佢個 host 喺同名 data 檔出現過**，全條 URL 就必須對得上 —— 防止頁面同資料檔行開。**擴充：**footer 入面嘅連結用同一條邏輯對 `data/apps.json`（全站級對照表，覆蓋 23 頁 —— 逐頁 scope 嗰條掃唔到冇同名 data 檔嗰 22 頁）；另外 `data/trips/trip-tools.json` 嘅 `apps.storeLinks.*` 每一條都要喺 `data/apps.json` 出現過（`apps.json` 係全集） |
 | E18 | 平台帳號連結（`PLATFORM_HOSTS`）出現喺 `about.html` 以外嘅任何頁 |
 | E19 | 標咗 `_draft` 嘅頁，出現喺 `sitemap.xml`、首頁 `.post-list`、或者任何 pillar 嘅 `.cluster-list`；另外 pillar 嘅 `jsonld:itemList` 條數同佢畫面 `.cluster-list` 條數對唔上 |
 | E20 | 相片冇 `alt`、`alt` 係空、係佔位字（「圖片」「TODO」…）或者係檔名；`.photo-figure` 入面冇 `<img>`；`.photo-figure` 以外有冇 `alt` 嘅 `<img>` |
+| E21 | footer 自家 app 推廣位出事：頁面冇 `<!-- apppromo -->` 錨點亦冇 `<!-- build:apppromo -->` 區塊、區塊有開頭冇收尾、推廣位唔喺 `<footer class="site-footer">` 入面、`data/apps.json` 讀唔到／冇 `promo.target`／`target` 指去 draft 頁 |
+| E22 | footer 站務連結出事：頁面冇 `<!-- footerlinks -->` 錨點亦冇 `<!-- build:footerlinks -->` 區塊、區塊有開頭冇收尾、唔喺 `<footer class="site-footer">` 入面、`FOOTER_LINKS` 指去 draft 頁、或者同一個 footer 有兩條連去同一個站務頁嘅連結（生成嗰條之外仲有手寫嘅） |
 | E14 | 顯示層走樣：**nav 品牌位／footer／`<title>` 三個品牌槽位**同 `SITE_NAME` 唔一致、nav 分區名同 `SECTIONS` 唔一致、nav 少咗分區連結、或者顯示槽位仲有舊字串 |
 
 警告（唔會 exit 1）：
@@ -561,6 +576,7 @@ Pillar 頁上面會連續出現三行：nav 標籤、麵包屑最後一格、`<h
 1. **nav 品牌位** —— `build` 直接生成（`<a class="brand">` 嘅內容整個換掉）。
 2. **`<title>`** —— `build` 生成。
 3. **footer** —— 手寫，但 `build` 驗佢含 `SITE_NAME`。
+   footer 入面嘅**自家 app 推廣位係例外，由 `build` 生成**（見下）。
 
 **E14 嘅次序好重要：先驗「檔案原本寫住咩」，再正規化輸出。**
 如果掉轉做，build 會靜靜咁修好然後檢查永遠 pass ——
@@ -571,6 +587,126 @@ Pillar 頁上面會連續出現三行：nav 標籤、麵包屑最後一格、`<h
 所以 `grep 'hk_eats'` 喺舊版本嘅品牌位（`hk<span>_</span>eats`）
 係**結構上搵唔到**嘅 —— 渲染出嚟有嗰七個字，但原始碼入面
 從來冇連續出現過。呢個盲點真係中過一次，見 E14 嘅註解。
+
+### footer 自家 app 推廣位（唔使寫，build 由 `data/apps.json` 生成）
+
+23 頁 footer 各有一個推廣位，內容一模一樣。唯一來源係 **`data/apps.json`**
+（全站級，同 `ad-slots.json` / `affiliates.json` 同級）。
+
+```
+data/apps.json                       ← 改文案、改連結、加減 app 改呢度
+    ↓ scripts/build.mjs
+<footer class="site-footer">
+  …
+  <!-- build:apppromo -->            ← 生成出嚟嘅區塊
+  <p class="app-promo">…</p>
+  <!-- /build:apppromo -->
+</footer>
+```
+
+**點解唔手寫。** footer 本身係手寫嘅，即係一段要出現喺 23 頁嘅文字
+如果都手寫，就係 23 份可以各自漂移嘅副本 —— E14 本身就係由一次同類
+失手嚟嘅（`trips/trip-tools.html` 嘅 footer 留低咗更名前嘅品牌）。
+
+**錨點同區塊標記係兩個唔同字串**，同 breadcrumb / lastupdate 一樣：
+
+| 狀態 | 檔案入面係咩 |
+|---|---|
+| 新頁，未 build 過 | `<!-- apppromo -->` |
+| build 過 | `<!-- build:apppromo -->` … `<!-- /build:apppromo -->` |
+| 寫檔寫到一半 | 有開頭冇收尾 → **E21**，唔會亂補 |
+
+共用同一個字串就分唔開後兩種狀態，補落去會留低一個孤兒開頭同一段舊內容。
+
+**開新頁記得喺 footer 加一句 `<!-- apppromo -->`**，否則 E21。
+
+#### 內容規矩（每一條都對應一條會紅嘅檢查）
+
+| 規矩 | 唔跟會點 |
+|---|---|
+| 純文字，零圖 | Apple／Google 官方 badge 托管喺佢哋 CDN → **E2**（零外部圖片）。本地圖又要過 E20 嘅 `alt` |
+| 零 `data-fresh-key` | footer 掛一條 `needsVerify` = 每一頁都渲染 `{{NEEDS_VERIFY}}` → **E15** 全站爆；22 頁冇同名 data 檔仲會 **E6** + 每頁 **W2** |
+| 零 tracking 參數 | `TRACKING_PARAM_RE` 攔 `utm_*`，就算網域喺白名單一樣攔 → **E1**。即係商店連結加唔到歸因參數 |
+| 唔准用 `class="callout-disclosure"` | 22 頁冇 `*.disclosure` entry → 每頁一個 **W12**；而 trip-tools 因為 `exec` 只攞第一個匹配會假 pass |
+| 唔准用 `class="ad-slot"` 或 `data-ad-slot` | `scripts/check-ads-cls.mjs` 會紅 |
+| 用 class 唔好用 id | 同一頁重複 `id` → **E10** |
+| 要喺 `<footer class="site-footer">` 入面，唔好巢多一個 `<footer>` | E14 個 footer regex 係非貪婪，食到第一個 `</footer>` 為止 → **E21**（位置）／**E14**（搵唔到品牌名） |
+| `promo.target` 唔准係 draft 頁 | `buildLinkGraph` 掃成頁 HTML，footer 一條連結就令 draft 由每一頁都可達，分段發布穿煲 → **E21** |
+
+#### 點解主連結係站內，商店連結一條都冇
+
+footer 推廣位只有一條指去 `trips/trip-tools.html` 嘅站內連結。
+
+1. **唔開 footer 連結農場。** 呢個 repo 自己寫過（上線清單第 11 步）：
+   「加喺有上文下理嘅位，唔好開一個 footer 連結農場。」`trip-tools`
+   已經有一版完整嘅上文下理去撐四個 app，footer 位嘅角色係**指返嗰版**，
+   唔係喺 23 頁各自賣一次。
+2. **商店連結嘅對數壓力留返喺已經有守衛嗰版。** `trips/trip-tools.html`
+   嘅 host 喺自己嘅 data 檔出現過，舊 E17 逐條驗緊嗰 8 條。
+3. **商店連結加唔到歸因參數**（見上面 `TRACKING_PARAM_RE`），擺 23 頁
+   量唔到成效，淨係換返一個連結農場。
+
+`data/apps.json` 照樣存住 8 條商店 URL —— 佢係守衛嘅對照表（E17 擴充），
+亦係將來真係要放嗰陣嘅來源。
+
+#### 披露：推廣位自己就係披露，唔另開 callout
+
+推廣位第一句係「歎世界作者亦有開發…」。披露嘅作用係擋住「你以為佢中立，
+其實佢有利益」，一段自報身份嘅文字本身已經做到。再加一張「開發者披露」
+卡係重複，而且會令真正需要披露嗰版（`trip-tools`，嗰版有**判斷**：
+「特別之處」「值唔值得裝」）嘅卡貶值。
+
+**唔可以做嘅係**寫一個中性嘅「推薦工具」位而唔講係自己嘅 —— 嗰個先係
+E13 想擋嗰種情況，只不過 E13 係逐頁 scope，喺 footer 捉唔到。
+
+### footer 站務連結（唔使寫，build 由 `FOOTER_LINKS` 生成）
+
+24 頁 footer 各有一行「關於本站　·　私隱政策」，由 `scripts/build.mjs`
+頂部嘅 **`FOOTER_LINKS` 常數**生成。同 apppromo 完全平行嘅第二個注入器。
+
+| 狀態 | 檔案入面係咩 |
+|---|---|
+| 新頁，未 build 過 | `<!-- footerlinks -->` |
+| build 過 | `<!-- build:footerlinks -->` … `<!-- /build:footerlinks -->` |
+| 寫檔寫到一半 | 有開頭冇收尾 → **E22**，唔會亂補 |
+
+**點解係 build 常數，唔係 `data/site-links.json`：**
+
+- `data/apps.json` 存在係因為嗰邊係**編輯內容**（app 名、文案、推廣目標），
+  會獨立於代碼變，而且要餵 E17 對數 —— 有理由做一個檔。
+- 呢兩條係「本站有邊幾版站務頁」，同 nav 一樣屬於**站嘅骨架**。骨架已經有
+  先例：`SECTIONS`（nav 分區名）同 `SITE_NAME` 都係常數。
+- 開多一個 data 檔就多一個漂移面（檔講 A、repo 實際有 B），而唯一好處係
+  「唔使改代碼」—— 但改呢兩條本身就係改站嘅結構，本來就應該經代碼審視。
+
+**行為細節：**
+
+- 路徑按頁面深度算（根目錄 `./about.html`、分區 `../about.html`），
+  用同 apppromo 一樣嘅 `relHrefTo()`。
+- **喺自己嗰版唔會自己連自己** —— `about.html` 嗰行嘅「關於本站」係
+  `<span aria-current="page">`，唔係 `<a>`。對讀者唔係死路，對連結圖亦唔會
+  留一條會被 `buildLinkGraph` 掉咗嘅 self-link。
+- `FOOTER_LINKS` **唔准指去 draft 頁**（E22）。理由同 apppromo 一樣：
+  `buildLinkGraph` 掃成頁 HTML，footer 一條連結就令 draft 由每一頁都可達。
+- **連去唔存在嘅頁唔喺 E22 攔** —— 嗰個由 E9 統一負責，佢先係連結圖嘅擁有者。
+  （實測：把 target 改成一個唔存在嘅檔，24 頁各報一條 E9。）
+- 順帶統一咗一個舊唔一致：**`index.html` 本來冇「關於本站」連結，其餘 22 版
+  各自手寫一條。**而家 23 條手寫嘅全部剷走，24 頁一齊由 build 生成。
+  E22 有一條檢查專門攔「手寫嗰條同生成嗰條並存」。
+
+**開新頁記得喺 footer 加 `<!-- footerlinks -->`**（`new-post.mjs` 模板已經有），
+否則 E22。
+
+#### 同廣告位嘅先後次序
+
+推廣位一定喺所有 `.ad-slot` 之後。最後一個廣告位 `ad-article-end` 喺
+`</article>` 之前，footer 天然喺佢之後，所以擺喺 footer 就自動符合。
+
+**點解要企硬**：一個排喺 `ad-article-end` 上面、樣式又似卡片嘅
+「下載我哋 app」，好易被判定為誘導點擊或者版位誤導。排喺 footer、
+純文字一行、同 footer 其他字同一個級別，就係最清楚嘅分界。
+`ad-slots.json` 而家全部 `enabled: false`，但 CSS 已經硬預留咗高度 ——
+今日睇到嘅次序就係開通之後嘅次序。
 
 ### 11. `<title>` 同 Open Graph（唔使寫，build 會覆蓋）
 
@@ -1483,33 +1619,121 @@ URL 後面嘅括號係 **2026-08-23 由本機實測嘅 HTTP 狀態**；`200` = �
 
 | key | 要查咩 | 去邊度 |
 |---|---|---|
-| `day-trip / duration.clearance.weekday` | 平日各主要口岸嘅一般過關等候時間區間 | 保安局口岸通（出境）：https://www.sb.gov.hk/chi/bwt/status.html?type=outbound （200）。連續抽樣幾日先歸納區間 |
-| `day-trip / duration.clearance.weekend` | 週末及長假期嘅過關等候時間區間 | 同上（入境版換 `?type=inbound`） |
-| `day-trip / duration.hkSide` | 由新界東／新界西／九龍到各口岸嘅一般車程 | https://amap.com （200）或 Google Maps 路線規劃 |
-| `day-trip / duration.szSide` | 由各口岸到主要商圈嘅一般車程 | 同上 |
-| `overnight / lodging.registration` | 境外旅客喺內地住宿嘅登記要求（酒店代辦定自行申報、要咩證件） | 公安機關出入境管理公布。⚠️ https://www.mps.gov.cn 由本機試到 **521**、https://www.nhc.gov.cn **412**，即係要換網絡或改用地方公安局網站 |
-| `overnight / lodging.foreignerAccept` | 接待境外旅客嘅住宿類型限制 | 同上，同一份規定 |
-| `overnight / checkin.hours` | 一般入住與退房時間，同提早寄存行李嘅慣例 | 酒店官網逐間抄，抽樣歸納 |
-| `overnight / luggage.storage.published` | 提供行李寄存嘅場所名單同**公布收費**（實際可得性係實地層） | 口岸／地鐵／商場官網 |
-| `trip-tools / apps.storeLinks.ios` | 四個 app 嘅 App Store 數字 ID | https://apps.apple.com （200）逐個搜 app 名，抄網址嘅數字 ID |
-| `with-family / fare.child` | 兒童及長者喺跨境交通同深圳地鐵嘅票價優惠同年齡／身高門檻 | 港鐵票務：https://www.mtr.com.hk/ch/customer/tickets/concessionary_fares.html （200）；深圳地鐵：https://www.szmc.net/szmc_m （200） |
-| `with-family / docs.child` | 小童過關所需嘅證件同隨行人要求 | 入境事務處：https://www.immd.gov.hk/hkt/ （200）；政府一站通：https://www.gov.hk/tc/residents/immigration/ （200） |
-| `with-family / access.toilets.mapped` | 口岸同商場平面圖上標示嘅廁所位置（**育嬰設施實況係實地層**） | 各口岸／商場官方平面圖 |
+**呢一節 2026-08-30 清空咗大半。**三頁（`day-trip`、`overnight`、`with-family`）
+本來一共 13 條待查，全部刪咗，唔係查到，係**問錯咗問題**。詳情見下面
+〈把「冇準確數」寫成內容〉。留返嘅只有一條：
+
+| key | 要查咩 | 去邊度 |
+|---|---|---|
+| `trip-tools / apps.storeLinks.ios` | 四個 app 嘅 App Store 數字 ID | https://apps.apple.com （200）逐個搜 app 名，抄網址嘅數字 ID。⚠️ 已填實，呢行留住係因為佢同時係 E17 嘅對照錨點 |
+
+#### 把「冇準確數」寫成內容（2026-08-30）
+
+原本 13 條 needsVerify 想問嘅嘢，官方全部答唔到 —— 但**同一個需求上，官方
+答得到嘅嘢係另一組問題**。刪咗嗰 13 條，改為記低官方真係公布咗嘅：
+
+| 刪咗 | 因為 | 換成 |
+|---|---|---|
+| `duration.clearance.weekday` / `.weekend` | 冇一個官方渠道公布「一般區間」—— 入境處、保安局、data.gov.hk 三邊全部只報即時值 | `day-trip / clearance.levels`：官方三級燈號嘅門檻定義（居民 15/30 分鐘、訪客 30/45 分鐘），由入境處開放數據嘅 data dictionary 逐行抄 |
+| — | — | `day-trip / clearance.tool`：保安局「口岸通」係咩、幾耐更新一次、由邊三個部門供數 |
+| `duration.hkSide` / `.szSide` | 車程冇官方公布區間；地圖 app 畀嘅係即時估算，唔可引用 | 冇換 —— 正文改為教讀者「第一次北上當量度」，同埋點解橫向比較（揀邊個口岸）先係燈號嘅正確用法 |
+| `overnight / lodging.foreignerAccept` | 深圳市公安局業務知識庫治安／戶政／出入境三個分類都冇 | 冇換 —— 正文寫明查過邊度、點解唔用二手講法 |
+| `overnight / checkin.hours` | 各住宿方自訂嘅商業條款，性質上冇官方來源 | 同上 |
+| `overnight / luggage.storage.published` / `.reality` | 散喺各口岸同商場自己公布，冇政府層面匯總 | 冇換 —— 正文改為「策略 B 要先確認先敢用」，確認唔到就預設策略 A |
+| — | — | `overnight / ports.overnight`：管制站服務時間（第二日返程嘅硬約束） |
+| `with-family / access.ports` | 入境處口岸頁只有地址、時間、電話，冇步行距離同無障礙設施 | `with-family / access.echannel.voice`：八個有語音輔助 e-道嘅管制站（**只覆蓋視障，唔覆蓋輪椅／電梯**，正文有講清楚） |
+| `with-family / access.toilets.mapped` / `.reality` | 平面圖唔係政府公開數據；育嬰實況要落場 | 冇換 —— 正文改為「把不確定性設計入行程」（每 45 分鐘經過一個一定有廁所嘅點） |
+| `with-family / fare.child` | 香港段查得到、深圳段連唔上；半條數冇用 | 冇換 |
+| `with-family / docs.child` | 回鄉證唔係入境處簽發，冇單一官方頁答得晒 | `with-family / echannel.age`：e-道嘅年齡同身高門檻（7 歲、1.1 米兩條線） |
+| — | — | `day-trip / ports.hours`：八個陸路管制站辦公時間 |
+
+⚠️ 兩個上一輪記錯咗嘅路徑，順手改正：
+`immd` 嘅管制站頁喺 `/hkt/contactus/control_points.html`（唔係 `/hkt/services/`）；
+保安局「口岸通」喺 `/chi/bwt/status.html?type=outbound`（`/chi/bwt/` 本身 404）。
 
 ### 咖啡（`data/coffee/*.json`）
 
 | key | 要查咩 | 去邊度 |
 |---|---|---|
 | `brewing-basics / freshness.window` | 唔同烘焙度嘅最佳賞味窗口（由烘焙日起計嘅日數區間） | 烘焙商公布嘅賞味期 + 業界文獻，兩個獨立來源夾 |
-| `reading-menu / menu.pricing.samples` | 抽樣店舖嘅單品手沖標價（**記低抽樣間數、地區、日期**；歸納區間係另一個 key） | 店舖餐牌／官網／點評 |
+| `reading-menu / pricing.sz.samples` | 深圳店舖嘅單品手沖標價（人民幣）。**記低抽樣間數、逐店地區、每張相日期**；歸納區間係 `pricing.sz.band`。門檻：每間要有真・單品手沖價（唔計豆款加購）、地區核實得到、相有完整年份、用戶上傳 menu 相同平台品項卡分開記 | 店舖餐牌／官網／點評 |
+| `reading-menu / pricing.hk.samples` | 同上，香港半邊（港元）。**完全未抽樣，唔可以由深圳數推** | 店舖餐牌／官網／點評 |
 
 ### 香港咖啡（`data/areas/hk-coffee-map.json`）
 
+**2026-08-30 重整：八條 needsVerify 變成兩條已填 + 四條待查，頁面除咗 draft。**
+卡住嘅唔係「查唔到」，係兩條 key 名入面塞咗一個舖位型態形容詞
+（`hours.**street**.observed`、`hours.**industrial**），而分辨舖位型態
+本站自己判咗必須落場 —— 即係兩條 entry 自己把自己鎖死。
+
+| 舊 key | 點處理 | 而家 |
+|---|---|---|
+| `hours.street.observed` | 拆走「街舖型」形容詞 → 改成品牌層 | **`hours.brand.published` 已填**：5 個品牌、30 個分點，全部官網 |
+| （新） | 覆蓋率本身就係答案，唔使開 needsVerify | **`hours.brand.lastOrder` 已填**：10/30，全部係 sensory ZERO |
+| `hours.street.typical` | **刪** | 由 5 個非隨機品牌歸納「一般區間」＝造假區間，同 `pricing.hk.samples` 拒絕過嘅做法一樣 |
+| `district.street` / `district.upstairs` / `access.upstairs` | **刪，寫成正文** | 三樣改極都要落場。頁面用「三樣要落場先知嘅嘢」一節講點解查唔到 + 讀者自己點睇 |
+| `hours.industrial` | 重新定義，由「必須實地」降返「客觀，等前置」 | 仍待查，見下 |
+| `district.industrial.judgement` | 拆兩條 | 客觀半邊 → `district.industrial.observed`；判斷半邊留返 |
+
+仲待查嘅四條 —— **全部刻意冇喺頁面掛 `data-fresh-key`**（頁面用正文交代缺口，
+唔留空位；entry 保留係因為佢哋真係查得到，係未做嘅工。W7 每次 build 都會列返）：
+
 | key | 要查咩 | 去邊度 |
 |---|---|---|
-| `district.industrial.list` | 香港工業區嘅實際名單（**只填名單，「有冇咖啡聚落」係判斷層**） | 規劃署分區計劃大綱圖：https://www.pland.gov.hk/ |
+| `district.industrial.list` | 香港工業區嘅實際名單 | 規劃署分區計劃大綱圖 https://www.pland.gov.hk/ 或法定圖則平台 https://www.ozp.tpb.gov.hk/ 。⚠️ 2026-08-30 實測：**冇現成清單可以直接引用** —— data.gov.hk 搜「industrial」128 個結果全部係統計，「land utilization」只有柵格 GIS。要逐份大綱圖由「工業」地帶砌返 |
+| `district.industrial.observed` | 上面 30 個分點入面，邊幾個地址落喺官方工業區範圍 | 純查表，但要先有 `district.industrial.list` |
+| `hours.industrial` | 嗰批工廈地址分點週末開唔開 | 由 `hours.brand.published` × `district.industrial.observed` 夾表，唔使落場 |
+| `district.industrial.judgement` | 邊幾個工業區真係有聚落、出入管制實況 | 判斷 + 實地。而且 30 個分點全部係有官網嘅品牌，單店缺席，用佢判斷聚落會嚴重低估 |
 
-⚠️ **呢頁其餘 5 個 key 全部唔係 A 類**：`district.street`、`district.upstairs`、`hours.industrial` 標咗「必須實地」，`hours.street.observed` 同 `.typical` 要抽樣。詳見下一節。
+⚠️ **兩句紀律寫死咗喺 `_layer` 同 `needsVerify` 兩個欄位入面，唔係靠記：**
+（1）個名唔可以簡化成「香港咖啡店嘅營業時間」—— 全集係「有官方渠道公布嘅品牌」；
+（2）呢批值唔可以攞去答舖位型態，正文亦唔可以寫「所以街舖一般 X 點開」。
+
+### AdSense 申請：privacy.html 同其餘前置條件（2026-08-30）
+
+`privacy.html` 放喺根目錄，同 `about.html` 同級。**入面每一句「本站冇做 X」
+都係對住原始碼查過先寫**，查法列咗喺頁尾「呢一版點樣核實出嚟」一節。
+核實結果摘要：
+
+| 項目 | 實測 |
+|---|---|
+| `<form>` / `<input>` / `<textarea>` / `<select>` / `<button>` | 全站零命中 |
+| `document.cookie` / `localStorage` / `sessionStorage` / `indexedDB` | 全站零命中 |
+| 外部字體、CDN、`<iframe>` / `<embed>` / `<object>` | 零命中；CSS 零 `@font-face` / `@import` / `url(` |
+| 外部超連結 | 15 條，全部係 `<a href>`（唔會自動載入）。`http://www.w3.org/2000/svg` 係 xmlns，唔係請求 |
+| affiliate 夥伴 | **兩個：Klook、Amazon**。三條連結。追蹤參數全部仲係 `PENDING-` 佔位值 |
+| 廣告位 | 四個全部 `enabled: false`，`publisher: null` |
+| 托管 | GitHub Pages（`CNAME` = taanworld.com；`taanworld.com` → 200 @ 185.199.111.153，即 GitHub Pages apex IP）。**冇 `.github/workflows`**，產物直接 commit |
+
+⚠️ **README 上面「部署到 GitHub Pages」嗰節寫住「依家未做第一步、Pages 仲係熄咗」
+—— 呢句已經過時，站已經上線。**
+
+#### 白名單加咗兩個網域
+
+`policies.google.com`、`www.pcpd.org.hk`。兩個各自嘅具體頁面 2026-08-30 逐條實測 200。
+
+**冇加**（原因逐個）：`adssettings.google.com`（由本機 302 去
+`myaccount.google.com/not-supported`）、`optout.aboutads.info`（429，核唔到）、
+`myadcenter.google.com` 同 `www.youronlinechoices.com`（兩個都淨係得根路徑，
+E1 明文攔根網域）。呢幾個喺 privacy.html 只用文字寫主機名，唔做連結。
+
+#### ⚠️ 寫呢一版嗰陣中過嘅兩個守衛
+
+1. **E3** —— 私隱政策要講「本站冇載入 X」，而 X 嘅原文（`adsbygoogle` 等四個
+   字串）一寫落 HTML，E3 就當你加咗廣告代碼，build 直接失敗。改為用中文描述
+   （「Google 嘅廣告載入腳本」），並喺頁尾註明「正因為咁，呢一版亦唔可以把
+   嗰四個字串原文寫出嚟」。**呢個唔係守衛過嚴，係守衛做緊佢應該做嘅嘢。**
+2. **W4** —— 同理，`data-aff="…"` 呢個屬性寫落 HTML 會被 affiliates 掃描當成
+   一條真嘅推廣連結。改為用文字描述。
+
+#### 仲差咩（AdSense 申請前）
+
+| 項目 | 狀態 |
+|---|---|
+| 私隱政策 | ✅ `privacy.html` |
+| 聯絡方式 | ✅ `about.html` 加咗 `#contact` 一節（hill0225@gmail.com） |
+| `ads.txt` | ❌ **刻意冇做。**內容要 publisher ID，而家冇。一份填住假 ID 嘅 ads.txt 比冇更差（AdSense 會報 "Not authorized"）。批核之後喺根目錄開一個檔，一行：`google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0` |
+| 域名年資 | ⚠️ **taanworld.com 2026-08-27 註冊（GoDaddy），得三日。**AdSense 對新域名嘅拒絕率明顯較高。呢個唔係補得到嘅嘢，只可以等 |
 
 ### 由本機試唔通嘅 URL
 
@@ -1557,8 +1781,12 @@ sitemap、唔出現喺 nav、亦冇任何 `hreflang` 指住佢**——冇內容�
 
 ### 上線 checklist：十一步，次序唔可以亂
 
-**依家未做第一步。GitHub Pages 仲係熄咗嘅，`SITE_ORIGIN` 仲係
-`example.github.io`，兩樣都係刻意。** 未買域名之前唔好開 Pages ——
+⚠️ **2026-08-30 更新：呢個 checklist 已經行完。**`CNAME` = `taanworld.com`，
+`https://taanworld.com/` 回 200（185.199.111.153，GitHub Pages apex IP）。
+下面保留原文做紀錄，唔好再當佢係待辦。
+
+~~**依家未做第一步。GitHub Pages 仲係熄咗嘅，`SITE_ORIGIN` 仲係
+`example.github.io`，兩樣都係刻意。**~~ 未買域名之前唔好開 Pages ——
 一開，`hill02252024.github.io/hk-eats/` 就上線，Google 收咗，之後轉自訂
 網域要 301，而 GitHub Pages 做唔到真正嘅 301。等於一開始就送咗一批
 重複內容出去。

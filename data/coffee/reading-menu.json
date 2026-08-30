@@ -4,7 +4,7 @@
   "_status": "principles",
   "_draft": true,
   "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
-  "_note": "處理法同烘焙度嘅風味傾向係業界通用嘅粗略對照，唔係精確規則 —— 同一種處理法喺唔同產區同莊園可以差好遠。呢度寫嘅係方向性期望，方便你落單前有個預判。因為冇時效性，全部標記 volatility: low。",
+  "_note": "處理法同烘焙度嘅風味傾向係業界通用嘅粗略對照，唔係精確規則 —— 同一種處理法喺唔同產區同莊園可以差好遠。呢度寫嘅係方向性期望，方便你落單前有個預判。因為冇時效性，全部標記 volatility: low。\n\n價位分咗地區：pricing.sz.* 係人民幣，pricing.hk.* 係港元。唔可以用一邊嘅數推另一邊 —— 幣別、鋪租結構、單品手沖普及度都唔同。",
   "entries": {
     "process.washed": {
       "value": "水洗：酸質清晰、乾淨、產地特徵最直接",
@@ -46,17 +46,29 @@
       "verifiedOn": "2026-08",
       "volatility": "low"
     },
-    "menu.pricing.samples": {
-      "needsVerify": "抽樣店舖嘅單品手沖標價（記低抽樣間數、地區同日期）",
+    "pricing.sz.samples": {
+      "needsVerify": "深圳咖啡店嘅單品手沖標價（人民幣）。要記低抽樣間數、逐店地區同日期。\n三條硬要求，缺一唔填 —— 唔係「填咗好過冇」，撈埋歸納會整出一個假區間：（1）「同一個月內」 —— 全部抽樣點嘅 menu 日期要收喺同一個月，唔可以跨季拼埋；（2）「同一粒度」 —— 「逐支豆逐個價」同「單品手沖一個統一價」係兩種數，要就全部逐支豆，要就全部統一價，兩種撈埋唔可以當一組；（3）「逐店地區確定得到」 —— 一份 menu 覆蓋多間分店而官方講明「價按地點而異」、或者份 menu 其實係某一間分店專屬嘅，都算綁唔實，唔計入抽樣。\n另外：每間要有真・單品手沖標價（唔計豆款加購價、唔計豆價）；地區要核實得到（相入面見到城市／區名，或者連商戶頁地址一齊存檔）；每張相要有完整年份 —— 冇年份嘅唔計入嗰個月；用戶上傳嘅 menu 相同平台上架品項卡要分開記 —— 兩者價可以唔同（2026-08-29 實測同一間店澳白差 ¥5）。",
       "volatility": "normal",
       "_layer": "客觀：查得到就填得到",
-      "_checked": "2026-08-29：站長提供咗深圳半邊嘅價格帶（美式 ¥25–29、拿鐵 ¥28–32、澳白 ¥26–28、手沖 ¥35–58、特調 ¥34–45，來源係五張大眾點評 menu 相）。⚠️ 本站未見過嗰五張相，未記到抽樣間數、地區同日期 —— 要攞到相先填得成一條有出處嘅 entry。香港半邊完全未抽樣。兩邊都未齊，所以維持待核實。"
+      "_checked": "2026-08-29：收到五張大眾點評 menu 相，逐張讀晒，全文紀錄喺 data/_sources/reading-menu-price-sampling.md（2026-08-30 由 gitignored 嘅 sources/ 搬入版本控制 —— 結論引用緊佢，證據唔應該淨係喺本機）。維持待核實。\n讀到嘅價（逐店，唔係歸納）：美式 25／29／25；拿鐵 28／32／28；澳白 28／26，另平台品項卡 33；單品手沖 A 店 冷萃35・花魁9.0 38・粉波旁38，D 店 曼特寧38・白玉蘭48・瑰夏58；特調 30–56。\n四個缺口：(1) 單品手沖只有兩間有標價 —— B 店（百川）只有豆款 +3 加購，C 店（luutosa 鹿兔山）成頁都係特調，冇咖啡豆單；(2) 五張相 ≤ 四間店 —— 相 D 同相 E 係同一張 menu（經典咖啡 25/26/28/32、冷萃 36/45、滴濾 38/48/58 逐項對得上），一張係平放數碼圖一張係側影實體餐牌；(3) 地區只確認到一間 —— 得 B 店相入面有「深圳初汇 HI, SHENZHEN」同「深圳限定拼配」，A／C／D／E 相入面冇城市、冇地址、冇區名；(4) 日期五分之三講唔實 —— 2025-07-06 同 2025-11-18 兩張有全日期，「7月14日」「7月22日」兩張冇年份（大眾點評當年唔顯示年份，所以較可能係 2026 而唔係 2025），相 A 完全冇日期行。\n站長上一輪憑印象嗰組數，美式／拿鐵／手沖對得上；澳白（講 26–28，計埋平台卡係 26–33）同特調（講 34–45，實際 30–56）兩項偏窄。\n2026-08-30：三條硬要求（同一個月內、同一粒度、逐店地區確定）由本條 _checked 搬咗上 needsVerify 文字 —— 下次抽樣嘅人未必會揭 _checked，門檻要擺喺佢一定睇到嗰度。\n2026-08-30（第二批相）：收到十二張新嘅大眾點評 menu 相，逐張逐項讀晒，全文紀錄喺 data/_sources/reading-menu-price-sampling-sz-2026-08-30.md。仍然一條都冇填。\n十二張覆蓋六間店：本無咖啡（3 張）、La Maison Étoilée（4 張）、Niceee Coffee（2 張）、TOMOSOON 多么順（1 張）、PEEEAK（1 張）、一間冇印店名嘅（1 張）。其中冇印店名嗰張同第一批相 D／E 係同一間店（机器滴滤 38／48／58 三項對得上），即係兩批相唔係完全獨立嘅樣本。\n真・單品手沖杯價得三間，全部逐支豆逐個價：本無咖啡 7 支 ¥40–75／杯；Niceee Coffee 5 支 58–88；La Maison Étoilée「競賽級・手冲」8 支 ¥78–388／杯。TOMOSOON 得一個統一價 ¥58（四支豆任揀）；相 A 嗰間標題自己寫「机器滴滤咖啡 Machine Pour-over」，係機器唔係手沖；PEEEAK 完全冇手沖。\n三條硬要求：（1）同一個月內 —— 過唔到，十二張零日期，連年份都冇；La Maison 印嘅「SINCE 2023」係品牌成立年、「ISSUE 3 第三期」係佢自己嘅期數，兩樣都唔係菜單日期；檔名嗰個 2026-08-30 係傳入嗰日。（2）同一粒度 —— 剔走 TOMOSOON 同相 A 之後三間一致，但 La Maison 一間店入面已經有三套價（XBLOOM 機器滴滤 38–78、手冲競賽級 78–388、瓶裝冷萃斟杯 58–398），揀邊套本身就係判斷；而「競賽級」係佢自己界定嘅頂配欄，同本無 ¥40–75 撈埋唔對等。（3）逐店地區確定 —— 過唔到，十二張零地區線索，冇城市、冇區名、冇地址、冇電話。「大众点评」浮水印只證明來源係嗰個全國平台，證唔到深圳。呢批仲差過第一批 —— 第一批起碼有一張影到「深圳初汇 HI, SHENZHEN」。\n要補：返大眾點評搵返嗰六間商戶頁，逐間存檔地址（有區名）同相嘅上傳日期。兩樣都係平台自己顯示嘅，唔使問店家；補到就即刻用得返呢批二十支豆嘅數。\n原相已經入 .gitignore（assets/photos/reading-menu/）—— 十二張全部係店家排版嘅 menu 設計圖，而且 12/12 有大眾點評浮水印；有版權嘅係排版唔係個價，讀數入版本控制，原相只留本機。"
     },
-    "menu.pricing.band": {
-      "needsVerify": "由抽樣歸納出嚟嘅常見價位帶",
+    "pricing.sz.band": {
+      "needsVerify": "由深圳抽樣歸納出嚟嘅常見價位帶（人民幣）。要先有 pricing.sz.samples 嘅原始值先歸納得到。samples 未滿足嗰三條硬要求（同一個月內、同一粒度、逐店地區確定）之前，唔好喺度歸納 —— 由一組跨月、混粒度、綁唔實地區嘅原始值算出嚟嘅區間，睇落似個數，其實冚唔到任何一個真實情境。",
       "volatility": "normal",
       "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key",
-      "_checked": "2026-08-29：判斷層，要先有 menu.pricing.samples 嘅原始抽樣值先歸納得到區間。"
+      "_checked": "2026-08-29：判斷層，要先有 pricing.sz.samples 嘅原始抽樣值先歸納得到區間。今輪讀完五張相之後 samples 仍然未填（見嗰條 _checked），所以本條一併維持。\n2026-08-30：原本呢條係 menu.pricing.band，唔分地區。而篇文覆蓋港深兩邊，一條唔分地區嘅 key 載一組純人民幣價，讀者會當成兩邊通用 —— 已經拆開，唔使等抽樣。\n逐張相嘅逐項讀數：data/_sources/reading-menu-price-sampling.md\n2026-08-30：三條硬要求（同一個月內、同一粒度、逐店地區確定）由本條 _checked 搬咗上 needsVerify 文字 —— 下次抽樣嘅人未必會揭 _checked，門檻要擺喺佢一定睇到嗰度。\n2026-08-30：第二批十二張相讀完（data/_sources/reading-menu-price-sampling-sz-2026-08-30.md），samples 仍然填唔到（日期、地區兩條硬要求過唔到），所以本條一併維持。"
+    },
+    "pricing.hk.samples": {
+      "needsVerify": "香港咖啡店嘅單品手沖杯價（港元）。夠五間先填；要記低抽樣間數、逐店地區同日期。\n三條硬要求，缺一唔填 —— 唔係「填咗好過冇」，撈埋歸納會整出一個假區間：（1）「同一個月內」 —— 全部抽樣點嘅 menu 日期要收喺同一個月，唔可以跨季拼埋；（2）「同一粒度」 —— 「逐支豆逐個價」同「單品手沖一個統一價」係兩種數，要就全部逐支豆，要就全部統一價，兩種撈埋唔可以當一組；（3）「逐店地區確定得到」 —— 一份 menu 覆蓋多間分店而官方講明「價按地點而異」、或者份 menu 其實係某一間分店專屬嘅，都算綁唔實，唔計入抽樣。\n（呢三條係 2026-08-30 實際撞到嘅：手上四間夠格店由 2024-12 拉到 2026-07，差成年半；NOC／The Coffee Academics 逐支豆標價，CMCR／Elephant Grounds 只有一個級別價；The Coffee Academics 官方明寫「Prices vary depending on the location」，Elephant Grounds 嗰份 PDF 內文標住係星街店專屬。）\n另外：每間要有真・單品手沖杯價（唔計 200g／500g 豆價、唔計 Flat White／espresso 類、唔計特調）；來源要官方（官網或者官方 IG 嘅店內 menu），二手整理同外賣平台唔計；要統一標明報嘅係加一前定加一後。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-30：完全未抽樣。2026-08-29 收到嗰五張相全部係人民幣標價嘅內地 menu，唔可以用嚟推算香港 —— 幣別、鋪租結構、單品手沖普及度都唔同。香港半邊要另外做一次同樣嚴格嘅抽樣。\n逐張相嘅逐項讀數：data/_sources/reading-menu-price-sampling.md\n2026-08-30：由 U Food 2026-07-30 嗰篇「香港 8 大高質咖啡店」做起點，八間逐間去官方來源（官網／官方 IG）核。逐間結果：data/_sources/hk-coffee-shops-official-check-2026-08-30.md。仍然唔填。\n夠格 1 間：NOC Coffee Co. —— 官方 PDF noc.coffee/media/2026/07/202607_Cafe-Drink-Menu_outlined.pdf 有完整「SINGLE ORIGIN POUROVER」頁，八支豆逐支標價：Panama Geisha Washed 95；Ethiopia Bensa Gonjobe 75、Ethiopia Duwancho 75、Peru Nueva Esperanza 75；Brazil Casa Bras Geisha 65、Rwanda Huye Geisha 65、Brazil Sitio Tres Barras 60、Ethiopia Chelchele 60。份 menu 明文「Subject to 10% Service Charge」，所以呢組數係加一前。日期靠 URL 路徑 /media/2026/07/ 推，menu 本身冇印日期。\n唔夠格 7 間，而且唔係「唔以單品手沖為主」咁簡單 —— % Arabica、sensory ZERO、Craft Coffee Roaster、Oma、C108、FREE D、野田珈琲 **七間官方來源全部零飲品價**，連 Flat White 幾錢都冇公開。其中 Craft／Oma／野田係真・單品咖啡烘焙商，官網有 single origin 豆賣，但賣嘅係豆價唔係一杯手沖嘅價。\n即係 1/5，差四間。下次搵「自己烘豆＋有店內 menu PDF／圖」嗰種先有機會；純電商型同連鎖飲品型都唔會公開。抽夠之後要統一講明報嘅係加一前定加一後。\n2026-08-30（第二輪）：照上一輪自己推嘅方向再搵（自己烘豆＋有店內 menu PDF／圖，跳過純電商同連鎖飲品型），一共查咗 24 間新嘅。逐間結果：data/_sources/hk-coffee-pourover-menu-search-2026-08-30.md。**仍然一條都冇填。**\n新增夠格 3 間，連 NOC 一共 4 間，差一間：\n· Common Man Coffee Roasters 香港 —— 官網 our-menus 連出 CMCR_HK_Day_Menu_Dec25.pdf，「FILTER COFFEE › Filter Brew 手冲過濾咖啡」：Standard Single Origin 75、UnCommon Coffee 85。頁腳「All prices are exclusive of service charge & taxes.」→ 加一前。CDN v=1765174286 → 2025-12-08。\n· The Coffee Academics —— 官網 pages/menu 連出 Main_Menu_UPDATE.pdf，第 8–9 頁 SPECIALTY POUROVER 逐支豆標價：Panama Esmeralda Geisha 198；NINETY Plus Panama Geisha 水洗／日曬各 98；Ecuador Sidra 88；Ethiopia Sidamo Peaberry 78、Indonesia Sumatra TP 78、Peru Organic Arabica 78。「All prices are subject to 10% service charge.」→ 加一前。CDN v=1733105368 → 2024-12-02。\n· Elephant Grounds —— 官網首頁 MENU 掣連出嘅 4 頁 PDF，第 4 頁「BREW BAR › POUR OVER」：OG BLEND 70、SINGLE ORIGIN 100。頁腳「10% SERVICE CHARGE」→ 加一前。PDF 內部日期 2025-05-16。\n就算再搵到第五間，落數前仲要處理三件事（詳見證據檔）：（1）TCA 官方明寫「Prices vary depending on the location」、Elephant Grounds 嗰份係星街店專屬 —— 兩間都綁唔實地區，而呢條 key 要求逐店地區核實得到；（2）粒度唔一致 —— NOC／TCA 逐支豆標價，CMCR／Elephant Grounds 係級別價，撈埋歸納會整出假區間；（3）日期由 2024-12 拉到 2026-07，差成年半，唔可以當同一時點嘅抽樣。\n未能核（唔當夠格亦唔當唔夠格）：Blue Bottle 香港（Cloudflare 403）、Sonne CAD（HTTP 429）。\n2026-08-30：三條硬要求（同一個月內、同一粒度、逐店地區確定）由本條 _checked 搬咗上 needsVerify 文字 —— 下次抽樣嘅人未必會揭 _checked，門檻要擺喺佢一定睇到嗰度。"
+    },
+    "pricing.hk.band": {
+      "needsVerify": "由香港抽樣歸納出嚟嘅常見價位帶（港元）。要先有 pricing.hk.samples 嘅原始值先歸納得到。samples 未滿足嗰三條硬要求（同一個月內、同一粒度、逐店地區確定）之前，唔好喺度歸納 —— 由一組跨月、混粒度、綁唔實地區嘅原始值算出嚟嘅區間，睇落似個數，其實冚唔到任何一個真實情境。",
+      "volatility": "normal",
+      "_layer": "判斷：要落判斷或抽樣歸納，填之前先睇同組客觀 key",
+      "_checked": "2026-08-30：判斷層，要先有 pricing.hk.samples 先歸納得到。香港半邊完全未抽樣，所以本條亦未有得填。\n逐張相嘅逐項讀數：data/_sources/reading-menu-price-sampling.md\n2026-08-30：三條硬要求（同一個月內、同一粒度、逐店地區確定）由本條 _checked 搬咗上 needsVerify 文字 —— 下次抽樣嘅人未必會揭 _checked，門檻要擺喺佢一定睇到嗰度。"
     }
   }
 }

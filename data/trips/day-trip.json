@@ -1,37 +1,55 @@
 {
   "title": "深圳一日遊骨架 — 易耗芯資料",
   "belongsTo": "/trips/day-trip.html",
-  "_status": "mixed",
-  "_draft": true,
-  "_draftReason": "仲有待核實項目，未適合俾搜尋引擎索引。填實之後拆走呢兩個 key 就會自動返入 sitemap 同各清單。",
-  "_note": "段落劃分同緩衝比例係本站嘅設計，唔係外部事實，所以直接寫喺正文。實際時長（過關等候、車程）係現實世界嘅量度值，本站冇核實，一律留待核實 —— 讀者應該用自己量到嘅時間填。",
+  "_status": "verified",
+  "_note": "段落劃分同緩衝比例係本站嘅設計，唔係外部事實，所以直接寫喺正文。\n2026-08-30 改寫：原本有四條「過關等候／車程」嘅 needsVerify（平日、週末、香港側、深圳側），全部刪咗。唔係因為查唔到就放棄 —— 而係嗰四條問錯咗問題。官方根本冇公布「一般區間」呢種數，佢公布嘅係即時燈號；而正文自己都寫住呢類數受口岸／時段／假期影響太大，一個平均值會誤導。所以改為記低官方真係公布咗嘅嘢：燈號嘅門檻定義同各管制站辦公時間，再喺正文教讀者點自己量。",
   "entries": {
-    "duration.clearance.weekday": {
-      "needsVerify": "平日各主要口岸嘅一般過關等候時間區間",
-      "volatility": "normal",
-      "_checked": "2026-08-29 查過：政府有即時嘅邊境道路交通狀況（sb.gov.hk/chi/bwt/），但嗰個係車輛過境車流，唔係旅客過關輪候時間；亦係即時值，唔係「一般區間」。immd 冇公布逐口岸輪候時間區間。本站立場亦寫咗喺正文：呢類數字受口岸／時段／假期影響太大，一個平均值會誤導 —— 所以就算搵到二手整理都唔會填，改為叫讀者第一次北上當係量度。"
-    },
-    "duration.clearance.weekend": {
-      "needsVerify": "週末及長假期各主要口岸嘅過關等候時間區間",
-      "volatility": "normal",
-      "_checked": "同 duration.clearance.weekday，2026-08-29 一併查過。"
-    },
-    "duration.hkSide": {
-      "needsVerify": "由主要出發區域（新界東／新界西／九龍）到各口岸嘅一般車程",
-      "volatility": "low",
-      "_checked": "2026-08-29：由各區到口岸嘅車程冇官方公布區間（會受路況、班次、轉乘影響）。地圖 app 畀嘅係即時估算，唔係可引用嘅官方區間。唔填。"
-    },
-    "duration.szSide": {
-      "needsVerify": "由各口岸到主要商圈嘅一般車程",
-      "volatility": "low",
-      "_checked": "同 duration.hkSide，2026-08-29 一併查過。"
-    },
     "lastEntry.byPort": {
       "value": "冇官方公布嘅「最遲進入時間」。實際約束係兩樣疊埋：口岸本身嘅服務結束時間，加上香港側嘅尾班車。羅湖同落馬洲支線唔會通宵運作，所以尾班車通常先係真正嘅死線；要深夜過關就要用皇崗或者港珠澳大橋。",
       "verifiedOn": "2026-08",
       "volatility": "high",
       "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。",
       "_sharedWith": "data/trips/trip-tools.json → return.lastEntry（同一件事，改就兩邊一齊改）"
+    },
+    "clearance.tool": {
+      "value": "保安局「口岸通」係一站式過關資訊平台（2025-09-22 推出），以綠、黃、紅燈號顯示各陸路管制站嘅過關情況，分「正常」、「繁忙」、「非常繁忙」三級，並提供平均輪候時間嘅粗略估算，每 15 分鐘更新一次。同時載有旅客同私家車嘅輪候、金巴同皇巴嘅輪候、以及各管制站附近嘅突發交通情況。資料由入境處、警務處、運輸署提供。",
+      "verifiedOn": "2026-08",
+      "volatility": "low",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "保安局「口岸通」出境版 https://www.sb.gov.hk/chi/bwt/status.html?type=outbound、入境版 https://www.sb.gov.hk/chi/bwt/status.html?type=inbound；推出時嘅新聞公報 https://www.info.gov.hk/gia/general/202509/22/P2025092200621.htm（2025-09-22）。同一組數亦見於入境事務處流動應用程式嘅「陸路邊境管制站等候時間」，下載頁 https://www.immd.gov.hk/hkt/mobile/index.html（頁面更新日期 18-03-2024）。",
+      "_checked": "2026-08-30 實測：outbound、inbound 兩個 type 參數都 HTTP 200；immd 流動應用程式頁亦 200，頁上明列「陸路邊境管制站等候時間」呢一項功能。⚠️ 上一輪 _checked 寫嘅 sb.gov.hk/chi/bwt/ 今日 404 —— 正確路徑係 /chi/bwt/status.html?type=outbound。呢一條同 HTML 正文嗰三條連結逐字對得上，由 E17 守住。"
+    },
+    "clearance.levels": {
+      "value": [
+        "0　正常：香港居民一般少於 15 分鐘；訪客一般少於 30 分鐘",
+        "1　繁忙：香港居民一般少於 30 分鐘；訪客一般少於 45 分鐘",
+        "2　非常繁忙：香港居民一般 30 分鐘或以上；訪客一般 45 分鐘或以上",
+        "4　系統維護中",
+        "99　非服務時間"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "low",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "入境處開放數據《Data Dictionary for Land Boundary Control Points Waiting Time》https://www.immd.gov.hk/opendata/hkt/transport/immigration_clearance/data_dictionary_for_land_boundary_control_points_waiting_time.pdf；數據集頁 https://data.gov.hk/tc-data/dataset/hk-immd-set28-land-boundary-control-points-waiting-time。",
+      "_checked": "2026-08-30 實測：兩條 JSON feed（CPQueueTimeR.json 旅客／CPQueueTimeV.json 訪客）都 HTTP 200，覆蓋 8 個陸路管制站（HYW HZM LMC LSC LWS MKT SBC STK）。門檻由官方 data dictionary 第 5 頁嘅 status code 表逐行抄，唔係推算。"
+    },
+    "ports.hours": {
+      "value": [
+        "羅湖：上午 6:30 至午夜 12:00",
+        "落馬洲：全日 24 小時",
+        "落馬洲支線：上午 6:30 至晚上 10:30",
+        "文錦渡：上午 7:00 至晚上 10:00",
+        "沙頭角：通關服務現已暫停，直至另行公布",
+        "深圳灣：旅檢大樓及私家車客運通關 上午 6:30 至午夜 12:00（貨車 24 小時）",
+        "港珠澳大橋：全日 24 小時",
+        "香園圍：上午 7:00 至晚上 10:00"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "管制站辦公時間會隨營運安排調整（沙頭角就係現時暫停通關嘅例子）。出行前以入境處公布為準。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。",
+      "_checked": "2026-08-30 實測：呢一頁列咗全部 13 個管制站（含機場、碼頭、高鐵），本站只抄 8 個陸路口岸 —— 同開放數據 feed 嗰 8 個一樣。⚠️ 上一輪 _checked 寫「immd control_points 路徑 404」，係揀錯咗目錄：唔喺 /hkt/services/，喺 /hkt/contactus/。"
     }
   }
 }

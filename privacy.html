@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>私隱政策 — 歎世界</title>
+<meta name="description" content="歎世界嘅私隱政策：本站唔設表單、唔用 cookie、唔用 localStorage、唔載入任何第三方資源。托管商日誌、推廣連結同將來嘅廣告安排逐項寫明。">
+<meta name="jsonld:type" content="Article">
+<meta name="jsonld:headline" content="私隱政策">
+<meta name="jsonld:description" content="本站收集咩、唔收集咩、由邊個托管、推廣連結同廣告嘅實際狀態。">
+<meta name="jsonld:datePublished" content="2026-08-30">
+<meta name="jsonld:dateModified" content="2026-08-30">
+<link rel="stylesheet" href="./css/main.css">
+<script src="./js/ads.js" defer></script>
+<!-- build:og -->
+<meta property="og:site_name" content="歎世界">
+<meta property="og:title" content="私隱政策 — 歎世界">
+<meta property="og:description" content="本站收集咩、唔收集咩、由邊個托管、推廣連結同廣告嘅實際狀態。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://taanworld.com/privacy.html">
+<meta property="og:locale" content="zh_HK">
+<!-- /build:og -->
+<!-- build:jsonld -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://taanworld.com/privacy.html"
+  },
+  "headline": "私隱政策",
+  "description": "本站收集咩、唔收集咩、由邊個托管、推廣連結同廣告嘅實際狀態。",
+  "inLanguage": "zh-HK",
+  "datePublished": "2026-08-30",
+  "dateModified": "2026-08-30",
+  "author": {
+    "@type": "Organization",
+    "name": "歎世界",
+    "url": "https://taanworld.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "歎世界",
+    "url": "https://taanworld.com/"
+  }
+}
+</script>
+<!-- /build:jsonld -->
+</head>
+<body>
+<a class="skip-link" href="#main">跳去正文</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./index.html">歎<span>世</span>界</a>
+    <nav class="site-nav" aria-label="主要分區">
+      <a href="./guides/index.html">北上實務</a>
+      <a href="./areas/index.html">分區地圖</a>
+      <a href="./notes/index.html">實食紀錄</a>
+      <a href="./coffee/index.html">咖啡</a>
+      <a href="./trips/index.html">北上行程</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+<!-- breadcrumb -->
+
+<h1>私隱政策</h1>
+<p class="meta-line">私隱 · 最後更新：2026-08-30</p>
+
+<p class="lede">呢一版唔係一份範本。下面每一句「本站冇做 X」都係對住原始碼查過先寫嘅，而且查法寫咗喺最後一節，你可以自己覆核。本站係一個純靜態網站 —— 冇後端、冇資料庫、冇帳戶 —— 所以絕大部分私隱問題喺結構上就唔存在，唔使靠承諾。</p>
+
+<h2 id="summary">一句總結</h2>
+
+<p><strong>本站唔會向你收集任何個人資料。</strong>冇表單、冇登入、冇留言、冇訂閱、冇 cookie、冇 localStorage、冇分析工具、冇第三方追蹤器。你嘅瀏覽器由本站攞到嘅，只有 HTML、CSS、一個 CSS 檔、三個 JavaScript 檔、幾張 WebP 相同幾個 JSON 資料檔，全部由本站自己嘅網域送出。</p>
+
+<h2 id="collect">本站直接收集嘅資料：冇</h2>
+
+<h3>冇表單，所以冇嘢好填</h3>
+
+<p>全站二十四版 HTML 入面，<strong>冇一個 <code>&lt;form&gt;</code>、<code>&lt;input&gt;</code>、<code>&lt;textarea&gt;</code>、<code>&lt;select&gt;</code> 或者 <code>&lt;button&gt;</code></strong>。冇電郵訂閱、冇留言區、冇聯絡表單、冇搜尋框。你喺呢個站上面根本冇地方輸入任何嘢。</p>
+
+<h3>冇 cookie，冇本機儲存</h3>
+
+<p>本站嘅 JavaScript 完全冇用 <code>document.cookie</code>、<code>localStorage</code>、<code>sessionStorage</code> 或者 <code>indexedDB</code>。三個 JS 檔各自做嘅嘢：</p>
+
+<ul>
+  <li><strong><code>freshness.js</code></strong> —— 由本站自己嘅 <code>/data/*.json</code> 讀資料，填入頁面上嘅數值位，同埋計「呢個數核實咗幾耐」去決定要唔要出過時提示。只讀本站檔案，唔向外發任何請求，唔記低你睇過乜。</li>
+  <li><strong><code>affiliates.js</code></strong> —— 由本站自己嘅 <code>/data/affiliates.json</code> 讀推廣連結，把頁面上做咗標記嘅位換成真連結。佢淨係改 <code>href</code>、<code>rel</code> 同 <code>title</code> 屬性，唔會記錄你有冇撳。</li>
+  <li><strong><code>ads.js</code></strong> —— 由本站自己嘅 <code>/data/ad-slots.json</code> 讀廣告位定義，喺容器上面標記狀態。<strong>呢個檔唔載入任何廣告網絡</strong>：冇 Google 嘅廣告載入腳本、冇 publisher ID、冇 <code>&lt;script&gt;</code> 注入。</li>
+</ul>
+
+<p>三個檔加埋，向外部網域發出嘅請求數目係<strong>零</strong>。</p>
+
+<h3>冇分析工具</h3>
+
+<p>冇 Google Analytics、冇 Plausible、冇 Umami、冇任何統計腳本。本站唔知有幾多人睇過、由邊度嚟、睇咗幾耐。</p>
+
+<h2 id="third-party">第三方資源：一個都冇載入</h2>
+
+<p>好多「唔收集資料」嘅網站，其實一開頁就已經向 Google Fonts、CDN、嵌入式地圖或者影片發送咗你嘅 IP。本站冇。</p>
+
+<ul>
+  <li><strong>字體</strong> —— 冇 <code>@font-face</code>、冇 <code>@import</code>。CSS 只用系統字體堆疊（Noto Sans TC、PingFang HK、Hiragino Sans 等），有邊隻就用邊隻，唔會向外攞。</li>
+  <li><strong>腳本同樣式</strong> —— 全部 <code>&lt;script src&gt;</code> 同 <code>&lt;link rel="stylesheet"&gt;</code> 都指向本站自己嘅相對路徑，冇一條指向 CDN。</li>
+  <li><strong>圖片</strong> —— 全部相同圖解都存喺本站。圖解係內嵌 SVG，唔係外部檔。</li>
+  <li><strong>嵌入內容</strong> —— 冇 <code>&lt;iframe&gt;</code>、冇 <code>&lt;embed&gt;</code>、冇 <code>&lt;object&gt;</code>、冇嵌入影片或者地圖。</li>
+</ul>
+
+<p>頁面上有連去政府網站、應用程式商店同官方資料頁嘅一般超連結。<strong>超連結唔會自動載入任何嘢</strong> —— 除非你撳落去，你嘅瀏覽器唔會同嗰啲網站通訊。撳咗之後你就進入咗對方嘅網站，受對方嘅私隱政策管，唔再受呢一份管。</p>
+
+<h2 id="logs">托管商日誌：唯一會記低你嘅地方</h2>
+
+<p>本站托管喺 <strong>GitHub Pages</strong>（GitHub, Inc.，微軟旗下），自訂網域 taanworld.com。呢個係一個純靜態托管服務，本站冇伺服器程式，亦攞唔到、睇唔到任何存取紀錄。</p>
+
+<p><strong>但要照實講：</strong>任何網站托管商都會為咗營運同保安而記低伺服器存取日誌，通常包括 IP 位址、時間、要求嘅檔案、User-Agent 同來源頁。GitHub 亦有咁做。呢啲資料由 GitHub 收集同保存，本站冇途徑存取、亦冇要求佢哋交出。GitHub 點樣處理呢啲資料，以佢自己嘅私隱聲明為準。</p>
+
+<p>換句話講：<strong>本站自己一件資料都冇收，但你連上嚟嘅動作本身，會經過 GitHub 嘅日誌。</strong>如果你唔想咁，就要用 VPN 或者類似工具 —— 呢一點對任何網站都一樣，唔止本站。</p>
+
+<h2 id="affiliate">推廣連結</h2>
+
+<p>本站有推廣（affiliate）連結。<strong>現時嘅夥伴有兩個：Klook 同 Amazon。</strong>冇第三個。</p>
+
+<p><strong>而家嘅實際狀態：兩個夥伴嘅追蹤參數都仲係佔位值（<code>PENDING-</code> 開頭），即係推廣計劃未申請、未生效，撳落去唔會產生任何佣金，亦唔會帶你嘅任何識別碼過去。</strong>將來真正接通之後，連結會帶一個標示係邊個網站帶客過去嘅代碼 —— 嗰個代碼識別嘅係本站，唔係你。</p>
+
+<p>推廣連結一律加 <code>rel="sponsored nofollow noopener"</code>，並且喺頁面上明文標示。價格唔會因為經本站連結而唔同。撳咗之後你就進入咗 Klook 或者 Amazon 嘅網站，佢哋會唔會落 cookie、收集咩，由佢哋自己嘅私隱政策決定。</p>
+
+<h2 id="ads">廣告</h2>
+
+<p><strong>本站現時冇任何廣告，亦冇載入任何廣告代碼。</strong>四個廣告位（<code>ad-article-1</code>、<code>ad-article-2</code>、<code>ad-article-end</code>、<code>ad-hub-grid</code>）全部處於 <code>enabled: false</code> 狀態，publisher ID 係空。你喺頁面上見到嘅空白，係用 CSS 硬預留咗高度嘅位 —— 目的係將來開通嗰陣版面唔會跳。</p>
+
+<h3>將來開通 Google AdSense 之後會點</h3>
+
+<p>本站正申請 Google AdSense。以下寫嘅係<strong>一經開通就會生效</strong>嘅安排，而唔係已經發生嘅事 —— 兩者喺呢一版分得好清楚，因為講錯咗就係向你報告一件未發生嘅事。</p>
+
+<ul>
+  <li>第三方供應商（包括 Google）會使用 cookie，根據你之前到訪本站或其他網站嘅紀錄投放廣告。</li>
+  <li>Google 使用廣告 cookie，令佢同佢嘅夥伴可以根據你到訪本站及／或其他網站嘅情況向你顯示廣告。</li>
+  <li>你可以到 Google 廣告設定（<code>myadcenter.google.com</code>）選擇停用個人化廣告；亦可以到 <code>www.aboutads.info</code> 一次過停用多個第三方供應商嘅個人化廣告 cookie。</li>
+  <li>Google 點樣使用來自使用其服務嘅網站嘅資料，寫喺<a href="https://policies.google.com/technologies/partner-sites">Google 嘅「合作夥伴網站」說明</a>；廣告相關嘅技術喺<a href="https://policies.google.com/technologies/ads">Google 廣告技術說明</a>；整體私隱政策喺 <a href="https://policies.google.com/privacy">Google 私隱權政策</a>。</li>
+</ul>
+
+<p class="callout">上面三條 Google 連結，本站喺 2026-08-30 逐條試過連得通先放上嚟。Google 廣告設定同 aboutads.info 兩個只寫主機名、冇做連結 —— 前者由本站呢邊測試時被轉向去一個唔相干嘅頁，後者回應 429，兩個都核唔到。跟返全站同一條規矩：<strong>核唔到就唔連</strong>，寧願你自己打，都好過送你去一條可能已經失效嘅網址。</p>
+
+<p><strong>開通之後，本頁會即刻改為現在式，而且會喺呢度寫明生效日期。</strong>如果你而家睇緊呢一段而頁面上仍然係空白版位，即係仲未開通。</p>
+
+<h2 id="children">兒童</h2>
+
+<p>本站係一個寫俾成年讀者嘅飲食同旅行資料站，唔以兒童為對象，亦冇任何可以輸入資料嘅地方，所以唔會、亦冇可能收集到兒童嘅個人資料。</p>
+
+<h2 id="rights">你嘅權利</h2>
+
+<p>《個人資料（私隱）條例》（香港法例第 486 章）賦予你查閱同改正自己個人資料嘅權利。就本站而言，<strong>由於本站冇持有任何個人資料，實際上冇資料可以畀你查閱或者改正</strong> —— 呢個係一個結構性事實，唔係一個政策選擇。條例嘅概覽見<a href="https://www.pcpd.org.hk/tc_chi/data_privacy_law/ordinance_at_a_Glance/ordinance.html">私隱專員公署嘅說明</a>。</p>
+
+<p>如果你認為本站有邊一句寫錯、或者你想知多啲，歡迎聯絡：<a href="mailto:hill0225@gmail.com">hill0225@gmail.com</a>。</p>
+
+<h2 id="changes">政策更新</h2>
+
+<p>呢一版嘅內容同本站原始碼綁住。<strong>只要本站加入任何會改變上面任何一句嘅嘢 —— 開通廣告、加入分析工具、加一個表單、載入一個外部字體 —— 呢一版就會同一時間更新，而唔係之後補。</strong>頁頂嘅「最後更新」日期就係最後一次核實嘅日期。</p>
+
+<h2 id="how-verified">呢一版點樣核實出嚟</h2>
+
+<p>下面係本站 2026-08-30 用嚟寫呢一版嘅實際檢查。呢個站嘅原始碼係公開嘅，你可以自己跑一次：</p>
+
+<ul>
+  <li><strong>表單</strong> —— 對全站 HTML 搜尋 <code>&lt;form</code>、<code>&lt;input</code>、<code>&lt;textarea</code>、<code>&lt;select</code>、<code>&lt;button</code>：零命中。</li>
+  <li><strong>儲存</strong> —— 對全站 HTML 同 JS 搜尋 <code>document.cookie</code>、<code>localStorage</code>、<code>sessionStorage</code>、<code>indexedDB</code>：零命中。</li>
+  <li><strong>外部資源</strong> —— 列出全部 <code>&lt;script src&gt;</code> 同 <code>&lt;link&gt;</code>：全部係相對路徑。搜尋 <code>&lt;iframe</code>、<code>&lt;embed</code>、<code>&lt;object</code>：零命中。搜尋 CSS 嘅 <code>@font-face</code>、<code>@import</code>、<code>url(</code>：零命中。</li>
+  <li><strong>廣告代碼</strong> —— 搜尋 Google 廣告載入腳本嘅檔名、廣告聯播網域名同 publisher ID 前綴四個字串：零命中。本站嘅建置腳本本身有一條檢查，一旦呢四個字串出現喺任何 HTML 或者 JS，建置就會直接失敗 —— 所以呢一段唔係人手保證，係一條每次建置都會行嘅守衛。（正因為咁，呢一版亦唔可以把嗰四個字串原文寫出嚟。）</li>
+  <li><strong>外部超連結</strong> —— 抽出全站所有絕對網址逐條核。建置腳本有一份白名單，唔喺白名單嘅網域一出現就會令建置失敗。</li>
+</ul>
+
+<p>本站嘅其他做法（點樣分開常青內容同會過期嘅數值、點樣標示未核實）寫喺<a href="./about.html">關於本站</a>。</p>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>歎世界 — 香港出發的食飲與旅行指南。</p>
+    <p>本站資料分為常青內容與可變資料兩部分，可變資料一律標明核實月份與變動速度。</p>
+<!-- build:footerlinks -->
+<p class="footer-links"><a href="./about.html">關於本站</a>　·　<span aria-current="page">私隱政策</span></p>
+<!-- /build:footerlinks -->
+<!-- build:apppromo -->
+<p class="app-promo">歎世界作者亦有開發香港交通同天氣 app：九巴通 — 長者版、鐵路通、香港泊車王、香港天氣通。　<a href="./trips/trip-tools.html">北上行程用邊幾個 app</a></p>
+<!-- /build:apppromo -->
+  </div>
+</footer>
+</body>
+</html>

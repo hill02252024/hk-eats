@@ -90,6 +90,23 @@ const SECTIONS = {
   trips:  { pillar: "北上行程",         nav: "北上行程" },
 };
 
+/* footer 站務連結。同 SECTIONS（nav）一樣係**結構**，唔係內容，
+ * 所以同樣做 build 常數，唔開 data 檔。
+ *
+ * 點解唔學 data/apps.json 開一個 data/site-links.json：
+ *   · apps.json 入面係編輯內容（app 名、文案、推廣目標），會獨立於代碼變，
+ *     而且要餵 E17 對數 —— 有理由做一個檔。
+ *   · 呢兩條係「本站有邊幾版站務頁」，同 nav 一樣屬於站嘅骨架。
+ *     骨架已經有先例：SECTIONS 同 SITE_NAME 都係常數。
+ *   · 開多一個 data 檔就多一個漂移面（檔講 A、repo 實際有 B），
+ *     而唯一嘅好處係「唔使改代碼」—— 但改呢兩條本身就係改站嘅結構，
+ *     本來就應該經代碼審視。
+ * label 係顯示文字，target 係 repo 相對路徑（唔可以係 draft 頁）。 */
+const FOOTER_LINKS = [
+  { label: "關於本站", target: "about.html" },
+  { label: "私隱政策", target: "privacy.html" },
+];
+
 /* /en/ 係預留目錄，本次唔填內容，亦唔對外宣告。 */
 const RESERVED_DIRS = new Set(["en"]);
 
@@ -115,12 +132,28 @@ const EXTERNAL_ALLOWLIST = {
   ],
   exact: [
     "www.mtr.com.hk",        // 港鐵：接駁／特惠站官方說明
+    // 私隱政策（privacy.html）引用嘅官方頁。2026-08-30 逐條實測 200：
+    //   policies.google.com/technologies/partner-sites   ← AdSense 要求публ嘅嗰版
+    //   policies.google.com/technologies/ads
+    //   policies.google.com/privacy
+    //   pcpd.org.hk/.../ordinance.html                    ← 私隱專員公署，《個人資料（私隱）條例》
+    // ⚠️ 冇加 adssettings.google.com（由本機 302 去 myaccount.google.com/not-supported）、
+    //    optout.aboutads.info（429，核唔到）、myadcenter.google.com 同
+    //    youronlinechoices.com（兩個都淨係得根路徑，E1 明文攔根網域）。
+    //    呢幾個喺 privacy.html 只用文字寫出主機名，唔連結 —— 核唔到就唔連。
+    "policies.google.com",   // Google 私隱與條款
+    "www.pcpd.org.hk",       // 香港個人資料私隱專員公署
     "www.openstreetmap.org", // 地圖參考
     "schema.org",            // 結構化資料詞彙
     "www.w3.org",            // SVG／XML namespace
-    // 官方 app 商店。預留畀 trips/trip-tools 嘅 apps.storeLinks —— 該項
-    // 目前仲係 needsVerify，所以站內暫時一條商店連結都冇；白名單
-    // 先開定，等資料補齊即刻用得。呢兩個網域係商店官方頁，唔帶佣金。
+    // 官方 app 商店。呢兩個網域係商店官方頁，唔帶佣金。
+    // 而家真係有連結喺站內：trips/trip-tools.html 四張 app 卡各兩條，
+    // 一共 8 條，對照表係 data/trips/trip-tools.json 嘅 apps.storeLinks.*
+    // （舊 E17 逐條驗）。全站級嘅對照表係 data/apps.json（E17 擴充驗
+    // footer）。footer 推廣位刻意冇商店連結 —— 見 data/apps.json 嘅
+    // _footerHasNoStoreLinks。
+    // ⚠️ 就算喺白名單，TRACKING_PARAM_RE 一樣攔 utm_*，所以商店連結
+    //    加唔到歸因參數。
     "apps.apple.com",        // App Store
     "play.google.com",       // Google Play
     // 本站自己喺各平台嘅帳號。只可以喺 about.html 出現 —— E18 會攔住
@@ -1196,6 +1229,262 @@ function checkStoreLinks(relPath, html) {
 }
 
 /* ------------------------------------------------------------------ */
+/* E21 footer 自家 app 推廣位：一個來源，23 頁生成                       */
+/* ------------------------------------------------------------------ */
+
+/* footer 本身係手寫嘅（E14 只驗佢含 SITE_NAME），所以一段要出現喺 23 頁
+ * 嘅推廣文字如果都手寫，就係 23 份可以各自漂移嘅副本 —— E14 本身就係由
+ * 一次同類失手嚟嘅（trip-tools 嘅 footer 留低咗更名前嘅品牌）。
+ *
+ * 所以推廣位跟 breadcrumb / lastupdate 同一個模式：頁面只放一個錨點，
+ * 內容由 data/apps.json 生成。改文案改一處。
+ *
+ * 跟返 breadcrumb / lastupdate 嘅做法：**錨點同區塊標記係兩個唔同字串**。
+ *   錨點（人手寫入 footer 一次）： <!-- apppromo -->
+ *   生成出嚟嘅區塊：              <!-- build:apppromo --> … <!-- /build:apppromo -->
+ * 點解唔可以共用同一個字串：共用嘅話「未生成過嘅錨點」同「寫到一半嘅
+ * 區塊（有開頭冇收尾）」喺文本上一模一樣，分唔開 —— 補落去就會留低一個
+ * 孤兒開頭同一段舊內容。分開兩個字串，三種狀態就各有唯一嘅指紋。 */
+
+const AP_ANCHOR = "<!-- apppromo -->";
+const AP_ANCHOR_RE = /[ \t]*<!--\s*apppromo\s*-->\n?/;
+const AP_START = "<!-- build:apppromo -->";
+const AP_END = "<!-- /build:apppromo -->";
+const AP_BLOCK_RE = /[ \t]*<!-- build:apppromo -->[\s\S]*?<!-- \/build:apppromo -->\n?/g;
+const APPS_PATH = path.join(DATA_DIR, "apps.json");
+
+let appsDocCache;
+function readApps() {
+  if (appsDocCache !== undefined) return appsDocCache;
+  if (!fs.existsSync(APPS_PATH)) {
+    err("E21 搵唔到 data/apps.json —— footer 推廣位嘅唯一來源");
+    return (appsDocCache = null);
+  }
+  try { appsDocCache = JSON.parse(fs.readFileSync(APPS_PATH, "utf8")); }
+  catch (e) { err(`E21 data/apps.json 唔係合法 JSON：${e.message}`); appsDocCache = null; }
+  return appsDocCache;
+}
+
+/* 由頁面路徑計去 target 嘅相對 href。根目錄嘅頁用 "./trips/x.html"，
+ * 分區入面嘅頁用 "../trips/x.html"。唔用絕對路徑 —— E12 會攔。
+ * 一律帶前綴（"./" 或者 "../"），同頁面手寫嗰啲連結同一個寫法。 */
+function relHrefTo(fromRel, targetRel) {
+  const fromDir = path.posix.dirname(fromRel);
+  const r = path.posix.relative(fromDir === "." ? "" : fromDir, targetRel);
+  return r.startsWith(".") ? r : "./" + r;
+}
+
+function renderAppPromo(relPath) {
+  const doc = readApps();
+  if (!doc) return null;
+  const promo = doc.promo || {};
+  const names = (doc.apps || []).map((a) => a.name).filter(Boolean);
+  if (!names.length) { err("E21 data/apps.json 冇任何 apps[].name"); return null; }
+
+  const target = promo.target;
+  if (!target) { err("E21 data/apps.json 冇 promo.target"); return null; }
+  /* target 唔可以係 draft 頁。draft 嘅前提就係「刻意冇人連入」
+   * （見下面分段發布嗰節），而 buildLinkGraph 掃成頁 HTML —— footer
+   * 一條連結就會令佢由每一頁都可達，分段發布即刻穿煲。 */
+  if (isDraft(target)) {
+    err(`E21 data/apps.json 嘅 promo.target「${target}」係 draft 頁 —— footer 唔可以連去 draft`);
+    return null;
+  }
+
+  const text = esc(promo.lead || "") + names.map(esc).join(esc(promo.appsJoiner || "、")) + esc(promo.tail || "");
+  /* 喺 target 自己嗰版唔好自己連自己 —— footer 一條指返本頁嘅連結，
+   * 對讀者係死路，對連結圖係一條 buildLinkGraph 會直接掉咗嘅 self-link。 */
+  const link = relPath === target
+    ? ""
+    : `　<a href="${esc(relHrefTo(relPath, target))}">${esc(promo.linkText || "詳情")}</a>`;
+
+  return AP_START + "\n" + `<p class="app-promo">${text}${link}</p>\n` + AP_END + "\n";
+}
+
+function injectAppPromo(relPath, html) {
+  const block = renderAppPromo(relPath);
+  if (!block) return html;
+
+  const hasOpen = html.includes(AP_START);
+  AP_BLOCK_RE.lastIndex = 0;
+  const hasBlock = AP_BLOCK_RE.test(html);
+  AP_BLOCK_RE.lastIndex = 0;
+
+  // 1) 已經有完整區塊 → 換新版
+  if (hasBlock) return html.replace(AP_BLOCK_RE, block);
+  // 2) 有開頭但夾唔成區塊 → 寫檔寫到一半，唔亂補
+  if (hasOpen) {
+    err(`E21 ${relPath}: 有 ${AP_START} 但收唔到尾 —— 上次可能寫檔寫到一半，唔會補多一個開頭，人手睇返`);
+    return html;
+  }
+  // 3) 得個錨點 → 第一次生成
+  if (AP_ANCHOR_RE.test(html)) return html.replace(AP_ANCHOR_RE, block);
+
+  err(`E21 ${relPath}: footer 冇 ${AP_ANCHOR} 錨點亦冇 ${AP_START} 區塊 —— 推廣位注入唔到`);
+  return html;
+}
+
+/* 注入之後先驗：區塊一定要喺 <footer class="site-footer"> 入面。
+ * 擺喺 <main> 尾會同 ad-article-end 連成一串賣嘢位；擺喺 footer 之外
+ * 就唔係站務資訊，係第五個內容區。 */
+function checkAppPromoPlacement(relPath, html) {
+  const footM = /<footer class="site-footer"[^>]*>([\s\S]*?)<\/footer>/i.exec(html);
+  if (!footM) return;                       // 冇 footer 由 E14 報
+  const at = html.indexOf(AP_START) !== -1 ? html.indexOf(AP_START) : html.indexOf(AP_ANCHOR);
+  if (at === -1) return;                    // 冇錨點由 E21 報
+  const fStart = footM.index;
+  const fEnd = fStart + footM[0].length;
+  if (at < fStart || at > fEnd) {
+    err(`E21 ${relPath}: 推廣位唔喺 <footer class="site-footer"> 入面（喺第 ${lineOf(html, at)} 行）`);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* E22 footer 站務連結：一個來源，24 頁生成                              */
+/* ------------------------------------------------------------------ */
+
+/* 同 apppromo 完全平行嘅第二個 footer 注入器。分開做唔合併，因為兩者
+ * 性質唔同：apppromo 係推廣（內容，來源喺 data/apps.json），
+ * 呢個係站務導覽（結構，來源喺 FOOTER_LINKS 常數）。
+ *
+ * 錨點同區塊標記**一定要係兩個唔同字串** —— 呢個係 apppromo 第一次
+ * 落地嗰陣撞返嚟嘅教訓：共用同一個字串的話，「未生成過嘅錨點」同
+ * 「寫到一半嘅區塊（有開頭冇收尾）」喺文本上一模一樣，分唔開，
+ * 補落去就會留低一個孤兒開頭同一段舊內容。 */
+
+const FL_ANCHOR = "<!-- footerlinks -->";
+const FL_ANCHOR_RE = /[ \t]*<!--\s*footerlinks\s*-->\n?/;
+const FL_START = "<!-- build:footerlinks -->";
+const FL_END = "<!-- /build:footerlinks -->";
+const FL_BLOCK_RE = /[ \t]*<!-- build:footerlinks -->[\s\S]*?<!-- \/build:footerlinks -->\n?/g;
+
+function renderFooterLinks(relPath) {
+  const parts = [];
+  for (const it of FOOTER_LINKS) {
+    /* draft 頁唔可以出現喺 footer —— draft 嘅前提就係「刻意冇人連入」，
+     * 而 buildLinkGraph 掃成頁 HTML，footer 一條連結就令佢由每一頁都可達。
+     * （連去唔存在嘅頁唔喺呢度攔：嗰個由 E9 統一負責，佢先係連結圖嘅擁有者。） */
+    if (isDraft(it.target)) {
+      err(`E22 FOOTER_LINKS 嘅「${it.label}」指住 draft 頁「${it.target}」—— footer 唔可以連去 draft`);
+      return null;
+    }
+    // 喺自己嗰版唔好自己連自己：對讀者係死路，對連結圖係一條會被掉咗嘅 self-link
+    parts.push(relPath === it.target
+      ? `<span aria-current="page">${esc(it.label)}</span>`
+      : `<a href="${esc(relHrefTo(relPath, it.target))}">${esc(it.label)}</a>`);
+  }
+  if (!parts.length) { err("E22 FOOTER_LINKS 係空"); return null; }
+  return FL_START + "\n" + `<p class="footer-links">${parts.join("　·　")}</p>\n` + FL_END + "\n";
+}
+
+function injectFooterLinks(relPath, html) {
+  const block = renderFooterLinks(relPath);
+  if (!block) return html;
+
+  const hasOpen = html.includes(FL_START);
+  FL_BLOCK_RE.lastIndex = 0;
+  const hasBlock = FL_BLOCK_RE.test(html);
+  FL_BLOCK_RE.lastIndex = 0;
+
+  if (hasBlock) return html.replace(FL_BLOCK_RE, block);
+  if (hasOpen) {
+    err(`E22 ${relPath}: 有 ${FL_START} 但收唔到尾 —— 上次可能寫檔寫到一半，唔會補多一個開頭，人手睇返`);
+    return html;
+  }
+  if (FL_ANCHOR_RE.test(html)) return html.replace(FL_ANCHOR_RE, block);
+
+  err(`E22 ${relPath}: footer 冇 ${FL_ANCHOR} 錨點亦冇 ${FL_START} 區塊 —— 站務連結注入唔到`);
+  return html;
+}
+
+function checkFooterLinksPlacement(relPath, html) {
+  const footM = /<footer class="site-footer"[^>]*>([\s\S]*?)<\/footer>/i.exec(html);
+  if (!footM) return;                       // 冇 footer 由 E14 報
+  const at = html.indexOf(FL_START) !== -1 ? html.indexOf(FL_START) : html.indexOf(FL_ANCHOR);
+  if (at === -1) return;                    // 冇錨點由 E22 報
+  const fStart = footM.index;
+  const fEnd = fStart + footM[0].length;
+  if (at < fStart || at > fEnd) {
+    err(`E22 ${relPath}: 站務連結唔喺 <footer class="site-footer"> 入面（喺第 ${lineOf(html, at)} 行）`);
+  }
+  /* 同一版唔可以有兩條指去同一個站務頁嘅連結 —— 手寫嗰條同生成嗰條
+   * 並存，就係「改咗一邊冇改另一邊」嘅溫床。呢條係實際發生過：
+   * 22 版 footer 本來各自手寫住一條「關於本站」。 */
+  const inner = footM[1];
+  for (const it of FOOTER_LINKS) {
+    const base = path.posix.basename(it.target);
+    const n = (inner.match(new RegExp(`href="[^"]*${base.replace(/\./g, "\\.")}"`, "g")) || []).length;
+    if (n > 1) {
+      err(`E22 ${relPath}: footer 有 ${n} 條連去「${base}」嘅連結 —— 生成嗰條之外仲有手寫嘅，剷走手寫嗰條`);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* E17 擴充：footer 商店連結 vs data/apps.json                          */
+/* ------------------------------------------------------------------ */
+
+/* 舊 E17 係逐頁 scope 嘅：只對數「host 有喺同名 data 檔出現過」嘅連結。
+ * 23 頁入面得 trips/trip-tools.html 符合，其餘 22 頁嘅 footer 就算被人
+ * 貼咗一條商店連結都冇人管 —— 唔係會紅，係唔會紅。
+ *
+ * 所以用同一條邏輯再掃一次 footer，對照表換成 data/apps.json：
+ * 個 host 喺 apps.json 出現過 → 全條 URL 必須喺 apps.json 逐字對得上。 */
+function checkFooterStoreLinks(relPath, html) {
+  const doc = readApps();
+  if (!doc) return;
+  const footM = /<footer class="site-footer"[^>]*>([\s\S]*?)<\/footer>/i.exec(html);
+  if (!footM) return;
+
+  const haystack = JSON.stringify(doc);
+  EXT_URL_RE.lastIndex = 0;
+  const urls = [...new Set([...footM[1].matchAll(EXT_URL_RE)].map((m) => m[0]))];
+  EXT_URL_RE.lastIndex = 0;
+  for (const url of urls) {
+    let host;
+    try { host = new URL(url).host; } catch { continue; }
+    if (host === SITE_HOST) continue;
+    if (!haystack.includes(host)) continue;      // 唔係由 apps.json 管嗰類
+    if (!haystack.includes(url)) {
+      err(
+        `E17 ${relPath}: footer 入面嘅連結「${url}」，網域喺 data/apps.json 出現過，` +
+        `但全條 URL 對唔上 —— footer 推廣位嘅連結一律由 data/apps.json 生成，唔准手寫`
+      );
+    }
+  }
+}
+
+/* apps.json 同 data/trips/trip-tools.json 都餵緊守衛（前者餵 footer，
+ * 後者餵嗰版嘅 app 卡），兩個檔各有一份商店 URL。唔核就係新開一個
+ * 漂移面。呢度定死方向：apps.json 係全集。 */
+function checkAppsStoreLinkParity() {
+  const doc = readApps();
+  if (!doc) return 0;
+  const ttPath = path.join(DATA_DIR, "trips/trip-tools.json");
+  if (!fs.existsSync(ttPath)) return 0;
+  let tt;
+  try { tt = JSON.parse(fs.readFileSync(ttPath, "utf8")); } catch { return 0; }
+
+  const canon = JSON.stringify(doc);
+  let checked = 0;
+  for (const [k, v] of Object.entries(tt.entries || {})) {
+    if (!/(^|\.)storeLinks\./.test(k) || !Array.isArray(v.value)) continue;
+    for (const line of v.value) {
+      const m = /https?:\/\/[^\s"'<>)]+/.exec(String(line));
+      if (!m) continue;
+      checked++;
+      if (!canon.includes(m[0])) {
+        err(
+          `E17 data/trips/trip-tools.json 嘅「${k}」有「${m[0]}」，但 data/apps.json 冇 —— ` +
+          `兩個檔都餵緊守衛，apps.json 係全集，唔可以行開`
+        );
+      }
+    }
+  }
+  return checked;
+}
+
+/* ------------------------------------------------------------------ */
 /* E12 唔准寫死絕對網址                                                 */
 /* ------------------------------------------------------------------ */
 
@@ -1898,6 +2187,13 @@ for (const file of htmlFiles) {
     }
     BC_BLOCK_RE.lastIndex = 0;
   }
+
+  // footer 站務連結：由 FOOTER_LINKS 常數生成
+  html = injectFooterLinks(relPath, html);
+
+  // footer 自家 app 推廣位：由 data/apps.json 生成
+  html = injectAppPromo(relPath, html);
+
   const doc = buildGraph(relPath, html, metas);
   let injected = false;
   if (doc) {
@@ -1922,6 +2218,13 @@ for (const { relPath, html } of pages) {
   checkDisclosure(relPath, html);
   checkDisplayConsistency(relPath, html);
   checkStoreLinks(relPath, html);
+  checkAppPromoPlacement(relPath, html);
+  checkFooterLinksPlacement(relPath, html);
+  checkFooterStoreLinks(relPath, html);
+}
+{
+  const n = checkAppsStoreLinkParity();
+  console.log(`      apps.json ↔ trip-tools.json 商店連結對數：${n} 條`);
 }
 
 /* W9：文章頭嘅日期要用「最後更新：」而且同 jsonld:dateModified 一致 */

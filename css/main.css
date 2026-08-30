@@ -149,6 +149,26 @@ main { display: block; padding: 1.6rem 0 3rem; }
 }
 .site-footer p { margin: .35rem 0; }
 
+/* footer 站務連結（關於本站 · 私隱政策）。內容由 scripts/build.mjs 由
+   FOOTER_LINKS 常數生成（<!-- build:footerlinks --> 區塊），呢度只管樣。
+   當前頁嗰條唔係連結，係 <span aria-current="page">，所以要單獨畀個
+   「唔可撳」嘅樣 —— 淡一級就夠，唔使加底線或者背景。 */
+.site-footer .footer-links { margin-top: .6rem; }
+.site-footer .footer-links [aria-current="page"] { color: var(--fg-faint); }
+
+/* footer 自家 app 推廣位。內容由 scripts/build.mjs 由 data/apps.json 生成
+   （<!-- build:apppromo --> 區塊），呢度只管樣。
+   刻意同 footer 其他字同一個級別 —— 佢係站務資訊，唔係第五個內容區，
+   亦唔應該似廣告。所以：唔加底色、唔加邊框、唔加 padding，
+   只用一條上邊線同少少上下留白同前後行分開。
+   全部用現有 token（--line / --fg-muted 由 .site-footer 繼承）——
+   新 token 唔會被 scripts/check-contrast.mjs 嘅 PAIRS 驗到。 */
+.site-footer .app-promo {
+  margin-top: .9rem;
+  padding-top: .8rem;
+  border-top: 1px solid var(--line);
+}
+
 /* ---------- 文字 ---------- */
 
 h1, h2, h3, h4 {
