@@ -1,64 +1,64 @@
 {
   "title": "北上支付設定 — 易耗芯資料",
   "belongsTo": "/guides/payment-setup.html",
-  "_status": "sourced",
-  "_note": "認證審核時間、免手續費限額、超額費率、綁卡規則與風控警告，均為編輯提供之核實資料。",
+  "_status": "unverified",
+  "_note": "⚠️ 2026-08-31 整檔重評。舊 _note 寫「認證審核時間、免手續費限額、超額費率、綁卡規則與風控警告，均為編輯提供之核實資料」—— 呢句同 border-crossings 出錯嗰條 huanggangNew.buses 係同一個指紋：聲稱核實過，但講唔出邊度核實。新加嘅 W16 守衛就係捉呢種。\n三個平台嘅官方站全部係 JS 渲染或者擋 curl，所以本機核唔到。要補嘅話，務實做法係喺 app 入面截圖官方說明頁，或者搵金管局／消委會嗰類第三方官方文件。",
   "entries": {
     "setup.reviewDays": {
-      "value": "認證審核約需 7 個工作天，唔係即開即用。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "實名認證要幾耐先審批得完。要講明係邊個 app（AlipayHK 定 WeChat Pay HK 定兩者），同埋個數係官方講嘅定用戶經驗。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「認證審核約需 7 個工作天，唔係即開即用。」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
     "setup.binding": {
-      "value": "AlipayHK 與 WeChat Pay HK 均毋須綁定內地銀行戶口，綁香港銀行卡或信用卡即可；人民幣消費自動結算為港幣。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "AlipayHK 同 WeChat Pay HK 使唔使綁內地銀行戶口、綁香港卡得唔得、人民幣消費點結算。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「AlipayHK 與 WeChat Pay HK 均毋須綁定內地銀行戶口，綁香港銀行卡或信用卡即可；人民幣消費自動結算為港幣。」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
-
     "wechat.freeQuota": {
-      "value": "每年免手續費限額 HK$200,000。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "WeChat Pay HK 每年免手續費限額嘅實際金額。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「每年免手續費限額 HK$200,000。」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
     "wechat.overFee": {
-      "value": [
-        "中銀 Visa／Mastercard 及銀行賬戶支付：超額後仍免手續費",
-        "銀聯信用卡：1%",
-        "其他支付方式：2%"
-      ],
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "WeChat Pay HK 超出免費限額之後，逐種支付方式嘅手續費率。舊值寫住三級（中銀 Visa／MC 免、銀聯 1%、其他 2%），三級都要重新核。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「['中銀 Visa／Mastercard 及銀行賬戶支付：超額後仍免手續費', '銀聯信用卡：1%', '其他支付方式：2%']」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
-
     "alipay.twoSystems": {
-      "value": "香港支付寶（AlipayHK）同大陸支付寶係兩套獨立系統。內地大部分商戶支援大陸支付寶，但多數唔收 AlipayHK。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "AlipayHK 同大陸支付寶係咪兩套獨立系統，同埋內地商戶收唔收 AlipayHK。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「香港支付寶（AlipayHK）同大陸支付寶係兩套獨立系統。內地大部分商戶支援大陸支付寶，但多數唔收 AlipayHK。」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
     "alipayCN.bindHKCard": {
-      "value": "大陸支付寶已支援綁定香港信用卡，毋須內地銀行卡。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "大陸支付寶而家支唔支援綁定香港信用卡。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「大陸支付寶已支援綁定香港信用卡，毋須內地銀行卡。」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
     "alipayCN.hkCardLimit": {
-      "value": "香港 Visa／Mastercard 喺大陸支付寶只可用於消費，唔可以為餘額充值。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "香港 Visa／Mastercard 喺大陸支付寶可以做啲乜（消費？充值？），限制係咩。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「香港 Visa／Mastercard 喺大陸支付寶只可用於消費，唔可以為餘額充值。」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
-
     "risk.warnings": {
-      "value": [
-        "唔好用找換店代充值",
-        "唔好短時間內頻繁大額增值",
-        "唔好頻繁換綁多張卡"
-      ],
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "邊啲操作會觸發風控。⚠️ 呢條係一個因果宣稱，唔係常識 —— 要官方明文，或者改寫成「有用戶報告」並標明係二手。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「['唔好用找換店代充值', '唔好短時間內頻繁大額增值', '唔好頻繁換綁多張卡']」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     },
     "risk.consequence": {
-      "value": "以上行為會觸發風控，可能導致帳戶凍結。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "needsVerify": "觸發風控之後嘅實際後果（凍結？限額？）。同上，因果宣稱要有出處。",
+      "volatility": "normal",
+      "_layer": "客觀：查得到就填得到",
+      "_checked": "2026-08-31 由 value 降返 needsVerify。舊值：「以上行為會觸發風控，可能導致帳戶凍結。」—— 冇 sourceNote，而全檔嘅 HTML 頁面亦一條外部連結都冇（實測 0 條）。2026-08-31 逐個官方渠道試過，全部核唔到：alipayhk.com/zh/ 回 403；alipayhk.com 嘅 /zh/support/faq/、/zh/faq/、/zh/support/general-faq/ 三條路徑回同一個 60,487 位元組嘅 404 頁；pay.wechat.com/zh_hk/person-Faq.shtml 係一個 327 位元組嘅 JS 轉址殼，冇 FAQ 內容；WeChat Pay HK 支付服務協議（hkwallet.moneydata.hk）206 行，搜「手續費／限額／銀聯／實名／工作天」零命中；alipay.com（中國）由本機連唔到（HTTP 000）。\n按本站規矩：核唔到就唔可以留住舊值當事實。舊值記喺呢度，補到官方出處就填返。"
     }
-  }
+  },
+  "_draft": true,
+  "_draftReason": "九條 entry 全部由 value 降返 needsVerify —— 檔頭本來寫「均為編輯提供之核實資料」，但一條 sourceNote 都冇，而 2026-08-31 逐個官方渠道試過全部核唔到（見各條 _checked）。呢啲係會變、而且錯咗有實際後果嘅金融條款（手續費率、限額、風控），唔可以無出處咁掛喺線上。補到官方出處、拆走 needsVerify 就出返街。"
 }

@@ -342,6 +342,7 @@ curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitema
 | W12 | 頁面有 `.callout-disclosure` 但 data 冇對應嘅 `*.disclosure` entry |
 | W13 | Pillar 嘅 `<h1>` 同分區名一模一樣（H1 要係一句，唔係重複一個標籤） |
 | W15 | 相片冇 `width`／`height`（載入嗰刻會跳版，CLS）、冇 `loading="lazy"`、或者 `.photo-figure` 冇 `figcaption` |
+| W16 | 檔標咗 `_status: "sourced"` 或 `"verified"`，但有 `value` 嘅 entry 冇 `sourceNote` —— 一個檔一旦自稱有出處，就要逐條講得出。真係唔需要出處（業界通則／第一手觀察／結構性事實）就喺 entry 加 `_noSource: "理由"`，空字串或者 `true` 唔算，一定要寫理由 |
 | W14 | `data/notes/*.json` 嘅回饋線有問題：冇 `visitDate`、有 entry 唔係 `high`、`feedsInto` 指去唔存在嘅檔／key（斷線），或者指住嘅 areas key **仍然係 `needsVerify`**（觀察未歸納返落分區檔） |
 
 ## 點樣加一篇新文章

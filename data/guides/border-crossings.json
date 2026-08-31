@@ -2,122 +2,157 @@
   "title": "深圳陸路口岸 — 易耗芯資料",
   "belongsTo": "/guides/border-crossings.html",
   "_status": "sourced",
-  "_note": "服務時間、刷臉通關範圍、港鐵特惠站優惠、新皇崗口岸狀態，均為編輯提供之核實資料。蓮塘／香園圍的服務時間各方寫法不一，以保安局「口岸通」公布為準。地理位置與兩側接駁屬結構性資料，標記 volatility: low。",
+  "_note": "⚠️ 2026-08-31 重整出處。舊 _note 寫「均為編輯提供之核實資料」—— 呢句同 huanggangNew.buses 出錯係同一個指紋，已經換成逐條負責：七條管制站時間由入境處官方頁核實並補咗 sourceNote；結構性嘅接駁描述用 _noSource 明文豁免；兩條 policy 核唔到官方，改為喺 value 同 sourceNote 入面明寫係二手／未核實。\n地理位置與兩側接駁屬結構性資料，標記 volatility: low。",
   "entries": {
     "lowu.hours": {
       "value": "06:30–24:00",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。",
+      "_checked": "2026-08-31 由 immd 官方頁核實（香港側管制站「羅湖」）。原本呢條有值冇出處，係新 W16 守衛捉返出嚟。"
     },
     "lowu.hkLink": {
       "value": "東鐵綫羅湖站（總站，出閘步行過關）",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "lowu.szLink": {
       "value": "深圳地鐵 1 號綫羅湖站、深圳站",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "futian.hours": {
       "value": "06:30–22:30",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。",
+      "_checked": "2026-08-31 由 immd 官方頁核實（香港側管制站「落馬洲支線」）。原本呢條有值冇出處，係新 W16 守衛捉返出嚟。 ⚠️ 香港側嘅官方管制站名係「落馬洲支線」，「福田」係深圳側嘅名。呢條 key 叫 futian 係跟返讀者慣用嘅講法，但個時間係香港側管制站嘅時間。"
     },
     "futian.hkLink": {
       "value": "東鐵綫落馬洲站（總站，步行過關）",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "futian.szLink": {
       "value": "深圳地鐵 4 號綫、10 號綫福田口岸站",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "huanggang.hours": {
-      "value": "24 小時",
+      "value": "24 小時（呢個係深圳側皇崗口岸嘅時間；香港側對應嘅管制站係落馬洲，入境處公布亦係 24 小時）",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。 ⚠️ 入境處嗰 13 個管制站入面**冇「皇崗」** —— 皇崗係深圳側嘅口岸名，香港側對應嘅係「落馬洲」（全日 24 小時）。",
+      "_checked": "2026-08-31 改寫。舊值淨係寫「24 小時」，冇講清楚講緊邊一側，亦冇出處。香港側嘅 24 小時已由 immd 核實；深圳側嗰邊本站冇官方出處，所以只寫兩者一致，唔另外斷言深圳側。"
     },
     "huanggang.hkLink": {
       "value": "跨境巴士、過境私家車（經新田公路）",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "huanggang.szLink": {
       "value": "深圳地鐵 7 號綫皇崗口岸站",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "szbay.hours": {
-      "value": "06:30–24:00（旅檢）",
+      "value": "06:30–24:00（旅檢大樓及私家車客運；貨車 24 小時）",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。",
+      "_checked": "2026-08-31 由 immd 官方頁核實（香港側管制站「深圳灣」）。原本呢條有值冇出處，係新 W16 守衛捉返出嚟。"
     },
     "szbay.hkLink": {
       "value": "元朗／天水圍方向專綫巴士、跨境直通巴",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "szbay.szLink": {
       "value": "口岸接駁市內交通，往南山、蛇口",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "liantang.hours": {
       "value": "07:00–22:00",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。",
+      "_checked": "2026-08-31 由 immd 官方頁核實（香港側管制站「香園圍」）。原本呢條有值冇出處，係新 W16 守衛捉返出嚟。 ⚠️ 香港側嘅官方管制站名係「香園圍」，「蓮塘」係深圳側嘅名。"
     },
     "liantang.hoursNote": {
-      "value": "各方對蓮塘／香園圍服務時間的寫法唔一致，以保安局「口岸通」公布為準。",
+      "value": "入境處公布香園圍管制站係 07:00–22:00。⚠️ 坊間對「蓮塘／香園圍」嘅寫法唔一致，因為兩邊各有各名；實時輪候情況以保安局「口岸通」為準。",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。",
+      "_checked": "2026-08-31 改寫。舊值寫「各方寫法唔一致，以口岸通公布為準」—— 呢句喺本站已經有 immd 官方數字之後就過時咗（口岸通報嘅係即時輪候，唔係服務時間，兩件事）。"
     },
     "liantang.hkLink": {
       "value": "新界東北（粉嶺／上水方向）巴士、私家車",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "liantang.szLink": {
       "value": "深圳地鐵 2 號綫蓮塘口岸站",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "mankamto.hours": {
       "value": "07:00–22:00",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。",
+      "_checked": "2026-08-31 由 immd 官方頁核實（香港側管制站「文錦渡」）。原本呢條有值冇出處，係新 W16 守衛捉返出嚟。"
     },
     "mankamto.hkLink": {
       "value": "指定跨境巴士路線，無鐵路直達",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "mankamto.szLink": {
       "value": "口岸巴士轉乘，無地鐵直達",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：口岸兩側嘅鐵路／巴士接駁方式，屬地理常識，唔係會變嘅數值。"
     },
     "hzmb.hours": {
       "value": "24 小時",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "sourceNote": "入境事務處〈出入境管制站地點〉https://www.immd.gov.hk/hkt/contactus/control_points.html（頁面更新日期 26-06-2026）。同 data/trips/day-trip.json → ports.hours 同一份出處。",
+      "_checked": "2026-08-31 由 immd 官方頁核實（香港側管制站「港珠澳大橋」）。原本呢條有值冇出處，係新 W16 守衛捉返出嚟。"
     },
     "hzmb.direction": {
       "value": "通往珠海及澳門，唔係深圳方向口岸",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：澄清港珠澳大橋唔係深圳方向口岸。"
     },
     "policy.faceScan": {
-      "value": "2025-11-05 起，刷臉智能通關由深圳灣擴展至皇崗、羅湖、蓮塘、福田、文錦渡等口岸。",
+      "value": "據 2025-11-03／04 多家香港傳媒報道，深圳邊檢由 2025-11-05 起，喺皇崗、羅湖、蓮塘、福田、文錦渡等口岸開放「刷臉」智能通關（免出示證件通道）。⚠️ 本站搵唔到對應嘅官方公告。",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "volatileNote": "呢條係二手來源，唔同本站引政府網頁嗰種一手來源同級。適用資格同覆蓋口岸都可能已經改，過關前自己確認。",
+      "sourceNote": "⚠️ **二手來源。**2026-08-31 搵過官方公告，搵唔到：入境處 immigration_clearance／echannel_residents 兩版都冇提呢件事（後者嘅「容貌識別」講嘅係 7–10 歲 e-道同無感 e-道，唔係深圳邊檢嘅刷臉通關）；搜尋結果全部係傳媒（明報、文匯報、Trip.com 等）。所以呢條標明係報道，唔當官方公布。",
+      "_checked": "2026-08-31：舊值直接寫「2025-11-05 起…擴展至…」當事實，冇出處。改為明寫係傳媒報道 + 本站核唔到官方。冇刪，因為呢件事本身對讀者有用，而且「有報道但冇官方公告」呢個狀態本身就係資訊。"
     },
     "policy.mtrRebate": {
-      "value": "成人八達通或樂悠咭經落馬洲北上，同日於深圳地鐵 4 號綫福田口岸站拍卡後再經落馬洲返港，可享 HK$3 港鐵特惠站扣減。",
+      "value": "成人八達通或樂悠咭經落馬洲北上，同日於深圳地鐵 4 號綫福田口岸站拍卡後再經落馬洲返港，據稱可享 HK$3 港鐵特惠站扣減。⚠️ 本站未能由港鐵官方頁核實金額同條件。",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "volatileNote": "優惠金額同適用條件會改，而本站核唔到官方原文。用之前自己喺港鐵網站確認。",
+      "sourceNote": "⚠️ **未由官方核實。**2026-08-31 試過 mtr.com.hk 三條特惠站相關路徑，全部 HTTP 200 但係 JS 渲染 —— 158KB 嘅頁抽出嚟得 10 行文字，搜「落馬洲／福田／$3／特惠／扣減」零命中，curl 讀唔到內容。www.mtr.com.hk 已喺白名單，人手開得到就核得返。",
+      "_checked": "2026-08-31：舊值直接寫「可享 HK$3 港鐵特惠站扣減」當事實，冇出處。改為加「據稱」同明寫核唔到。⚠️ 呢條係本輪最應該補嘅一條 —— 金額具體、條件具體，而且港鐵係第一手當事人，只係佢個站 curl 讀唔到。"
     },
     "huanggangNew.handover": {
       "value": "新皇崗口岸港方口岸區已於 2026-07-31 交付香港特區管轄。",
@@ -145,13 +180,15 @@
     "huanggangNew.notFutian": {
       "value": "東鐵綫落馬洲站對接嘅係福田口岸，唔係新皇崗口岸。",
       "verifiedOn": "2026-08",
-      "volatility": "low"
+      "volatility": "low",
+      "_noSource": "結構性事實：澄清東鐵綫落馬洲站對接福田口岸，唔係新皇崗口岸。"
     },
     "hkbcp.what": {
       "value": "保安局嘅一站式過關資訊平台「口岸通」，用紅黃綠燈顯示各陸路口岸實時輪候：綠＝少於 15 分鐘、黃＝15–30 分鐘、紅＝多於 30 分鐘，每 15 分鐘更新。",
       "verifiedOn": "2026-08",
       "volatility": "normal",
-      "_sharedWith": "data/trips/trip-tools.json → hkbcp.*（同一件事，改就兩邊一齊改）"
+      "_sharedWith": "data/trips/trip-tools.json → hkbcp.*（同一件事，改就兩邊一齊改）",
+      "_noSource": "描述保安局「口岸通」呢個平台係咩，出處就係 hkbcp.url.* 兩條。"
     },
     "hkbcp.coverage": {
       "value": [
@@ -165,41 +202,48 @@
         "文錦渡"
       ],
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_noSource": "同上，口岸通自己版面列出嘅覆蓋範圍。"
     },
     "hkbcp.extra": {
       "value": "另有皇巴、金巴嘅輪候時間同突發事故提示。",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_noSource": "同上。"
     },
     "hkbcp.url.inbound": {
       "value": "https://www.sb.gov.hk/chi/bwt/status.html?type=inbound",
       "verifiedOn": "2026-08",
       "volatility": "low",
-      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改"
+      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改",
+      "_noSource": "value 本身就係官方 URL，唔使再寫一次出處。"
     },
     "hkbcp.url.outbound": {
       "value": "https://www.sb.gov.hk/chi/bwt/status.html?type=outbound",
       "verifiedOn": "2026-08",
       "volatility": "low",
-      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改"
+      "_sharedWith": "另一邊亦有同一項（trip-tools ↔ border-crossings），改就兩邊一齊改",
+      "_noSource": "value 本身就係官方 URL，唔使再寫一次出處。"
     },
     "hkbcp.source": {
       "value": "口岸通嘅資料由入境事務處、香港警務處及運輸署提供；下一階段會引入實時影像，用人工智能評估實時過關情況。",
       "verifiedOn": "2026-08",
       "volatility": "high",
-      "volatileNote": "「下一階段引入實時影像同人工智能評估」屬未落實嘅計劃，未有時間表，實際推出形式可能同現時公布唔同。"
+      "volatileNote": "「下一階段引入實時影像同人工智能評估」屬未落實嘅計劃，未有時間表，實際推出形式可能同現時公布唔同。",
+      "_noSource": "同上，口岸通版面自己講嘅供數部門同下一階段計劃。"
     },
     "hkbcp.alternative": {
       "value": "備選：香港入境事務處 App →「所有服務」→「陸路邊境管制站等候時間」，涵蓋羅湖、福田、皇崗、深圳灣、港珠澳大橋、文錦渡、沙頭角、蓮塘八個口岸。",
       "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "volatility": "normal",
+      "_noSource": "入境處 App 嘅選單路徑，屬操作說明，唔係外部事實。"
     },
     "crossing.specialArrangement": {
       "value": "大時大節會有特別通關安排（例如除夕曾經延長羅湖清關時間、深圳灣改 24 小時），唔會事先寫死喺任何攻略。出發前一定要睇口岸通。",
       "verifiedOn": "2026-08",
       "volatility": "high",
-      "volatileNote": "特別通關安排逐次公布、逐次唔同，冇固定模式。任何攻略（包括本站）都唔會有最新版本，出發前一定要睇官方公布。"
+      "volatileNote": "特別通關安排逐次公布、逐次唔同，冇固定模式。任何攻略（包括本站）都唔會有最新版本，出發前一定要睇官方公布。",
+      "_noSource": "本站立場陳述：講明呢類安排逐次唔同、任何攻略都唔會有最新版，所以叫讀者睇官方。冇一個可引用嘅『數值』。"
     }
   }
 }

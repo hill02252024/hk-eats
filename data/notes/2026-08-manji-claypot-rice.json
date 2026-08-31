@@ -46,7 +46,9 @@
       "value": "大眾點評 4.4 分",
       "verifiedOn": "2026-08",
       "volatility": "high",
-      "volatileNote": "平台評分逐日變。呢個係到訪當日嘅數，唔係本站評分。"
+      "volatileNote": "平台評分逐日變。呢個係到訪當日嘅數，唔係本站評分。",
+      "sourceNote": "大眾點評商戶資訊頁，2026-08 睇（到訪當時嘅讀數）；非商戶官方公布，出發前建議自行確認。⚠️ 2026-08-31 想覆核一次，但 dianping.com 由本機 curl 只攞到 2.9KB 嘅殼（內容 client-side 載入），覆核唔到 —— 所以呢個數仍然係到訪當時嗰個，唔係今日嘅。平台評分逐日變。",
+      "_checked": "2026-08-31 補 sourceNote。同檔另外三篇食評（panxi／sinsumkee／taizai）嘅 platform.* 一直有 sourceNote，呢兩篇漏咗 —— 係不一致，唔係判斷差異。"
     },
     "hours.daily": {
       "value": "週一至週日 10:30–21:00",

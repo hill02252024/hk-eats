@@ -2253,9 +2253,62 @@ for (const { relPath, html, metas } of pages) {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* W16 聲稱有出處嘅檔，逐條 entry 要真係有出處                            */
+/* ------------------------------------------------------------------ */
+
+/* 由一次真實失手嚟嘅：data/guides/border-crossings.json 嘅
+ * huanggangNew.buses 寫「改由 4 條新專營巴士線接駁」，冇 sourceNote，
+ * 而官方係七條專營巴士＋六條專線小巴。個數係抄二手源抄錯咗，
+ * 而檔頭 _note 當時寫住「均為編輯提供之核實資料」—— 即係個檔聲稱
+ * 核實過，但冇任何一格講得出「核實嗰陣睇咗邊度」。
+ *
+ * 所以：**一個檔一旦自稱 sourced／verified，就要逐條講得出出處。**
+ * `_status` 唔可以繼續係一句冇人驗嘅自我聲明。
+ *
+ * 豁免用 entry 層嘅 `_noSource: "<理由>"`，唔用 _layer 判斷。三個理由：
+ *   1. _layer 講嘅係「查唔查得到」，唔係「使唔使引用」——兩件事。
+ *      而且全站只有廿幾條有 _layer，覆蓋唔到。
+ *   2. 豁免要講得出**係邊一種**免（業界通則／第一手觀察／結構性事實），
+ *      寫落去就係自我說明，將來覆核唔使重新判斷一次。
+ *   3. 加豁免要係一個**刻意動作**，而且 grep 得返出嚟。空字串或者
+ *      true 唔算 —— 一定要寫理由。
+ *
+ * 唔喺範圍：_status 係 principles（檔頭已明文話唔係數據）、
+ * mixed、unverified 嘅檔。⚠️ 即係 notes/* 同 trip-tools（都係 mixed）
+ * 而家唔受呢條守。想收窄嗰個缺口，就要先把嗰啲檔嘅 _status 講清楚。 */
+
+const W16_SCOPE = new Set(["sourced", "verified"]);
+
+function checkSourcedFiles() {
+  const files = walk(DATA_DIR).filter((f) => f.endsWith(".json"));
+  let scanned = 0, entries = 0;
+  for (const f of files) {
+    let doc;
+    try { doc = JSON.parse(fs.readFileSync(f, "utf8")); } catch { continue; }
+    if (!W16_SCOPE.has(doc._status)) continue;
+    scanned++;
+    for (const [k, v] of Object.entries(doc.entries || {})) {
+      if (!v || typeof v !== "object" || !("value" in v)) continue;
+      entries++;
+      if (typeof v.sourceNote === "string" && v.sourceNote.trim()) continue;
+      if (typeof v._noSource === "string" && v._noSource.trim()) continue;
+      warn(
+        `W16 ${rel(f)} → ${k}：檔標咗 _status: "${doc._status}"，但呢條有 value 冇 sourceNote —— ` +
+        `講唔出出處就唔算 sourced。真係唔需要出處（業界通則／第一手觀察／結構性事實）就寫 _noSource: "理由"`
+      );
+    }
+  }
+  return { scanned, entries };
+}
+
 for (const file of htmlFiles) checkPageData(rel(file), fs.readFileSync(file, "utf8"));
 const articleCount = htmlFiles.filter((f) => path.basename(f) !== "index.html").length;
 console.log(`[5/8] 文章 ↔ data 對應檢查：${articleCount} 篇文章`);
+{
+  const w16 = checkSourcedFiles();
+  console.log(`      出處對數（_status: ${[...W16_SCOPE].join("/")}）：${w16.scanned} 個檔、${w16.entries} 條有值 entry`);
+}
 
 const linkStats = checkLinkStructure(pages);
 console.log(`[6/8] 內連結構：${pages.length} 頁，孤兒 ${linkStats.orphans} 個，最深 ${linkStats.maxDepth} click`);

@@ -9,7 +9,8 @@
       "verifiedOn": "2026-08",
       "volatility": "high",
       "volatileNote": "口岸嘅最遲進入時間會隨營運安排調整，亦可能同公布嘅服務結束時間唔一致。出行前請以口岸官方公布為準。",
-      "_sharedWith": "data/trips/trip-tools.json → return.lastEntry（同一件事，改就兩邊一齊改）"
+      "_sharedWith": "data/trips/trip-tools.json → return.lastEntry（同一件事，改就兩邊一齊改）",
+      "_noSource": "value 本身係一個關於「冇」嘅陳述 —— 第一句就係「冇官方公布嘅最遲進入時間」。後半嘅推理（尾班車先係真死線）由同檔 ports.hours 嗰條有出處嘅資料推出嚟。"
     },
     "clearance.tool": {
       "value": "保安局「口岸通」係一站式過關資訊平台（2025-09-22 推出），以綠、黃、紅燈號顯示各陸路管制站嘅過關情況，分「正常」、「繁忙」、「非常繁忙」三級，並提供平均輪候時間嘅粗略估算，每 15 分鐘更新一次。同時載有旅客同私家車嘅輪候、金巴同皇巴嘅輪候、以及各管制站附近嘅突發交通情況。資料由入境處、警務處、運輸署提供。",
