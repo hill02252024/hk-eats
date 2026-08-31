@@ -1,0 +1,122 @@
+{
+  "title": "口岸巴士轉乘：邊程免費，睇你喺邊度上車 — 易耗芯資料",
+  "belongsTo": "/guides/bus-interchange.html",
+  "_status": "verified",
+  "_note": "呢頁刻意**唔抄成張轉乘表**。官方資料好碎 —— 單係九巴 B9 做第二程就有 60 幾條首程路線，而且逐條有唔同折扣、唔同轉乘站、唔同上車點條件。抄一份出嚟，第一日已經開始過期，而讀者根本唔會喺篇文入面搵到佢嗰條線。\n所以正文寫**機制**（三個折扣碼、上車點決定待遇、方向決定轉乘站），數字只留最少嘅示範，再教讀者用官方查詢器自己查。同「口岸通」嗰節同一個路數。\n⚠️ 兩間巴士公司嘅官網都係 SPA：curl 攞返嚟係個 1.5KB 殼，人手開就見到內容。核實嗰陣係撬佢哋自己個查詢器背後嘅 API，唔係讀 HTML。下次覆核記住。",
+  "entries": {
+    "ctb.discountCodes": {
+      "value": [
+        "FR＝減收：第二程減 $1.5（唔係免費）",
+        "L1＝回贈首程車費：首程嗰程等於冇收",
+        "L2＝次程免費：第二程唔使俾",
+        "TF＝兩程總車費：兩程夾埋收一個固定價"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "車資同轉乘優惠隨時改，而且改咗唔一定有公告。呢個係 2026-08 核實嗰刻嘅狀態，出發前用官方查詢器再查一次。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "城巴「新界西口岸線B3, B3A, B3X巴士轉乘計劃」https://www.citybus.com.hk/concession/tc/scheme/20；跨境路線總覽 https://www.citybus.com.hk/content/default.aspx?intLangID=2&section=routes&page=crossBoarderServices。2026-08-31 由城巴自己個查詢器背後嘅 API 逐條讀返（27 條記錄）。",
+      "_checked": "2026-08-31：四個代碼嘅中文名唔係我改嘅，係由城巴自己個查詢器嘅前端程式碼逐個抽返（原文：FR=減收／L1=回贈首程車費／L2=次程免費）。呢個係全篇最重要嘅一格 —— 坊間一律講「免費一程」，但官方分四級，而其中一級只係減 $1.5。"
+    },
+    "ctb.szbay.boarding": {
+      "value": [
+        "首程 50，喺屯門公路轉車站登車 → FR，第二程 B3X 只減 $1.5",
+        "首程 50，喺屯門公路轉車站「以前」登車 → L2，第二程 B3X 免費",
+        "首程 55，喺屯門公路巴士轉乘站（上層）／屯門公路站登車 → FR，減 $1.5",
+        "首程 55，喺畢架山花園／龍翔道或之前登車 → L2，免費",
+        "首程 962X，只適用於喺西區海底隧道巴士轉乘站或以前登車 → L2，免費"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "車資同轉乘優惠隨時改，而且改咗唔一定有公告。呢個係 2026-08 核實嗰刻嘅狀態，出發前用官方查詢器再查一次。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "城巴「新界西口岸線B3, B3A, B3X巴士轉乘計劃」https://www.citybus.com.hk/concession/tc/scheme/20；跨境路線總覽 https://www.citybus.com.hk/content/default.aspx?intLangID=2&section=routes&page=crossBoarderServices。2026-08-31 由城巴自己個查詢器背後嘅 API 逐條讀返（27 條記錄）。",
+      "_checked": "2026-08-31：呢五行係 scheme #20 嗰 27 條記錄入面、第二程係 B3X 嗰批，逐條抄 remark 欄。"
+    },
+    "ctb.szbay.stops": {
+      "value": [
+        "北上（首程 → B3X 去深圳灣）：50 同 55 喺「紅橋, 屯門公路」轉；962X 喺「屯門市中心, 屯門鄉事會路」轉",
+        "南下（B3X 首程 → 轉出市區）：50 同 55 喺「紅橋, 屯門公路」轉；962X 喺「屯門官立中學, 屯興路」轉，而且係 L1 回贈首程車費"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "車資同轉乘優惠隨時改，而且改咗唔一定有公告。呢個係 2026-08 核實嗰刻嘅狀態，出發前用官方查詢器再查一次。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "城巴「新界西口岸線B3, B3A, B3X巴士轉乘計劃」https://www.citybus.com.hk/concession/tc/scheme/20；跨境路線總覽 https://www.citybus.com.hk/content/default.aspx?intLangID=2&section=routes&page=crossBoarderServices。2026-08-31 由城巴自己個查詢器背後嘅 API 逐條讀返（27 條記錄）。",
+      "_checked": "2026-08-31：⚠️ 962X 嘅轉乘站**兩個方向唔同**，呢個位坊間攻略常見寫錯 —— 把南下嗰個「屯門官立中學」寫落北上。官方 27 條記錄入面兩個方向分開列，冇得撈亂。"
+    },
+    "kmb.mechanism": {
+      "value": "九巴嘅寫法唔用代碼，直接寫金額：多數係「減 $X」，少數寫「免費」，另一批寫「兩程合共 $X」（兩程夾埋收一個固定價）。同城巴一樣，同一對路線喺唔同方向、唔同上車點可以係唔同待遇。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "車資同轉乘優惠隨時改，而且改咗唔一定有公告。呢個係 2026-08 核實嗰刻嘅狀態，出發前用官方查詢器再查一次。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "九巴「八達通及電子支付巴士轉乘計劃」https://www.kmb.hk/tc/services/interchange_BBI.html。2026-08-31 由九巴自己個查詢器背後嘅四個資料檔逐條讀返（涵蓋 777 條路線）。"
+    },
+    "kmb.example": {
+      "value": [
+        "首程 268C → 喺「形點 I (YL401)」轉 → 第二程 B9 往香園圍・蓮塘口岸：免費",
+        "首程 968 → 同一個站轉 B9：減 $21.3",
+        "首程 63 → B9：兩程合共 $21.3"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "車資同轉乘優惠隨時改，而且改咗唔一定有公告。呢個係 2026-08 核實嗰刻嘅狀態，出發前用官方查詢器再查一次。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "九巴「八達通及電子支付巴士轉乘計劃」https://www.kmb.hk/tc/services/interchange_BBI.html。2026-08-31 由九巴自己個查詢器背後嘅四個資料檔逐條讀返（涵蓋 777 條路線）。",
+      "_checked": "2026-08-31：只揀三條做示範，刻意唔抄全表 —— 單係 B9 做第二程就有 60 幾條首程路線。揀呢三條係因為佢哋展示咗三種唔同待遇（免費／減額／兩程合共），而第一條啱好係站長親身坐過嗰程。"
+    },
+    "ports.covered": {
+      "value": [
+        "深圳灣：城巴 B3／B3A／B3M／B3X（深西快線），轉乘計劃見城巴 scheme 20",
+        "香園圍（接蓮塘）：城巴 B7／B8 有獨立轉乘計劃；九巴 B9 亦到香園圍・蓮塘口岸",
+        "福田：九巴 B1",
+        "落馬洲—皇崗：九巴另有「轉乘落馬洲-皇崗過境穿梭巴士優惠」，同上面三個係分開嘅計劃"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "車資同轉乘優惠隨時改，而且改咗唔一定有公告。呢個係 2026-08 核實嗰刻嘅狀態，出發前用官方查詢器再查一次。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "城巴跨境路線總覽 https://www.citybus.com.hk/content/default.aspx?intLangID=2&section=routes&page=crossBoarderServices；九巴車資優惠計劃頁（由 https://www.kmb.hk/tc/services/interchange_BBI.html 同一個分區連出）。",
+      "_checked": "2026-08-31：⚠️ 皇崗嗰條係本站查嗰陣先發現 —— 一般攻略只講深圳灣、蓮塘、福田三個。"
+    },
+    "howto.lookup": {
+      "value": [
+        "城巴：入「車費優惠」→ 轉乘計劃，揀返你嗰個計劃，或者直接用路線號搜",
+        "九巴：入「八達通及電子支付巴士轉乘計劃」，喺搜尋欄輸入首程路線號，再揀方向，就會列出第二程路線、建議轉乘站同折扣",
+        "兩邊都要留意：先揀啱方向，再對返你實際上車嗰個站"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "normal",
+      "volatileNote": "查詢器嘅介面會改版，但「輸入首程路線號、揀方向」呢個流程好穩定。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "城巴 https://www.citybus.com.hk/content/default.aspx?intLangID=2&section=routes&page=crossBoarderServices；九巴 https://www.kmb.hk/tc/services/interchange_BBI.html。"
+    },
+    "rules.octopus": {
+      "value": [
+        "要用同一張八達通（或同一個電子支付帳戶）俾晒兩程",
+        "轉乘要有時限：城巴口岸線嗰批係 90 至 120 分鐘，逐條唔同",
+        "城巴嘅轉乘優惠最多連續用 3 次，而且計埋九巴、龍運、新大嶼山巴士嗰邊嘅次數",
+        "兩程之間，同一張卡唔可以有 9 次以上任何拍卡紀錄",
+        "唔好喺兩程中間用同一張卡搭唔喺計劃入面嘅路線或者其他交通工具"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "車資同轉乘優惠隨時改，而且改咗唔一定有公告。呢個係 2026-08 核實嗰刻嘅狀態，出發前用官方查詢器再查一次。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "城巴「車費優惠條款及細則」，見 https://www.citybus.com.hk/content/default.aspx?intLangID=2&section=routes&page=crossBoarderServices 頁內；時限逐條由 scheme 20 嘅 timeLimit 欄讀出。"
+    },
+    "firsthand.trips": {
+      "value": [
+        "268C → 元朗形點 → B9 → 蓮塘：有優惠。官方紀錄呢一對係「免費」，兩邊對得上",
+        "旺角 → 50 → 屯門 → B3X → 深圳灣：有優惠。但站長冇記低確實金額，所以係「免費」定「減 $1.5」，本站唔當事實寫"
+      ],
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "呢個係一次乘搭嘅第一手觀察，唔係量度。金額冇記低，唔會補。",
+      "_layer": "客觀：查得到就填得到",
+      "sourceNote": "站長 2026 年 8 月親身乘搭；官方對照見 kmb.example 同 ctb.szbay.boarding 兩條。",
+      "_checked": "2026-08-31：第一條同官方數據完全對得上（268C 首程、形點 I YL401 轉、B9 往蓮塘＝免費），所以可以當印證。第二條**唔可以**：旺角上車喺屯門公路轉車站之前，[推論] 應該係 L2 次程免費，但站長明言冇記低金額，所以正文只寫「有優惠」，唔寫係邊一種。"
+    }
+  }
+}

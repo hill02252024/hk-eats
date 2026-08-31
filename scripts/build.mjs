@@ -141,6 +141,16 @@ const EXTERNAL_ALLOWLIST = {
     //    optout.aboutads.info（429，核唔到）、myadcenter.google.com 同
     //    youronlinechoices.com（兩個都淨係得根路徑，E1 明文攔根網域）。
     //    呢幾個喺 privacy.html 只用文字寫出主機名，唔連結 —— 核唔到就唔連。
+    // 兩間專營巴士公司嘅官方轉乘優惠頁。guides/bus-interchange 引用緊。
+    // 2026-08-31 逐條實測 200：
+    //   citybus.com.hk/concession/tc/scheme/20          新界西口岸線 B3/B3A/B3X 轉乘計劃
+    //   citybus.com.hk/content/default.aspx?...crossBoarderServices
+    //   kmb.hk/tc/services/interchange_BBI.html         八達通及電子支付巴士轉乘計劃
+    // ⚠️ 兩個網站都係 SPA（內容 client-side load）。人手開個網址係睇到嘢嘅，
+    //    但 curl 攞返嚟係個殼 —— 核實嗰陣要撬佢哋自己嘅 API，唔好因為
+    //    curl 見到 1.5KB 就當佢死咗。
+    "www.citybus.com.hk",    // 城巴：口岸線轉乘計劃
+    "www.kmb.hk",            // 九巴：八達通及電子支付巴士轉乘計劃
     "policies.google.com",   // Google 私隱與條款
     "www.pcpd.org.hk",       // 香港個人資料私隱專員公署
     "www.openstreetmap.org", // 地圖參考

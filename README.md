@@ -274,6 +274,28 @@ SITE_ORIGIN=https://實際域名 node scripts/build.mjs
 同所有 `og:url` 都會指去 `example.github.io`，發布咗等於叫搜尋引擎去一個
 唔存在嘅網域。
 
+### 🔴 一次改動嘅完整流程：`--publish` 0 error **唔算做完**
+
+**0 error 只係「本機過到守衛」，唔係「讀者見到」。**兩者之間有三步，
+少做任何一步，個站對外就同冇改過一樣 —— 而你會以為改咗。
+
+```sh
+node scripts/build.mjs --publish     # 1. 必須 0 error
+git add -A && git commit -m "…"      # 2. commit
+git push                             # 3. push
+sleep 90                             # 4. 等 GitHub Pages 重建
+curl -sI https://taanworld.com/<新頁>          # 5. 線上驗：HTTP 200
+curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitemap 條數
+```
+
+**第 5 步係硬要求。**線上驗唔到就唔准報「做完」—— 要報「本機好咗，
+但線上未見到」，並且講明卡喺邊一步。GitHub Pages 有時要一兩分鐘先重建，
+亦試過因為 Actions 排隊而更耐；等唔到就再 curl 一次，唔好當佢成功。
+
+驗嘅時候至少睇兩樣：**新頁嘅 HTTP status**（唔可以係 404）同
+**`sitemap.xml` 嘅 `<loc>` 條數**（要同本機生成嗰個對得上）。
+只驗首頁 200 冇用 —— 首頁一直都係 200。
+
 ### build 做嘅嘢
 
 生成：`sitemap.xml`、`robots.txt`、每頁 JSON-LD、每頁 inline SVG。
