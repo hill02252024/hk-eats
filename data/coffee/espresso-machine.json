@@ -28,12 +28,13 @@
       "sourceNote": "消費者委員會《選擇》月刊第 597 期〈好啡要好機！10款特濃咖啡機全面測〉https://www.consumer.org.hk/tc/article/597-espresso-machines，2026 年 7 月。本站 2026-09-01 直接讀官方頁核實。"
     },
     "test.noCrossCompare": {
-      "value": "消委會明文提醒：各類咖啡機喺設計、規格同操作上各有不同，**唔同組別樣本嘅評分唔宜直接比較**。",
+      "value": "消委會明文提醒：各類咖啡機喺設計、規格同操作上各有不同，「唔同組別樣本嘅評分唔宜直接比較」。",
       "verifiedOn": "2026-09",
       "volatility": "low",
       "_layer": "客觀：查得到就填得到",
       "sourceNote": "消費者委員會《選擇》月刊第 597 期〈好啡要好機！10款特濃咖啡機全面測〉https://www.consumer.org.hk/tc/article/597-espresso-machines，2026 年 7 月。本站 2026-09-01 直接讀官方頁核實。",
-      "_checked": "2026-09-01：呢句係消委會自己講嘅，抄返落嚟因為佢直接限制咗讀者可以點用嗰批評分 —— 唔應該攞 $649 嗰部同 $23,880 嗰部比個總分。"
+      "_checked": "2026-09-01：呢句係消委會自己講嘅，抄返落嚟因為佢直接限制咗讀者可以點用嗰批評分 —— 唔應該攞 $649 嗰部同 $23,880 嗰部比個總分。",
+      "_corrected": "2026-09-01：拆走 value 入面嘅 markdown **粗體**，改用引號。freshness.js 由頭到尾用 textContent，唔會渲染 markdown —— 嗰兩對星會照字面出街。E28 而家會攔住呢件事。⚠️ 同檔仲有三條 sourceNote（temp.drift／temp.absolute／machine.strengths）有同樣問題，佢哋出 W18（warning 唔係 error），今輪範圍以外，冇掂。"
     },
     "temp.drift": {
       "value": [

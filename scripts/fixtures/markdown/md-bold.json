@@ -1,0 +1,7 @@
+{
+  "title": "反面對照 fixture — E28 粗體。唔係真資料，唔准 copy 返落 data/。",
+  "_status": "fixture",
+  "entries": {
+    "fx.bold": { "value": "口岸通綠燈代表**少於 15 分鐘**。", "verifiedOn": "2026-09", "volatility": "low" }
+  }
+}

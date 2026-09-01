@@ -325,6 +325,7 @@ curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitema
 | E19 | 標咗 `_draft` 嘅頁，出現喺 `sitemap.xml`、首頁 `.post-list`、或者任何 pillar 嘅 `.cluster-list`；另外 pillar 嘅 `jsonld:itemList` 條數同佢畫面 `.cluster-list` 條數對唔上 |
 | E20 | 相片冇 `alt`、`alt` 係空、係佔位字（「圖片」「TODO」…）或者係檔名；`.photo-figure` 入面冇 `<img>`；`.photo-figure` 以外有冇 `alt` 嘅 `<img>` |
 | E21 | footer 自家 app 推廣位出事：頁面冇 `<!-- apppromo -->` 錨點亦冇 `<!-- build:apppromo -->` 區塊、區塊有開頭冇收尾、推廣位唔喺 `<footer class="site-footer">` 入面、`data/apps.json` 讀唔到／冇 `promo.target`／`target` 指去 draft 頁 |
+| E28 | data entry 嘅 `value` 入面有 markdown（`**粗體**`／`*斜體*`／`[文字](網址)`／`` `code` ``）。`js/freshness.js` 由頭到尾用 `textContent`，呢啲符號會**照字面**出街 |
 | E27 | 夥伴嘅 `params` 空咗或者仲有 `PENDING` 佔位值，但佢名下嘅 link 已經俾頁面 `data-aff` 引用 —— 一條冇追蹤嘅免費導流。**唔挑夥伴**，Klook／Trip.com／KKday 一視同仁 |
 | E25 | `klook.com` 連結**組裝之後**（partner params ＋ link params 合埋）冇有效 `aid`，或者 `aid` 仲係 `PENDING-*` |
 | E26 | 任何地方（`data/affiliates.json`、`.html`、`js/`）出現 `s.klook.com` —— Klook 明文話呢個格式追蹤唔到成效 |
@@ -347,6 +348,7 @@ curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitema
 | W12 | 頁面有 `.callout-disclosure` 但 data 冇對應嘅 `*.disclosure` entry |
 | W13 | Pillar 嘅 `<h1>` 同分區名一模一樣（H1 要係一句，唔係重複一個標籤） |
 | W15 | 相片冇 `width`／`height`（載入嗰刻會跳版，CLS）、冇 `loading="lazy"`、或者 `.photo-figure` 冇 `figcaption` |
+| W18 | 同 E28 一樣，但係喺 `sourceNote`／`volatileNote`／`needsVerify`。呢三個欄位一樣行 `textContent`（見 `renderFooter`／`renderBanner`／`fillNeedsVerify`），一樣會照字面出街，只係唔喺正文 —— 所以係 warning 唔係 error |
 | W17 | `data/affiliates.json` 某條連結嘅 `verifiedOn` 過咗 6 個月，或者根本冇填 —— 外部落地頁會靜靜咁壞（見下面「聯盟連結三條規矩」） |
 | W16 | 檔標咗 `_status: "sourced"` 或 `"verified"`，但有 `value` 嘅 entry 冇 `sourceNote` —— 一個檔一旦自稱有出處，就要逐條講得出。真係唔需要出處（業界通則／第一手觀察／結構性事實）就喺 entry 加 `_noSource: "理由"`，空字串或者 `true` 唔算，一定要寫理由 |
 | W14 | `data/notes/*.json` 嘅回饋線有問題：冇 `visitDate`、有 entry 唔係 `high`、`feedsInto` 指去唔存在嘅檔／key（斷線），或者指住嘅 areas key **仍然係 `needsVerify`**（觀察未歸納返落分區檔） |
@@ -629,6 +631,39 @@ node scripts/check-affiliate-links.mjs --self-test
 兩句同時成立係矛盾。`build.mjs` 喺**任何檢查跑之前**就攔咗佢並且
 `exit 1`，所以連「0 error」呢個誤導畫面都印唔出嚟。self-test
 （唔帶 `--publish`）唔受影響。
+
+#### 🔴 data 入面唔准寫 markdown（E28／W18）
+
+`js/freshness.js` **由頭到尾用 `textContent`，冇一個位用 `innerHTML`** ——
+呢個係刻意嘅：data 入面任何嘢都唔應該變成 HTML。代價就係 markdown
+唔會被渲染，會照字面出街。讀者見到嘅係「`**指明管制站**`」連埋兩對星。
+
+呢個唔係假設。2026-09-01 真係出過一次街：`declare.cash` 寫咗
+`**指明管制站**`，`--publish` 0 error、push 咗、要喺線上驗嗰陣先捉到。
+
+| 欄位 | 會唔會渲染 | 守衛 |
+|---|:-:|---|
+| `value` | ✅ 正文資料格 | **E28（error）** |
+| `sourceNote` | ✅ 資料格頁腳「來源：」 | **W18（warning）** |
+| `volatileNote` | ✅ 「此部分正在變動中」橫幅 | **W18** |
+| `needsVerify` | ✅ 待核實標記 | **W18** |
+| `_note`／`_checked`／`_corrected` 等底線欄位 | ❌ 永遠唔會渲染 | 唔掃 —— 入面用 markdown 完全冇問題 |
+
+分兩級係為咗可以即刻上 error 而唔使一次過改晒現存嗰批（2026-09-01 有 11 條
+`sourceNote` 中招），**唔係話 W18 嗰批唔使改**。
+
+反面對照（五個 fixture，真係跑一次 build）：
+
+```sh
+node scripts/check-markdown-in-data.mjs --self-test
+```
+
+靠 `MARKDOWN_SCAN_EXTRA=` 叫 build **額外**掃埋 `scripts/fixtures/markdown/`。
+個開關刻意做成「**只可以加，唔可以減**」—— 佢最多令守衛多掃一個資料夾，
+冇任何寫法可以令佢少掃 `data/`。同 `AFFILIATES_JSON` 一樣，撞到 `--publish` 即刻拒絕跑。
+
+fixture 入面有兩個**唔應該中招**嘅對照（`3 * 4` 同 `snake_case` 單條底線），
+self-test 會斷言佢哋零命中 —— 唔係淨係驗「捉到壞嘢」，仲要驗「唔會亂咬」。
 
 #### 🔴 憑據分級：curl 200 唔係唯一一種憑據
 

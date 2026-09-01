@@ -1,0 +1,7 @@
+{
+  "title": "反面對照 fixture — W18：markdown 喺 sourceNote（渲染得到，但唔喺正文）。",
+  "_status": "fixture",
+  "entries": {
+    "fx.sn": { "value": "乾淨嘅值，冇 markdown。", "sourceNote": "⚠️ **二手來源。**要人手核。", "verifiedOn": "2026-09", "volatility": "low" }
+  }
+}

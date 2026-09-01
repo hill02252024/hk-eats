@@ -36,6 +36,8 @@
  *   E26 Klook 短網址     任何地方出現 s.klook.com —— 呢個格式收唔到佣金。
  *   E27 未接通就掛街      夥伴嘅 params 空咗／仲有 PENDING，但佢名下嘅 link
  *                        已經俾頁面引用 —— 一條冇追蹤嘅免費導流。
+ *   E28 data 有 markdown  entry 嘅 `value` 入面有 **粗體**／*斜體*／[連結](url)／`code`。
+ *                        freshness.js 行 textContent，呢啲符號會照字面出街。
  *
  * 警告（唔會 exit 1）：
  *   W1 文章冇對應 data/<section>/<name>.json
@@ -45,6 +47,8 @@
  *   W4 data-aff key 喺 affiliates.json 冇對應
  *   W5 JSON-LD meta 缺漏
  *   W17 聯盟落地頁核實日期過期（>6 個月）或者冇填
+ *   W18 同 E28 一樣，但係喺 sourceNote／volatileNote／needsVerify —— 呢三個
+ *       欄位一樣行 textContent，一樣會照字面出街，只係唔喺正文。
  */
 
 import fs from "node:fs";
@@ -60,9 +64,26 @@ const PUBLISH = process.argv.includes("--publish");
 /* 反面對照專用：把 affiliates.json 指去一個 fixture。
  * **淨係 scripts/check-affiliate-links.mjs 會用**。故意寫到好嘈 ——
  * 一個可以靜靜咁改守衛讀邊個檔嘅開關，本身就係一個窿。 */
+/* 反面對照專用：**額外**再掃多一個資料夾。故意做成「只可以加，唔可以減」——
+ * 一個可以令守衛少掃嘢嘅開關本身就係個窿；呢個開關最多令佢多報，唔會少報。 */
+const MARKDOWN_SCAN_EXTRA = process.env.MARKDOWN_SCAN_EXTRA
+  ? path.resolve(ROOT, process.env.MARKDOWN_SCAN_EXTRA)
+  : null;
+
 const AFFILIATES_PATH = process.env.AFFILIATES_JSON
   ? path.resolve(ROOT, process.env.AFFILIATES_JSON)
   : null;
+if (MARKDOWN_SCAN_EXTRA && PUBLISH) {
+  console.error("");
+  console.error("ERROR   --publish 唔准同 MARKDOWN_SCAN_EXTRA 一齊用。");
+  console.error(`        而家 MARKDOWN_SCAN_EXTRA=${process.env.MARKDOWN_SCAN_EXTRA}`);
+  console.error("        反面對照請跑 node scripts/check-markdown-in-data.mjs --self-test。");
+  console.error("");
+  process.exit(1);
+}
+if (MARKDOWN_SCAN_EXTRA) {
+  console.error(`⚠️  MARKDOWN_SCAN_EXTRA 生效：E28／W18 額外掃埋 ${path.relative(ROOT, MARKDOWN_SCAN_EXTRA)}。呢個係反面對照模式。`);
+}
 if (AFFILIATES_PATH) {
   /* 發布模式一撞到呢個覆寫就即刻死。理由：`--publish` 嘅意思係「呢一份
    * 就係要出街嗰份」，而覆寫嘅意思係「而家讀緊一份假嘢」。兩句同時成立
@@ -2340,6 +2361,77 @@ function checkSourcedFiles() {
 }
 
 /* ------------------------------------------------------------------ */
+/* E28／W18 data 入面唔准有 markdown                                      */
+/* ------------------------------------------------------------------ */
+
+/* js/freshness.js 由頭到尾用 `textContent`，冇一個位用 innerHTML ——
+ * 呢個係刻意嘅（data 入面任何嘢都唔應該變成 HTML）。代價就係：markdown
+ * 唔會被渲染，會**照字面**出街。讀者見到嘅係「**指明管制站**」連埋兩對星。
+ *
+ * 呢個唔係假設性風險。2026-09-01 真係發生過：declare.cash 寫咗
+ * `**指明管制站**`，出咗街，喺線上驗嗰陣先捉到。所以要守衛，唔可以靠記。
+ *
+ * 兩級處理：
+ *   E28（error）—— `value`。呢個係文章正文入面讀者一定會見到嗰格。
+ *   W18（warn）—— `sourceNote` / `volatileNote` / `needsVerify`。呢三個
+ *     一樣行 textContent（見 freshness.js 嘅 renderFooter／renderBanner／
+ *     fillNeedsVerify），所以一樣會照字面出街，但佢哋出現喺資料格頁腳同
+ *     橫幅，唔喺正文。分兩級係為咗可以即刻上 error 而唔使一次過改晒
+ *     現存嗰批 —— 唔係話佢哋唔使改。
+ *
+ * ⚠️ 範圍**只限會渲染嘅欄位**。`_note`、`_corrected`、`_checked` 呢類
+ * 底線欄位係寫畀將來嘅自己睇，永遠唔會經 freshness.js，入面用 markdown
+ * 完全冇問題 —— 掃佢哋只會製造噪音。 */
+
+const MARKDOWN_PATTERNS = [
+  ["**粗體**", /\*\*[^*\n]+\*\*/],
+  ["__粗體__", /__[^_\n]+__/],
+  /* 斜體寫得保守：兩邊唔准貼住空白，避免「3 * 4」或者單獨一粒星中招 */
+  ["*斜體*", /(?<!\*)\*[^*\s\n](?:[^*\n]*[^*\s\n])?\*(?!\*)/],
+  ["[文字](網址)", /\[[^\]\n]+\]\([^)\n]+\)/],
+  ["`code`", /`[^`\n]+`/],
+];
+
+const MD_RENDERED_FIELDS = ["value", "sourceNote", "volatileNote", "needsVerify"];
+
+function checkNoMarkdownInData() {
+  const dirs = [DATA_DIR];
+  if (MARKDOWN_SCAN_EXTRA && fs.existsSync(MARKDOWN_SCAN_EXTRA)) dirs.push(MARKDOWN_SCAN_EXTRA);
+  const files = dirs.flatMap((d) => walk(d)).filter((f) => f.endsWith(".json"));
+  let scanned = 0, checked = 0;
+  for (const f of files) {
+    let doc;
+    try { doc = JSON.parse(fs.readFileSync(f, "utf8")); } catch { continue; }
+    if (!doc.entries || typeof doc.entries !== "object") continue;
+    scanned++;
+    for (const [k, v] of Object.entries(doc.entries)) {
+      if (!v || typeof v !== "object") continue;
+      for (const field of MD_RENDERED_FIELDS) {
+        const raw = v[field];
+        if (raw === undefined || raw === null) continue;
+        const items = Array.isArray(raw) ? raw : [raw];
+        for (const item of items) {
+          if (typeof item !== "string") continue;
+          checked++;
+          for (const [label, re] of MARKDOWN_PATTERNS) {
+            const m = re.exec(item);
+            if (!m) continue;
+            const snippet = item.slice(Math.max(0, m.index - 18), m.index + m[0].length + 18);
+            const msg =
+              `${rel(f)} → ${k}.${field}：入面有 markdown「${label}」（${m[0].slice(0, 40)}）——` +
+              ` freshness.js 用 textContent，呢啲符號會照字面出街。原文附近：「…${snippet}…」`;
+            if (field === "value") err(`E28 ${msg}`);
+            else warn(`W18 ${msg}`);
+            break;   // 一格報一次就夠
+          }
+        }
+      }
+    }
+  }
+  return { scanned, checked };
+}
+
+/* ------------------------------------------------------------------ */
 /* E23／E24／W17 聯盟連結                                                */
 /* ------------------------------------------------------------------ */
 
@@ -2576,6 +2668,10 @@ console.log(`[5/8] 文章 ↔ data 對應檢查：${articleCount} 篇文章`);
 {
   const w16 = checkSourcedFiles();
   console.log(`      出處對數（_status: ${[...W16_SCOPE].join("/")}）：${w16.scanned} 個檔、${w16.entries} 條有值 entry`);
+}
+{
+  const md = checkNoMarkdownInData();
+  console.log(`      data 唔准有 markdown（E28 value／W18 其餘渲染欄位）：掃 ${md.scanned} 個檔、${md.checked} 格文字`);
 }
 {
   const aff = checkAffiliates(htmlFiles, jsFiles);

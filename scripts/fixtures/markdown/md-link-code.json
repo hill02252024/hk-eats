@@ -1,0 +1,8 @@
+{
+  "title": "反面對照 fixture — E28 連結同 code。",
+  "_status": "fixture",
+  "entries": {
+    "fx.link": { "value": "詳情見[香港海關](https://www.customs.gov.hk/)。", "verifiedOn": "2026-09", "volatility": "low" },
+    "fx.code": { "value": "喺終端機打 `node scripts/build.mjs` 就得。", "verifiedOn": "2026-09", "volatility": "low" }
+  }
+}

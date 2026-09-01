@@ -1,0 +1,18 @@
+{
+  "title": "正對照 fixture — 完全乾淨，唔應該報任何嘢。呢個係用嚟證明守衛唔係恆真（入面刻意有單條底線、全形括號、引號）。",
+  "_status": "fixture",
+  "entries": {
+    "fx.clean": {
+      "value": "口岸通綠燈代表少於 15 分鐘，用「」做強調，唔用星號。",
+      "sourceNote": "保安局口岸通頁，2026-09-01 睇。",
+      "volatileNote": "呢項會變，出發前自己再確認。",
+      "verifiedOn": "2026-09",
+      "volatility": "low"
+    },
+    "fx.underscoreOk": {
+      "value": "檔名 data_file 同 snake_case 只有單條底線，唔應該當成粗體語法。",
+      "verifiedOn": "2026-09",
+      "volatility": "low"
+    }
+  }
+}

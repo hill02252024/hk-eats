@@ -1,0 +1,8 @@
+{
+  "title": "反面對照 fixture — E28 斜體 + 一個唔應該中招嘅對照（乘數星號）。",
+  "_status": "fixture",
+  "entries": {
+    "fx.italic": { "value": "呢個係 *大概* 嘅數。", "verifiedOn": "2026-09", "volatility": "low" },
+    "fx.notItalic": { "value": "運算式 3 * 4 = 12，同埋一粒單獨嘅星 * 都唔應該當係斜體。", "verifiedOn": "2026-09", "volatility": "low" }
+  }
+}
