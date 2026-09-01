@@ -34,6 +34,8 @@
  *   E24 聯盟披露         任何有 data-aff 嘅頁，正文要有 affiliates.json 嗰句披露文案。
  *   E25 Klook 冇 aid     klook.com 連結組裝之後冇有效 aid（或者仲係 PENDING）。
  *   E26 Klook 短網址     任何地方出現 s.klook.com —— 呢個格式收唔到佣金。
+ *   E27 未接通就掛街      夥伴嘅 params 空咗／仲有 PENDING，但佢名下嘅 link
+ *                        已經俾頁面引用 —— 一條冇追蹤嘅免費導流。
  *
  * 警告（唔會 exit 1）：
  *   W1 文章冇對應 data/<section>/<name>.json
@@ -62,6 +64,19 @@ const AFFILIATES_PATH = process.env.AFFILIATES_JSON
   ? path.resolve(ROOT, process.env.AFFILIATES_JSON)
   : null;
 if (AFFILIATES_PATH) {
+  /* 發布模式一撞到呢個覆寫就即刻死。理由：`--publish` 嘅意思係「呢一份
+   * 就係要出街嗰份」，而覆寫嘅意思係「而家讀緊一份假嘢」。兩句同時成立
+   * 係一個矛盾 —— 唔可以靠人記得唔好夾埋用。放喺最頂，喺任何檢查跑之前，
+   * 咁就冇可能出現「印咗 0 error 先至死」呢種誤導畫面。 */
+  if (PUBLISH) {
+    console.error("");
+    console.error(`ERROR   --publish 唔准同 AFFILIATES_JSON 一齊用。`);
+    console.error(`        而家 AFFILIATES_JSON=${process.env.AFFILIATES_JSON}`);
+    console.error(`        --publish 嘅意思係「呢一份就係要出街嗰份」；覆寫嘅意思係「而家讀緊一份 fixture」。`);
+    console.error(`        兩者同時成立係矛盾。反面對照請跑 node scripts/check-affiliate-links.mjs --self-test。`);
+    console.error("");
+    process.exit(1);
+  }
   console.error(`⚠️  AFFILIATES_JSON 覆寫生效：affiliate 守衛而家讀緊 ${path.relative(ROOT, AFFILIATES_PATH)}，唔係 data/affiliates.json。呢個係反面對照模式，唔係正常 build。`);
 }
 
@@ -2479,6 +2494,45 @@ function checkAffiliates(files, jsToo = []) {
     const why = pv && typeof pv._pendingUrl === "string" && pv._pendingUrl.trim();
     if (!why) {
       err(`E23 ${rel(p)} → partners.${pk}：登記咗但一條 links 都冇 —— 係準備緊就寫 _pendingUrl: "理由"，係唔再用就連 partner 一齊剷`);
+    }
+  }
+
+  /* E27：partner 嘅追蹤參數未填好，但佢名下嘅 link 已經俾頁面引用緊。
+   *
+   * 呢個係「準備接通」呢個階段最容易靜靜咁蝕錢嘅狀態：條連結 200、
+   * 落地頁啱、讀者撳得到、披露句齊全 —— 一切正常，淨係冇追蹤，
+   * 即係一條免費導流。E25 只管 klook.com（因為 aid 呢個參數名係
+   * Klook 專有），呢條唔挑夥伴：**只要 params 空咗或者仲有 PENDING
+   * 佔位值，就唔准有任何頁面掛佢。**
+   *
+   * 唔准喺頁面引用 ≠ 唔准存在。連結可以照寫落 affiliates.json 備定
+   * （URL 核實過就係核實過），淨係唔可以掛出街。 */
+  const paramsPending = (pk) => {
+    const pv = partners[pk];
+    if (!pv) return null;                       // partner 唔存在由 E23 報
+    const pm = pv.params;
+    if (!pm || typeof pm !== "object" || Object.keys(pm).length === 0) return "params 係空";
+    for (const [k, v] of Object.entries(pm)) {
+      if (v === null || v === undefined || String(v).trim() === "") return `params.${k} 冇值`;
+      if (/PENDING/i.test(String(v))) return `params.${k} 仲係佔位值「${v}」`;
+    }
+    return null;
+  };
+  for (const file of files) {
+    const html = fs.readFileSync(file, "utf8");
+    const re = /data-aff\s*=\s*["']([^"']+)["']/gi;
+    let mm;
+    while ((mm = re.exec(html))) {
+      const l = links[mm[1]];
+      if (!l || !l.partner) continue;           // 由 W4／E23 報
+      const why = paramsPending(l.partner);
+      if (!why) continue;
+      err(
+        `E27 ${rel(file)}:${lineOf(html, mm.index)} 掛咗 data-aff="${mm[1]}"（夥伴 ${l.partner}），` +
+        `但嗰個夥伴嘅追蹤參數未填好（${why}）—— 呢條連結會照樣 200、照樣去到落地頁、讀者照樣撳得到，` +
+        `淨係一蚊都收唔到，而且冇任何外顯症狀。填好 partners.${l.partner}.params 先掛，` +
+        `或者暫時由頁面攞走呢條 data-aff`
+      );
     }
   }
 

@@ -97,3 +97,77 @@ Sec-Fetch-* 全套 header）同 WebFetch，全部 403。**連 `/robots.txt` 都 
 
 （順帶：呢啲 `utm_*` 係 Klook 自己加落自己個網址度嘅，唔關本站事。
 本站寫入 `affiliates.json` 嘅 URL 由頭到尾冇 `utm_*` —— E23 亦唔准有。）
+
+---
+
+## 第二輪：搵更貼題嘅落地頁（2026-09-01）
+
+### 🔴 先收返一句講錯咗嘅嘢
+
+上面寫過 `/zh-HK/activity/` 「連續三次 403 … 係嗰條路徑本身唔通」。
+**「路徑本身唔通」呢個推論冇根據，收返。**
+
+今日查清楚：Klook 邊緣對非瀏覽器 client 回 **403**，對唔存在嘅路徑回 **404**，
+兩者分得好清楚（`/zh-HK/tours/`、`/zh-HK/china-esim/`、`/zh-HK/sim-card/` 全部 404）。
+而 Klook **自己 sitemap 入面**確實存在嘅頁，一樣係 403。
+所以 403 只講到「curl 攞唔到 body」，講唔到「條路壞咗」。
+換走舊值本身冇問題（`/zh-HK/esim/` 語意上更貼題），但當時嘅理由寫得太實。
+
+### 第一方 URL 清單：Klook 自己嘅 sitemap 同 llms.txt
+
+`www.klook.com/robots.txt` 明文 `Allow: /llms.txt`、`Allow: /llms-full.txt`，
+另有 `Sitemap: https://www.klook.com/sitemap.xml`。三樣 curl 都 **200**：
+
+| 檔 | code | 內容 |
+|---|---|---|
+| `/llms.txt` | 200 | 官方品類 URL 清單（`/attractions/`、`/wifi-sim-card/`、`/hotels/` …） |
+| `/llms-full.txt` | 200 | 20 KB，**零 shenzhen 命中** |
+| `/sitemap.xml` | 200 | sitemap index，22 個 `*_zh-hk.xml` 子檔 |
+
+抽咗五個 zh-HK 子 sitemap（全部 200，`lastmod 2026-09-01`）：
+
+| 子 sitemap | locs | 深圳相關命中 |
+|---|---|---|
+| `sitemap-city-plain_zh-hk.xml` | 1424 | `/zh-HK/destination/c23301-shenzhen/` |
+| `sitemap-destination-transport-plain_zh-hk.xml` | 415 | `/zh-HK/destination/c23301-shenzhen/4-transport/`、`/c2-hong-kong/4-transport/` |
+| `sitemap-destination-ttd-plain_zh-hk.xml` | 5557 | `…/c23301-shenzhen/` 之下 12 個品類（`1-things-to-do`、`1002-day-trips`、`1005-food-tours`、`1001-tours` …） |
+| `sitemap-wifi-sim-card-plain_zh-hk.xml` | 59 | `?region=25-Mainland China`、`?region=77-Mainland China, Hong Kong & Macau` |
+| `sitemap-mobility-plain_zh-hk.xml` | 696 | `china-high-speed-rail/…23301-shenzhen/…`（城市對城市高鐵） |
+
+即係話 —— 用戶講嗰個 `destination/c23301-shenzhen/` 格式**係真嘅**，
+而且仲有 `4-transport/` 呢個啱到極嘅子分類。
+
+### ❌ 但全部 curl 唔到 200
+
+| URL | code |
+|---|---|
+| `/zh-HK/destination/c23301-shenzhen/` | 403 |
+| `/zh-HK/destination/c23301-shenzhen/4-transport/` | 403 |
+| `/zh-HK/destination/c23301-shenzhen/1002-day-trips/` | 403 |
+| `/zh-HK/destination/c23301-shenzhen/1-things-to-do/` | 403 |
+| `/zh-HK/destination/c23301-shenzhen/1005-food-tours/` | 403 |
+| `/zh-HK/destination/c2-hong-kong/4-transport/` | 403 |
+| `/zh-HK/wifi-sim-card/` | 403 |
+| `/zh-HK/wifi-sim-card/?region=25-Mainland China` | 403 |
+| `/zh-HK/wifi-sim-card/?region=77-…` | 403 |
+| `/zh-HK/city/34-shenzhen/`、`/zh-HK/destination/` | 403 |
+
+（WebFetch 試 `/zh-HK/destination/c23301-shenzhen/` 一樣 403。）
+
+對照組：而家用緊嗰三條 flat 分類頁，同一時間 curl 全部 **200** ——
+`/zh-HK/esim/`、`/zh-HK/transport/`、`/zh-HK/attractions/`。
+即係 Klook 封嘅係 SEO destination／filter 頁，唔係封晒成個站。
+
+### 憑據分級，唔可以撈埋
+
+| 憑據 | 證到咩 | 夠唔夠寫入 |
+|---|---|---|
+| curl 200 ＋ 讀到標題 | 讀者拎得到、內容對題 | ✅ |
+| 出現喺對方 sitemap | 對方聲明佢係正規頁 | ❌ 攞唔到 body，證唔到對題 |
+
+站規係「確認 HTTP 200 先寫入」。sitemap 憑據好強，但**證唔到內容對題**，
+所以呢一輪行方案 (c)：**URL 唔郁，改 label 同正文，明講讀者要自己再揀。**
+
+候選 URL 全部記咗喺 `data/affiliates.json` 各條 link 嘅 `_betterTargetPending`，
+逐字抄自 sitemap。要 flip 只差一步：喺真瀏覽器開一次、確認內容，
+然後喺呢度補一句「人手核」——**唔可以扮 curl 核過**。

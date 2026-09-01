@@ -1,7 +1,7 @@
 {
   "_note": "全站唯一嘅 affiliate 連結來源。頁面只准寫 data-aff=\"<key>\"，唔准寫任何 URL 或 tracking 參數。佣金率或連結一變，改呢個檔就全站生效。scripts/build.mjs 會掃描 .html 與 js/，發現硬編碼即報 error 並 exit 1；E23 另外會逐條驗呢個檔本身（host、https、路徑、partner 對唔對得上、url 有冇混入追蹤參數）。",
   "_todo": "Klook 已接通（aid=133428，2026-09-01）。Trip.com 同 KKday 兩個聯盟帳號仲未申請，params 留空 —— 未填之前唔准喺任何頁面掛佢哋嘅連結做導流。",
-  "_paramsPending": "⚠️ 參數名同參數值一律等申請成功之後由聯盟後台抄返，唔准憑印象填。填錯參數名嘅後果特別惡劣：條 URL 一樣去到落地頁、一樣 200、讀者一樣撳得到，但佣金完全追蹤唔到 —— 佢淨係一個「多咗個冇人識嘅 query string」。所以 Trip.com 同 KKday 索性留空 params。\nKlook 已經唔屬於呢個狀態：aid=133428 係由 Klook 後台抄返嘅帳戶級 ID，E25 而家會強制每條 klook 連結都帶到佢。⚠️ 舊有嘅 aff_adid（值係 PENDING-KLOOK-ADID）已經剷走 —— 嗰個參數名本身都未核實過，而 Klook 後台原文只講「加上 ?aid=xxxx 即可生成聯盟連結」，冇提第二個參數。冇核實就唔填。",
+  "_paramsPending": "⚠️ 參數名同參數值一律等申請成功之後由聯盟後台抄返，唔准憑印象填。填錯參數名嘅後果特別惡劣：條 URL 一樣去到落地頁、一樣 200、讀者一樣撳得到，但佣金完全追蹤唔到 —— 佢淨係一個「多咗個冇人識嘅 query string」。所以 Trip.com 同 KKday 索性留空 params。E27 而家會攔住「params 未填好但已經俾頁面掛咗出街」呢個狀態。\nKlook 已經唔屬於呢個狀態：aid=133428 係由 Klook 後台抄返嘅帳戶級 ID。",
   "_hosts": "E23 認嘅 affiliate host 白名單寫喺 scripts/build.mjs 嘅 AFFILIATE_HOSTS。佢同 EXTERNAL_ALLOWLIST 係兩個表，故意唔共用 —— 加一個 affiliate host 唔應該順便令全站任何一頁都可以硬連去嗰個網域。",
   "disclosure": "本站部分連結為推廣連結，經此類連結消費本站可能獲得佣金，價格不受影響。",
   "partners": {
@@ -13,7 +13,7 @@
       },
       "rel": "sponsored nofollow noopener",
       "target": "_blank",
-      "_officialRule": "Klook 後台介面原文（2026-09-01 由帳戶持有人提供）：「於任一 Klook 電腦版或手機版網頁連結後加上『?aid=xxxx』即可生成聯盟連結」、「必須用 www.klook.com 網址格式；s.klook.com 格式無法追蹤成效」。→ E25 守第一句（每條 klook 連結組完之後一定要有 aid），E26 守第二句（全站唔准出現 s.klook.com）。",
+      "_officialRule": "Klook 後台介面原文（2026-09-01 由帳戶持有人提供）：「於任一 Klook 電腦版或手機版網頁連結後加上『?aid=xxxx』即可生成聯盟連結」、「必須用 www.klook.com 網址格式；s.klook.com 格式無法追蹤成效」。→ E25 守第一句（每條 klook 連結組完之後一定要有 aid），E26 守第二句（全站唔准出現 s.klook.com）。本站用嘅係「append ?aid=」呢個格式，唔係 affiliate.klook.com/redirect 格式 —— 見檔頭 _linkFormat。",
       "_aidScope": "帳戶級 ID，全站通用 —— 唔使逐條連結／逐篇文分開開 ID。所以佢擺喺 partner 層，唔擺喺 links 層。"
     },
     "tripcom": {
@@ -38,24 +38,27 @@
     "klook-china-esim": {
       "partner": "klook",
       "url": "https://www.klook.com/zh-HK/esim/",
-      "label": "內地上網數據卡／eSIM",
+      "label": "Klook 嘅上網卡／eSIM 專頁（覆蓋全球，要自己揀「中國內地」）",
       "verifiedOn": "2026-09",
-      "_checked": "2026-09-01 curl 200，標題「5G eSIM、旅遊SIM卡及隨身WiFi | 50多個國家 | Klook」，係分類頁唔係單一產品。⚠️ 舊值係 https://www.klook.com/zh-HK/activity/ —— 2026-09-01 連續三次探測都係 403（同一時間 /zh-HK/transport/ 三次都 200，所以唔係隨機封 bot，係嗰條路徑本身唔通）。舊值標住 verifiedOn 2026-08 但已經唔 work，換咗。"
+      "_checked": "2026-09-01 curl 200，標題「5G eSIM、旅遊SIM卡及隨身WiFi | 50多個國家 | Klook」，係分類頁唔係單一產品。\n🔴 更正（同日第二版）：上一版喺度寫舊值 https://www.klook.com/zh-HK/activity/ 「連續三次 403 …係嗰條路徑本身唔通」。**「路徑本身唔通」呢個推論冇根據，收返。**後來查清楚：403 係 Klook 邊緣對非瀏覽器 client 嘅封鎖，唔係 404 —— 同一日，Klook 自己 zh-HK sitemap 入面一大批確實存在嘅頁（例如 /zh-HK/destination/c23301-shenzhen/）一樣係 403。換走舊值本身冇問題（/zh-HK/esim/ 語意上更貼題），但當時寫落嘅理由講得太實。\n⚠️ 呢條落地頁係**全球** eSIM 列表（分頁 1–25，日韓越泰美…），唔係內地專頁。label 已經改成明講要自己揀地區。更精準嘅候選見 _betterTargetPending。",
+      "_betterTargetPending": "候選：https://www.klook.com/zh-HK/wifi-sim-card/?region=25-Mainland%20China（另一個：?region=77-Mainland%20China%2C%20Hong%20Kong%20&%20Macau，內地＋港澳一張通用）。\n憑據：兩條都逐字抄自 Klook 自己嘅 https://www.klook.com/sitemap-wifi-sim-card-plain_zh-hk.xml（2026-09-01 curl 200，59 條 loc，lastmod 2026-09-01）—— 即係 Klook 自己聲明佢哋係正規頁。\n❌ 但係本站 curl 佢哋係 403，攞唔到 body，所以**確認唔到 200、亦確認唔到內容對題**。站規係「確認 200 先寫入」，所以唔寫。要 flip 過去，只需要有人喺真瀏覽器開一次，喺 _sources 寫明係人手核。"
     },
     "klook-cross-border-bus": {
       "partner": "klook",
       "url": "https://www.klook.com/zh-HK/transport/",
-      "label": "跨境巴士／直通車票",
+      "label": "Klook 嘅鐵路／巴士車票專頁（覆蓋全球，要自己揀路線）",
       "verifiedOn": "2026-09",
-      "_checked": "2026-09-01 curl 連續三次 200，標題「預訂全球鐵路＆巴士車票」，分類頁。"
+      "_checked": "2026-09-01 curl 連續三次 200，標題「預訂全球鐵路＆巴士車票」，分類頁。⚠️ 係全球頁，唔係跨境／港深專頁 —— label 已改成明講。更精準嘅候選見 _betterTargetPending。",
+      "_betterTargetPending": "候選：https://www.klook.com/zh-HK/destination/c23301-shenzhen/4-transport/ —— 深圳・交通，正正就係呢條連結想要嗰個範圍。\n憑據：逐字抄自 https://www.klook.com/sitemap-destination-transport-plain_zh-hk.xml（2026-09-01 curl 200，415 條 loc）。同一份 sitemap 亦有 /zh-HK/destination/c2-hong-kong/4-transport/。\n❌ curl 403，確認唔到 200 同內容，所以唔寫。同 klook-china-esim 一樣，等人手喺瀏覽器核一次就可以 flip。"
     },
     "klook-attraction-tickets": {
       "partner": "klook",
       "url": "https://www.klook.com/zh-HK/attractions/",
-      "label": "景點門票",
+      "label": "Klook 嘅景點門票專頁（覆蓋全球，要自己揀城市）",
       "verifiedOn": "2026-09",
       "_checked": "2026-09-01 curl 200，標題「⋯必玩景點門票⋯ - Klook」，分類頁。",
-      "_unusedYet": "暫時未有頁面用呢條 key。備定，等有一篇真係講門票／一日遊先掛。"
+      "_unusedYet": "暫時未有頁面用呢條 key。備定，等有一篇真係講門票／一日遊先掛。",
+      "_betterTargetPending": "候選（深圳）：/zh-HK/destination/c23301-shenzhen/1-things-to-do/、/1002-day-trips/、/1005-food-tours/、/1001-tours/。\n憑據：全部抄自 https://www.klook.com/sitemap-destination-ttd-plain_zh-hk.xml（2026-09-01 curl 200，5557 條 loc）。❌ 同樣 curl 403，未寫入。"
     },
     "tripcom-shenzhen-hotels": {
       "partner": "tripcom",
@@ -73,5 +76,6 @@
       "_checked": "2026-09-01 curl 200，城市列表頁。同上，尾斜線唔可以拆。",
       "_unusedYet": "暫時未有頁面用呢條 key。"
     }
-  }
+  },
+  "_linkFormat": "🔴 更正紀錄（2026-09-01，第二版）：本檔上一版寫「aff_adid 從來未核實過」，**呢句係錯嘅**。aff_adid=1410889 係真值，確實出現喺帳戶持有人真實生成嗰條 Klook 連結入面。\n剷走佢嘅**正確理由**係格式問題，唔係核實問題：aff_adid 屬於 affiliate.klook.com/redirect 嗰種轉址格式；本站揀咗另一種格式 —— 直接喺目標頁後面 append ?aid= 。**兩種格式唔混用。**喺 append 格式嘅 URL 度加 aff_adid，唔屬於嗰個格式嘅參數集，所以唔要。\n將來如果改用 redirect 格式，就要兩個參數一齊搬過去，唔可以摻半。"
 }

@@ -1,0 +1,77 @@
+{
+  "_note": "反面對照 fixture — E27（params 空）。唔係真資料，唔准 copy 返落 data/。把已經俾四版引用緊嘅 klook-china-esim 改掛去 tripcom（params 空），URL 亦一併改成 trip.com 嘅，令 E25／E26 唔會插手 —— 咁 fail 出嚟嗰條一定係 E27。",
+  "_todo": "Klook 已接通（aid=133428，2026-09-01）。Trip.com 同 KKday 兩個聯盟帳號仲未申請，params 留空 —— 未填之前唔准喺任何頁面掛佢哋嘅連結做導流。",
+  "_paramsPending": "⚠️ 參數名同參數值一律等申請成功之後由聯盟後台抄返，唔准憑印象填。填錯參數名嘅後果特別惡劣：條 URL 一樣去到落地頁、一樣 200、讀者一樣撳得到，但佣金完全追蹤唔到 —— 佢淨係一個「多咗個冇人識嘅 query string」。所以 Trip.com 同 KKday 索性留空 params。\nKlook 已經唔屬於呢個狀態：aid=133428 係由 Klook 後台抄返嘅帳戶級 ID，E25 而家會強制每條 klook 連結都帶到佢。⚠️ 舊有嘅 aff_adid（值係 PENDING-KLOOK-ADID）已經剷走 —— 嗰個參數名本身都未核實過，而 Klook 後台原文只講「加上 ?aid=xxxx 即可生成聯盟連結」，冇提第二個參數。冇核實就唔填。",
+  "_hosts": "E23 認嘅 affiliate host 白名單寫喺 scripts/build.mjs 嘅 AFFILIATE_HOSTS。佢同 EXTERNAL_ALLOWLIST 係兩個表，故意唔共用 —— 加一個 affiliate host 唔應該順便令全站任何一頁都可以硬連去嗰個網域。",
+  "disclosure": "本站部分連結為推廣連結，經此類連結消費本站可能獲得佣金，價格不受影響。",
+  "partners": {
+    "klook": {
+      "name": "Klook",
+      "scope": "門票、一日遊、交通票、內地上網",
+      "params": {
+        "aid": "133428"
+      },
+      "rel": "sponsored nofollow noopener",
+      "target": "_blank",
+      "_officialRule": "Klook 後台介面原文（2026-09-01 由帳戶持有人提供）：「於任一 Klook 電腦版或手機版網頁連結後加上『?aid=xxxx』即可生成聯盟連結」、「必須用 www.klook.com 網址格式；s.klook.com 格式無法追蹤成效」。→ E25 守第一句（每條 klook 連結組完之後一定要有 aid），E26 守第二句（全站唔准出現 s.klook.com）。",
+      "_aidScope": "帳戶級 ID，全站通用 —— 唔使逐條連結／逐篇文分開開 ID。所以佢擺喺 partner 層，唔擺喺 links 層。"
+    },
+    "tripcom": {
+      "name": "Trip.com",
+      "scope": "酒店住宿",
+      "params": {},
+      "_paramsPending": "未申請，參數名未核實 —— 見檔頭 _paramsPending。",
+      "rel": "sponsored nofollow noopener",
+      "target": "_blank"
+    },
+    "kkday": {
+      "name": "KKday",
+      "scope": "特色體驗",
+      "params": {},
+      "_paramsPending": "未申請，參數名未核實 —— 見檔頭 _paramsPending。",
+      "_pendingUrl": "⚠️ 呢個 partner 暫時一條 links 都冇，係故意嘅。2026-09-01 探測：www.kkday.com 對非瀏覽器 client 一律回 403（連 /robots.txt 都 403，curl 同 WebFetch 兩邊都係）—— 即係本站確認唔到任何一條 kkday URL 真係 200。站規係「確認 200 先寫入」，所以寧願冇連結，都唔寫一條核唔到嘅。探測紀錄：data/_sources/affiliate-target-url-probe-2026-09-01.md。",
+      "rel": "sponsored nofollow noopener",
+      "target": "_blank"
+    }
+  },
+  "links": {
+    "klook-china-esim": {
+      "partner": "tripcom",
+      "url": "https://hk.trip.com/hotels/shenzhen-hotels-list-30/",
+      "label": "內地上網數據卡／eSIM",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，標題「5G eSIM、旅遊SIM卡及隨身WiFi | 50多個國家 | Klook」，係分類頁唔係單一產品。⚠️ 舊值係 https://www.klook.com/zh-HK/activity/ —— 2026-09-01 連續三次探測都係 403（同一時間 /zh-HK/transport/ 三次都 200，所以唔係隨機封 bot，係嗰條路徑本身唔通）。舊值標住 verifiedOn 2026-08 但已經唔 work，換咗。"
+    },
+    "klook-cross-border-bus": {
+      "partner": "klook",
+      "url": "https://www.klook.com/zh-HK/transport/",
+      "label": "跨境巴士／直通車票",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 連續三次 200，標題「預訂全球鐵路＆巴士車票」，分類頁。"
+    },
+    "klook-attraction-tickets": {
+      "partner": "klook",
+      "url": "https://www.klook.com/zh-HK/attractions/",
+      "label": "景點門票",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，標題「⋯必玩景點門票⋯ - Klook」，分類頁。",
+      "_unusedYet": "暫時未有頁面用呢條 key。備定，等有一篇真係講門票／一日遊先掛。"
+    },
+    "tripcom-shenzhen-hotels": {
+      "partner": "tripcom",
+      "url": "https://hk.trip.com/hotels/shenzhen-hotels-list-30/",
+      "label": "深圳酒店",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，標題「深圳酒店推介：精選 10 間高性價比酒店⋯| Trip.com」，係城市列表頁唔係單一酒店。⚠️ 尾嗰個斜線唔可以拆 —— 冇斜線嗰個版本（⋯-list-30）回 404。",
+      "_unusedYet": "暫時未有頁面用呢條 key。等有一篇真係講北上過夜／住宿先掛。"
+    },
+    "tripcom-guangzhou-hotels": {
+      "partner": "tripcom",
+      "url": "https://hk.trip.com/hotels/guangzhou-hotels-list-32/",
+      "label": "廣州酒店",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，城市列表頁。同上，尾斜線唔可以拆。",
+      "_unusedYet": "暫時未有頁面用呢條 key。"
+    }
+  }
+}

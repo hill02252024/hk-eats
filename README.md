@@ -325,6 +325,7 @@ curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitema
 | E19 | 標咗 `_draft` 嘅頁，出現喺 `sitemap.xml`、首頁 `.post-list`、或者任何 pillar 嘅 `.cluster-list`；另外 pillar 嘅 `jsonld:itemList` 條數同佢畫面 `.cluster-list` 條數對唔上 |
 | E20 | 相片冇 `alt`、`alt` 係空、係佔位字（「圖片」「TODO」…）或者係檔名；`.photo-figure` 入面冇 `<img>`；`.photo-figure` 以外有冇 `alt` 嘅 `<img>` |
 | E21 | footer 自家 app 推廣位出事：頁面冇 `<!-- apppromo -->` 錨點亦冇 `<!-- build:apppromo -->` 區塊、區塊有開頭冇收尾、推廣位唔喺 `<footer class="site-footer">` 入面、`data/apps.json` 讀唔到／冇 `promo.target`／`target` 指去 draft 頁 |
+| E27 | 夥伴嘅 `params` 空咗或者仲有 `PENDING` 佔位值，但佢名下嘅 link 已經俾頁面 `data-aff` 引用 —— 一條冇追蹤嘅免費導流。**唔挑夥伴**，Klook／Trip.com／KKday 一視同仁 |
 | E25 | `klook.com` 連結**組裝之後**（partner params ＋ link params 合埋）冇有效 `aid`，或者 `aid` 仲係 `PENDING-*` |
 | E26 | 任何地方（`data/affiliates.json`、`.html`、`js/`）出現 `s.klook.com` —— Klook 明文話呢個格式追蹤唔到成效 |
 | E23 | `data/affiliates.json` 自檢：連結唔係 https、host 唔喺 `AFFILIATE_HOSTS`、指住根網域、`url` 入面寫死咗追蹤參數、`partner` 喺 `partners` 搵唔到；或者一個 partner 登記咗但一條 links 都冇又冇寫 `_pendingUrl: "理由"` |
@@ -591,6 +592,20 @@ Klook 後台介面原文：
 | **E25** | 組裝之後嘅 `klook.com` 連結一定要有有效 `aid`（`PENDING-*` 唔算） |
 | **E26** | 全站唔准出現 `s.klook.com` |
 
+**連結格式：本站用 `append ?aid=`，唔用 `affiliate.klook.com/redirect`。**
+Klook 有兩種生成聯盟連結嘅格式，各有各嘅參數集：
+
+| 格式 | 參數 |
+|---|---|
+| 直接喺目標頁後面 `?aid=` ← **本站用呢個** | `aid` |
+| `affiliate.klook.com/redirect` | `aid` ＋ `aff_adid` |
+
+🔴 **更正**：早前 repo 入面寫「`aff_adid` 從來未核實過」，**呢句錯咗**。
+`aff_adid=1410889` 係真值，確實出現喺帳戶持有人真實生成嗰條連結入面。
+剷走佢嘅正確理由係**格式**唔係核實：佢屬於 redirect 格式嘅參數集，
+而本站揀咗 append 格式。**兩種格式唔混用**——摻半就係兩邊都唔完整。
+將來要轉 redirect 格式，就兩個參數一齊搬。
+
 `aid` 係**帳戶級**，擺 `partners.klook.params`，唔好逐條 link 寫。
 E25 驗嘅係**組裝之後**嗰條 URL（`buildAffiliateUrl()`），唔係 `links.*.url` ——
 驗錯目標嘅話，`aid` 完全冇填都會照樣過。
@@ -604,10 +619,44 @@ E25 驗嘅係**組裝之後**嗰條 URL（`buildAffiliateUrl()`），唔係 `lin
 node scripts/check-affiliate-links.mjs --self-test
 ```
 
-`scripts/fixtures/affiliates-{no-aid,pending-aid,shortlink}.json`，
+五個 fixture：`affiliates-{no-aid,pending-aid,shortlink,unlinked-partner-empty,unlinked-partner-pending}.json`，
 靠 `AFFILIATES_JSON=` 環境變數把守衛指去 fixture。守衛邏輯只有一份
 （喺 `build.mjs`），self-test 唔複製 —— 複製咗就會有兩份各自漂移嘅實作，
 而測試會繼續綠。
+
+⚠️ **`AFFILIATES_JSON` 唔准同 `--publish` 一齊用。**`--publish` 嘅意思係
+「呢一份就係要出街嗰份」，覆寫嘅意思係「而家讀緊一份 fixture」——
+兩句同時成立係矛盾。`build.mjs` 喺**任何檢查跑之前**就攔咗佢並且
+`exit 1`，所以連「0 error」呢個誤導畫面都印唔出嚟。self-test
+（唔帶 `--publish`）唔受影響。
+
+#### 🔴 403 唔等於連結壞咗
+
+Klook 邊緣對非瀏覽器 client 會回 **403**，而唔存在嘅路徑係回 **404**——
+兩者分得好清楚。所以：
+
+- **403 = 頁存在，但 curl／WebFetch 攞唔到 body。**確認唔到 200、
+  亦確認唔到內容對唔對題 → 按站規唔准寫入。
+- **404 = 真係冇呢條路徑。**
+
+早前 repo 寫過 `/zh-HK/activity/` 「連續三次 403，係嗰條路徑本身唔通」——
+**「路徑本身唔通」呢個推論冇根據，已收返。**同一日 Klook 自己 zh-HK
+sitemap 入面一大批確實存在嘅頁（`/zh-HK/destination/c23301-shenzhen/` 等）
+一樣係 403。換走舊值本身冇問題，但當時寫落嘅理由講得太實。
+
+#### 搵 Klook 正規 URL：睇佢自己嘅 sitemap 同 llms.txt
+
+`robots.txt` 明文 `Allow: /llms.txt`、`Allow: /llms-full.txt`，
+另有 `Sitemap: https://www.klook.com/sitemap.xml`（sitemap index，
+入面有 22 個 `*_zh-hk.xml` 子檔）。呢兩樣 curl 攞得到 200，
+係**第一方**嘅正規 URL 清單——比喺頁面度撞 URL 可靠得多。
+
+但要分清楚兩種憑據，唔可以撈埋：
+
+| 憑據 | 證到咩 | 夠唔夠寫入 |
+|---|---|---|
+| curl 200 ＋ 讀到標題 | 讀者拎得到、內容對題 | ✅ 夠 |
+| 出現喺對方 sitemap | 對方聲明佢係正規頁 | ❌ 唔夠——攞唔到 body，證唔到對題 |
 
 ### 8. 加廣告位（可選）
 
@@ -1812,7 +1861,7 @@ URL 後面嘅括號係 **2026-08-23 由本機實測嘅 HTTP 狀態**；`200` = �
 | `document.cookie` / `localStorage` / `sessionStorage` / `indexedDB` | 全站零命中 |
 | 外部字體、CDN、`<iframe>` / `<embed>` / `<object>` | 零命中；CSS 零 `@font-face` / `@import` / `url(` |
 | 外部超連結 | 15 條，全部係 `<a href>`（唔會自動載入）。`http://www.w3.org/2000/svg` 係 xmlns，唔係請求 |
-| affiliate 夥伴 | **三個：Klook、Trip.com、KKday**（2026-09-01 更新，Amazon 已全部移除）。五條連結，全部係分類頁、全部 curl 過 200。**Klook 已接通（`aid=133428`）**；Trip.com、KKday 追蹤參數未填 |
+| affiliate 夥伴 | **三個：Klook、Trip.com、KKday**（2026-09-01 更新，Amazon 已全部移除）。五條連結，全部係分類頁、全部 curl 過 200。**Klook 已接通（`aid=133428`，append 格式）**；Trip.com、KKday 追蹤參數未填，而 E27 會攔住佢哋喺未填好之前俾頁面掛出街 |
 | 廣告位 | 四個全部 `enabled: false`，`publisher: null` |
 | 托管 | GitHub Pages（`CNAME` = taanworld.com；`taanworld.com` → 200 @ 185.199.111.153，即 GitHub Pages apex IP）。**冇 `.github/workflows`**，產物直接 commit |
 
