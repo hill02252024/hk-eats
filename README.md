@@ -325,6 +325,8 @@ curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitema
 | E19 | 標咗 `_draft` 嘅頁，出現喺 `sitemap.xml`、首頁 `.post-list`、或者任何 pillar 嘅 `.cluster-list`；另外 pillar 嘅 `jsonld:itemList` 條數同佢畫面 `.cluster-list` 條數對唔上 |
 | E20 | 相片冇 `alt`、`alt` 係空、係佔位字（「圖片」「TODO」…）或者係檔名；`.photo-figure` 入面冇 `<img>`；`.photo-figure` 以外有冇 `alt` 嘅 `<img>` |
 | E21 | footer 自家 app 推廣位出事：頁面冇 `<!-- apppromo -->` 錨點亦冇 `<!-- build:apppromo -->` 區塊、區塊有開頭冇收尾、推廣位唔喺 `<footer class="site-footer">` 入面、`data/apps.json` 讀唔到／冇 `promo.target`／`target` 指去 draft 頁 |
+| E23 | `data/affiliates.json` 自檢：連結唔係 https、host 唔喺 `AFFILIATE_HOSTS`、指住根網域、`url` 入面寫死咗追蹤參數、`partner` 喺 `partners` 搵唔到；或者一個 partner 登記咗但一條 links 都冇又冇寫 `_pendingUrl: "理由"` |
+| E24 | 任何有 `data-aff` 嘅頁面，正文冇一字不差咁出現 `data/affiliates.json` 嘅 `disclosure` 文案（或者 `disclosure` 本身留空） |
 | E22 | footer 站務連結出事：頁面冇 `<!-- footerlinks -->` 錨點亦冇 `<!-- build:footerlinks -->` 區塊、區塊有開頭冇收尾、唔喺 `<footer class="site-footer">` 入面、`FOOTER_LINKS` 指去 draft 頁、或者同一個 footer 有兩條連去同一個站務頁嘅連結（生成嗰條之外仲有手寫嘅） |
 | E14 | 顯示層走樣：**nav 品牌位／footer／`<title>` 三個品牌槽位**同 `SITE_NAME` 唔一致、nav 分區名同 `SECTIONS` 唔一致、nav 少咗分區連結、或者顯示槽位仲有舊字串 |
 
@@ -342,6 +344,7 @@ curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitema
 | W12 | 頁面有 `.callout-disclosure` 但 data 冇對應嘅 `*.disclosure` entry |
 | W13 | Pillar 嘅 `<h1>` 同分區名一模一樣（H1 要係一句，唔係重複一個標籤） |
 | W15 | 相片冇 `width`／`height`（載入嗰刻會跳版，CLS）、冇 `loading="lazy"`、或者 `.photo-figure` 冇 `figcaption` |
+| W17 | `data/affiliates.json` 某條連結嘅 `verifiedOn` 過咗 6 個月，或者根本冇填 —— 外部落地頁會靜靜咁壞（見下面「聯盟連結三條規矩」） |
 | W16 | 檔標咗 `_status: "sourced"` 或 `"verified"`，但有 `value` 嘅 entry 冇 `sourceNote` —— 一個檔一旦自稱有出處，就要逐條講得出。真係唔需要出處（業界通則／第一手觀察／結構性事實）就喺 entry 加 `_noSource: "理由"`，空字串或者 `true` 唔算，一定要寫理由 |
 | W14 | `data/notes/*.json` 嘅回饋線有問題：冇 `visitDate`、有 entry 唔係 `high`、`feedsInto` 指去唔存在嘅檔／key（斷線），或者指住嘅 areas key **仍然係 `needsVerify`**（觀察未歸納返落分區檔） |
 
@@ -521,13 +524,63 @@ SVG 要求：`viewBox`、`role="img"`、`aria-labelledby` 指向自己嘅
 
 `js/affiliates.js` 會組好 URL、set `href`、加 `rel="sponsored nofollow noopener"`。
 
+#### 🔴 聯盟連結三條規矩
+
+**(a) 一篇文只用一個聯盟平台。**唔好三個並排。兩個理由，都係實際嘅：
+聯盟 cookie 會互相覆蓋——讀者撳完 A 再撳 B，最後成單嗰個歸 B，
+A 嗰次曝光完全白費；而且並排等於邀請讀者去比價，比完通常兩個都唔幫襯。
+**一篇文，一個平台，一個決定。**
+
+**(b) 分工按品類定，唔按邊個佣金高。**
+
+| 品類 | 用邊個 | 為咩 |
+|---|---|---|
+| 酒店住宿 | **Trip.com** | 港人熟、`hk.trip.com` 有繁中同港元 |
+| 門票、一日遊、交通票、內地上網 | **Klook** | 本站四條現有連結全部喺呢類 |
+| 特色體驗 | **KKday** | 定位差異化，唔同 Klook 打對台 |
+
+分工寫死喺 `data/affiliates.json` 每個 partner 嘅 `scope`。
+一篇文揀邊個，先睇佢寫緊咩品類，唔係睇邊個聯盟計劃俾得多。
+
+**(c) 連結目標一律用分類頁／搜尋頁，唔准用單一產品頁。**
+單一產品下架就 404，**而本站冇任何機制偵測得到** ——
+讀者撳落去見到 404，我哋唔會收到通知。分類頁唔會有呢個問題。
+
+寫入之前一定要 `curl` 確認 **HTTP 200**，並且把探測結果記落
+`data/_sources/`。呢條唔係形式：`klook-china-esim` 原本指住
+`/zh-HK/activity/`，標住 `verifiedOn: 2026-08`，
+到 2026-09-01 再探測已經連續三次 **403**（同一分鐘 `/zh-HK/transport/`
+三次都 200，所以唔係封 bot，係嗰條路徑本身唔通）。
+**一條標住「核實過」嘅連結，半個月就壞咗。**
+
+E23 守 (c) 嘅結構部分（https、host、唔准指根網域、唔准喺 url 混追蹤參數），
+W17 守佢嘅時間部分（`verifiedOn` 過 6 個月就催你再 curl 一次）。
+兩條都攔唔到「今日就係 404」——**冇自動偵測，只有紀律。**
+
+#### 追蹤參數同白名單
+
+- 追蹤參數只准擺 `partners.*.params` 或者 `links.*.params`，**唔准寫入 `url`**（E23）。
+  咁樣改一次 partner 就全站生效。
+- **`TRACKING_PARAM_RE` 唔會擋住聯盟參數。**佢個名單雖然有
+  `tag` / `aid` / `aff_adid` / `aff_id` / `affiliate_id` / `affid`，
+  但佢淨係喺 E1／E12 度用，而嗰兩條只掃 `.html` 同 `js/`——
+  `data/affiliates.json` 由頭到尾唔經過佢。所以聯盟參數唔使加白名單、
+  亦唔使改 regex。
+- **新聯盟網域加落 `AFFILIATE_HOSTS`（`scripts/build.mjs`），唔好加落 `EXTERNAL_ALLOWLIST`。**
+  兩個表故意分開：掉入 `EXTERNAL_ALLOWLIST` 之後，全站任何一頁都可以
+  硬寫一條 `<a href="https://www.klook.com/…">`，`data-aff` 呢層 indirection
+  就白做咗。
+- **參數名唔准憑印象填。**填錯參數名嘅後果特別惡劣：條 URL 一樣去到落地頁、
+  一樣 200、讀者一樣撳得到，但佣金追蹤唔到，而且冇任何守衛捉得到。
+  等申請成功之後由聯盟後台抄返。
+
 ### 8. 加廣告位（可選）
 
 ```html
 <div class="ad-slot" data-ad-slot="ad-article-1"></div>
 ```
 
-**順序規則：任何 Klook / Amazon CTA 區塊必須排喺同一版面嘅廣告位之前。**
+**順序規則：任何聯盟 CTA 區塊必須排喺同一版面嘅廣告位之前。**
 即係第一個 `.affiliate-cta` 一定要出現喺第一個 `.ad-slot` 之前，
 違反就 build error（E4）。理由：CTA 係我哋自己揀嘅、對讀者有用嘅推薦，
 廣告係買返嚟嘅版位——次序講緊嘅係邊樣先服務讀者。
@@ -1724,7 +1777,7 @@ URL 後面嘅括號係 **2026-08-23 由本機實測嘅 HTTP 狀態**；`200` = �
 | `document.cookie` / `localStorage` / `sessionStorage` / `indexedDB` | 全站零命中 |
 | 外部字體、CDN、`<iframe>` / `<embed>` / `<object>` | 零命中；CSS 零 `@font-face` / `@import` / `url(` |
 | 外部超連結 | 15 條，全部係 `<a href>`（唔會自動載入）。`http://www.w3.org/2000/svg` 係 xmlns，唔係請求 |
-| affiliate 夥伴 | **兩個：Klook、Amazon**。三條連結。追蹤參數全部仲係 `PENDING-` 佔位值 |
+| affiliate 夥伴 | **三個：Klook、Trip.com、KKday**（2026-09-01 更新，Amazon 已全部移除）。五條連結，全部係分類頁、全部 curl 過 200。追蹤參數一個都未填 |
 | 廣告位 | 四個全部 `enabled: false`，`publisher: null` |
 | 托管 | GitHub Pages（`CNAME` = taanworld.com；`taanworld.com` → 200 @ 185.199.111.153，即 GitHub Pages apex IP）。**冇 `.github/workflows`**，產物直接 commit |
 

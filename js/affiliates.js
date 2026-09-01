@@ -5,7 +5,7 @@
  * （scripts/build.mjs 會掃 HTML，發現硬編碼就 exit 1）。
  *
  * 用法（HTML 側）：
- *   <a data-aff="klook-shenzhen-esim">深圳 eSIM 數據卡</a>
+ *   <a data-aff="klook-china-esim">內地上網數據卡／eSIM</a>
  *
  * JSON 格式：
  *   {
@@ -18,11 +18,11 @@
  *       }
  *     },
  *     "links": {
- *       "klook-shenzhen-esim": {
+ *       "klook-china-esim": {
  *         "partner": "klook",
  *         "url": "https://…",            // 未帶 tracking 的落地頁
  *         "params": { "spm": "…" },      // 該連結專用，覆寫 partner 同名參數
- *         "label": "深圳 eSIM 數據卡",     // 可選：元素本身冇字先會填
+ *         "label": "內地上網數據卡／eSIM", // 可選：元素本身冇字先會填
  *         "verifiedOn": "2026-08"
  *       }
  *     }

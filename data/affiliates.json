@@ -1,17 +1,31 @@
 {
-  "_note": "全站唯一嘅 affiliate 連結來源。頁面只准寫 data-aff=\"<key>\"，唔准寫任何 URL 或 tracking 參數。佣金率或連結一變，改呢個檔就全站生效。scripts/build.mjs 會掃描 .html 與 js/，發現硬編碼即報 error 並 exit 1。",
-  "_todo": "partners.*.params 內的追蹤 ID 現時為佔位值（PENDING-*），未申請聯盟帳號前唔應該上線；填入真值前請先確認各聯盟嘅參數名稱。",
+  "_note": "全站唯一嘅 affiliate 連結來源。頁面只准寫 data-aff=\"<key>\"，唔准寫任何 URL 或 tracking 參數。佣金率或連結一變，改呢個檔就全站生效。scripts/build.mjs 會掃描 .html 與 js/，發現硬編碼即報 error 並 exit 1；E23 另外會逐條驗呢個檔本身（host、https、路徑、partner 對唔對得上、url 有冇混入追蹤參數）。",
+  "_todo": "全部 partner 嘅追蹤參數都未填 —— 三個聯盟帳號都未申請。填之前唔准上線做導流。",
+  "_paramsPending": "⚠️ 參數名同參數值一律等申請成功之後由聯盟後台抄返，唔准憑印象填。填錯參數名嘅後果特別惡劣：條 URL 一樣去到落地頁、一樣 200、讀者一樣撳得到，但佣金完全追蹤唔到，而且冇任何守衛捉得到 —— 佢淨係一個「多咗個冇人識嘅 query string」。所以 klook 嗰兩個 PENDING-* 係舊有嘅佔位值（參數名本身都未核實過），trip.com 同 kkday 索性留空 params。",
+  "_hosts": "E23 認嘅 affiliate host 白名單寫喺 scripts/build.mjs 嘅 AFFILIATE_HOSTS。佢同 EXTERNAL_ALLOWLIST 係兩個表，故意唔共用 —— 加一個 affiliate host 唔應該順便令全站任何一頁都可以硬連去嗰個網域。",
   "disclosure": "本站部分連結為推廣連結，經此類連結消費本站可能獲得佣金，價格不受影響。",
   "partners": {
     "klook": {
       "name": "Klook",
+      "scope": "門票、一日遊、交通票、內地上網",
       "params": { "aid": "PENDING-KLOOK-AID", "aff_adid": "PENDING-KLOOK-ADID" },
       "rel": "sponsored nofollow noopener",
       "target": "_blank"
     },
-    "amazon": {
-      "name": "Amazon",
-      "params": { "tag": "PENDING-AMZN-TAG" },
+    "tripcom": {
+      "name": "Trip.com",
+      "scope": "酒店住宿",
+      "params": {},
+      "_paramsPending": "未申請，參數名未核實 —— 見檔頭 _paramsPending。",
+      "rel": "sponsored nofollow noopener",
+      "target": "_blank"
+    },
+    "kkday": {
+      "name": "KKday",
+      "scope": "特色體驗",
+      "params": {},
+      "_paramsPending": "未申請，參數名未核實 —— 見檔頭 _paramsPending。",
+      "_pendingUrl": "⚠️ 呢個 partner 暫時一條 links 都冇，係故意嘅。2026-09-01 探測：www.kkday.com 對非瀏覽器 client 一律回 403（連 /robots.txt 都 403，curl 同 WebFetch 兩邊都係）—— 即係本站確認唔到任何一條 kkday URL 真係 200。站規係「確認 200 先寫入」，所以寧願冇連結，都唔寫一條核唔到嘅。探測紀錄：data/_sources/affiliate-target-url-probe-2026-09-01.md。",
       "rel": "sponsored nofollow noopener",
       "target": "_blank"
     }
@@ -19,22 +33,41 @@
   "links": {
     "klook-china-esim": {
       "partner": "klook",
-      "url": "https://www.klook.com/zh-HK/activity/",
+      "url": "https://www.klook.com/zh-HK/esim/",
       "label": "內地上網數據卡／eSIM",
-      "verifiedOn": "2026-08"
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，標題「5G eSIM、旅遊SIM卡及隨身WiFi | 50多個國家 | Klook」，係分類頁唔係單一產品。⚠️ 舊值係 https://www.klook.com/zh-HK/activity/ —— 2026-09-01 連續三次探測都係 403（同一時間 /zh-HK/transport/ 三次都 200，所以唔係隨機封 bot，係嗰條路徑本身唔通）。舊值標住 verifiedOn 2026-08 但已經唔 work，換咗。"
     },
     "klook-cross-border-bus": {
       "partner": "klook",
       "url": "https://www.klook.com/zh-HK/transport/",
       "label": "跨境巴士／直通車票",
-      "verifiedOn": "2026-08"
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 連續三次 200，標題「預訂全球鐵路＆巴士車票」，分類頁。"
     },
-    "amazon-hand-grinder": {
-      "partner": "amazon",
-      "url": "https://www.amazon.com/s",
-      "params": { "k": "manual+coffee+grinder" },
-      "label": "手搖磨豆機（類目搜尋）",
-      "verifiedOn": "2026-08"
+    "klook-attraction-tickets": {
+      "partner": "klook",
+      "url": "https://www.klook.com/zh-HK/attractions/",
+      "label": "景點門票",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，標題「⋯必玩景點門票⋯ - Klook」，分類頁。",
+      "_unusedYet": "暫時未有頁面用呢條 key。備定，等有一篇真係講門票／一日遊先掛。"
+    },
+    "tripcom-shenzhen-hotels": {
+      "partner": "tripcom",
+      "url": "https://hk.trip.com/hotels/shenzhen-hotels-list-30/",
+      "label": "深圳酒店",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，標題「深圳酒店推介：精選 10 間高性價比酒店⋯| Trip.com」，係城市列表頁唔係單一酒店。⚠️ 尾嗰個斜線唔可以拆 —— 冇斜線嗰個版本（⋯-list-30）回 404。",
+      "_unusedYet": "暫時未有頁面用呢條 key。等有一篇真係講北上過夜／住宿先掛。"
+    },
+    "tripcom-guangzhou-hotels": {
+      "partner": "tripcom",
+      "url": "https://hk.trip.com/hotels/guangzhou-hotels-list-32/",
+      "label": "廣州酒店",
+      "verifiedOn": "2026-09",
+      "_checked": "2026-09-01 curl 200，城市列表頁。同上，尾斜線唔可以拆。",
+      "_unusedYet": "暫時未有頁面用呢條 key。"
     }
   }
 }

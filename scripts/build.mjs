@@ -28,6 +28,10 @@
  *   E5 廣告位尺寸        ad-slots.json 每個 slot 嘅高度要同 css/main.css 嘅
  *                        min-height 一一對應（手機 + 桌面兩組）。
  *   E6 資料檔缺失        頁面引用嘅 data-fresh 檔唔存在。
+ *   E23 聯盟連結自檢     data/affiliates.json 逐條驗：https、host 喺 AFFILIATE_HOSTS、
+ *                        唔准指根網域、url 唔准混入追蹤參數、partner 要對得返；
+ *                        partner 冇連結就要有 _pendingUrl 講明點解。
+ *   E24 聯盟披露         任何有 data-aff 嘅頁，正文要有 affiliates.json 嗰句披露文案。
  *
  * 警告（唔會 exit 1）：
  *   W1 文章冇對應 data/<section>/<name>.json
@@ -36,6 +40,7 @@
  *      volatility=high 但冇 volatileNote）
  *   W4 data-aff key 喺 affiliates.json 冇對應
  *   W5 JSON-LD meta 缺漏
+ *   W17 聯盟落地頁核實日期過期（>6 個月）或者冇填
  */
 
 import fs from "node:fs";
@@ -2307,12 +2312,138 @@ function checkSourcedFiles() {
   return { scanned, entries };
 }
 
+/* ------------------------------------------------------------------ */
+/* E23／E24／W17 聯盟連結                                                */
+/* ------------------------------------------------------------------ */
+
+/* 一個真空位：E1 同 E12 只掃 .html 同 js/，**由頭到尾冇睇過
+ * data/affiliates.json**。而 affiliate 落地頁就係全部住喺嗰個檔入面 ——
+ * 即係全站規管得最嚴嘅一類外部連結（帶追蹤、有錢收、直接導流），
+ * 反而係唯一一類冇守衛驗過嘅。E23 就係補呢個窿。
+ *
+ * ⚠️ AFFILIATE_HOSTS 同 EXTERNAL_ALLOWLIST 係兩個表，故意唔共用。
+ * 把 affiliate host 掉入 EXTERNAL_ALLOWLIST 會有一個副作用：全站任何
+ * 一頁都可以硬寫一條 <a href="https://www.klook.com/…">，而 data-aff
+ * 呢層 indirection 就白做咗。分開兩個表，加 affiliate host 就淨係
+ * 影響 affiliate。
+ *
+ * 順帶答一個實際問題：TRACKING_PARAM_RE 攔唔攔到聯盟參數？
+ * 攔 —— 佢個名單本身就有 tag / aid / aff_adid / aff_id / affiliate_id /
+ * affid。但佢淨係喺 E1／E12 度用，即係淨係管 HTML。affiliates.json
+ * 入面嘅 params 唔會經過佢，所以聯盟參數唔會「中招」。E23 反而倒轉用
+ * 佢：links.*.url 入面**唔准**有追蹤參數 —— 追蹤要擺 params，
+ * 咁改一次 partner 就全站生效，唔使逐條 URL 手改。 */
+
+const AFFILIATE_HOSTS = new Set([
+  "www.klook.com",   // 門票、一日遊、交通票、內地上網
+  "hk.trip.com",     // 酒店住宿
+  "www.kkday.com",   // 特色體驗（2026-09 未有連結，見 partners.kkday._pendingUrl）
+]);
+
+/* 外部落地頁會靜靜咁壞 —— 呢個唔係假設：klook-china-esim 原本嗰條
+ * /zh-HK/activity/ 標住 verifiedOn 2026-08，2026-09-01 再探測已經 403。
+ * 冇人 curl 過就冇人知。W17 唔會幫你偵測 404，但佢會逼你定期再 curl 一次。 */
+const W17_STALE_MONTHS = 6;
+
+function monthsSinceYm(ym) {
+  const [y, m] = ym.split("-").map(Number);
+  const now = new Date();
+  return (now.getFullYear() - y) * 12 + (now.getMonth() + 1 - m);
+}
+
+function checkAffiliates(files) {
+  const p = path.join(DATA_DIR, "affiliates.json");
+  const out = { links: 0, partners: 0, pages: 0 };
+  if (!fs.existsSync(p)) return out;
+  let doc;
+  try { doc = JSON.parse(fs.readFileSync(p, "utf8")); }
+  catch { return out; }            // JSON 壞咗由 E6 報
+
+  const partners = doc.partners || {};
+  const links = doc.links || {};
+  out.partners = Object.keys(partners).length;
+  out.links = Object.keys(links).length;
+
+  for (const [key, l] of Object.entries(links)) {
+    const at = `data/affiliates.json → links.${key}`;
+    if (!l || typeof l !== "object") { err(`E23 ${at}：唔係一個 object`); continue; }
+
+    if (!l.partner || !partners[l.partner]) {
+      err(`E23 ${at}：partner「${l.partner}」喺 partners 入面搵唔到 —— affiliates.js 會攞唔到 rel／target／params`);
+    }
+
+    if (typeof l.url !== "string" || !l.url.trim()) {
+      err(`E23 ${at}：冇 url。真係未確認到落地頁，就唔好開呢條 links entry —— 改為喺 partners.<partner>._pendingUrl 寫明點解`);
+      continue;
+    }
+    let u;
+    try { u = new URL(l.url); }
+    catch { err(`E23 ${at}：url 解析唔到「${l.url.slice(0, 70)}」`); continue; }
+
+    if (u.protocol !== "https:") err(`E23 ${at}：url 唔係 https（${l.url.slice(0, 70)}）`);
+    if (!AFFILIATE_HOSTS.has(u.host.toLowerCase())) {
+      err(`E23 ${at}：host「${u.host}」唔喺 AFFILIATE_HOSTS（scripts/build.mjs）→ 新夥伴要先加入嗰個表，唔好加落 EXTERNAL_ALLOWLIST`);
+    }
+    if (u.pathname === "" || u.pathname === "/") {
+      err(`E23 ${at}：url 指向根網域（${l.url.slice(0, 70)}）→ 要連去分類頁／搜尋頁`);
+    }
+    if (TRACKING_PARAM_RE.test(l.url)) {
+      err(`E23 ${at}：url 入面已經寫死咗追蹤參數 → 追蹤參數只准擺喺 partners.*.params 或者 links.*.params，改一次先會全站生效`);
+    }
+
+    if (typeof l.verifiedOn === "string" && /^\d{4}-\d{2}$/.test(l.verifiedOn)) {
+      const age = monthsSinceYm(l.verifiedOn);
+      if (age > W17_STALE_MONTHS) {
+        warn(`W17 ${at}：落地頁上次核實係 ${l.verifiedOn}（${age} 個月前，上限 ${W17_STALE_MONTHS} 個月）—— 分類頁都會改網址，再 curl 一次先算`);
+      }
+    } else {
+      warn(`W17 ${at}：冇 verifiedOn（YYYY-MM）—— 冇核實日期就冇有效期`);
+    }
+  }
+
+  /* partner 登記咗但一條連結都冇：可以係「準備緊」，亦可以係「剷連結
+   * 嗰陣漏咗剷 partner」。兩者外觀一模一樣，所以要寫明係邊種。 */
+  const used = new Set(Object.values(links).map((l) => l && l.partner));
+  for (const [pk, pv] of Object.entries(partners)) {
+    if (used.has(pk)) continue;
+    const why = pv && typeof pv._pendingUrl === "string" && pv._pendingUrl.trim();
+    if (!why) {
+      err(`E23 data/affiliates.json → partners.${pk}：登記咗但一條 links 都冇 —— 係準備緊就寫 _pendingUrl: "理由"，係唔再用就連 partner 一齊剷`);
+    }
+  }
+
+  /* E24：披露文案嘅正本喺 affiliates.json。以前佢係一個冇人讀嘅欄位 ——
+   * 頁面自己各寫各嘅一句「以上為推廣連結」，而正本入面「本站可能獲得
+   * 佣金」嗰句由頭到尾冇出過街。夥伴由一個變三個，呢個窿就更加唔可以留。 */
+  const want = typeof doc.disclosure === "string" ? doc.disclosure.replace(/\s+/g, "") : "";
+  if (!want) {
+    err("E24 data/affiliates.json 冇 disclosure 文案 —— 披露文案係單一來源，唔准留空");
+  } else {
+    for (const file of files) {
+      const html = fs.readFileSync(file, "utf8");
+      if (!/data-aff\s*=/i.test(html)) continue;
+      out.pages++;
+      if (!stripTags(html).replace(/\s+/g, "").includes(want)) {
+        err(
+          `E24 ${rel(file)}：頁面有 data-aff 連結，但正文冇 data/affiliates.json 嘅披露文案 —— ` +
+          `要一字不差咁出現：「${doc.disclosure}」`
+        );
+      }
+    }
+  }
+  return out;
+}
+
 for (const file of htmlFiles) checkPageData(rel(file), fs.readFileSync(file, "utf8"));
 const articleCount = htmlFiles.filter((f) => path.basename(f) !== "index.html").length;
 console.log(`[5/8] 文章 ↔ data 對應檢查：${articleCount} 篇文章`);
 {
   const w16 = checkSourcedFiles();
   console.log(`      出處對數（_status: ${[...W16_SCOPE].join("/")}）：${w16.scanned} 個檔、${w16.entries} 條有值 entry`);
+}
+{
+  const aff = checkAffiliates(htmlFiles);
+  console.log(`      聯盟連結：${aff.partners} 個夥伴、${aff.links} 條連結，披露對數 ${aff.pages} 頁`);
 }
 
 const linkStats = checkLinkStructure(pages);
