@@ -32,7 +32,7 @@
       ],
       "verifiedOn": "2026-09",
       "volatility": "normal",
-      "sourceNote": "香港海關官網「免稅優惠」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ，2026-09-01 curl 200 讀原文。原文逐字：「凡年滿十八歲的旅客，可以免稅攜帶下列煙草產品進入香港，供其本人自用: 19支香煙；或 1支雪茄，如多於1支雪茄，則總重量不超過25克；或 25克其他製成煙草。」頁面標題行寫住「旅客攜帶煙酒入境數量規定 (2010年8月1日起生效)」。✅ 「19 支」呢個數異常但**確認正確**，唔係打漏 20 —— 官方原文就係 19。"
+      "sourceNote": "香港海關官網「免稅優惠」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ，2026-09-01 curl 200 讀原文。原文逐字：「凡年滿十八歲的旅客，可以免稅攜帶下列煙草產品進入香港，供其本人自用: 19支香煙；或 1支雪茄，如多於1支雪茄，則總重量不超過25克；或 25克其他製成煙草。」頁面標題行寫住「旅客攜帶煙酒入境數量規定 (2010年8月1日起生效)」。✅ 「19 支」呢個數異常但「確認正確」，唔係打漏 20 —— 官方原文就係 19。"
     },
     "duty.ageLimit": {
       "value": "18 歲（嬰幼兒配方粉出境豁免係 16 歲，兩者唔同，要分開睇）",
@@ -58,29 +58,30 @@
       "value": "個人行李內不超過 15 公斤冷藏／冷凍肉類及家禽，作自用或禮品可免申領進口許可證，但仍須附第 132AK 章嘅官方證明書；而發證實體一般只向食物業人士簽發作商業用途。違例最高罰款 5 萬元及監禁 6 個月。",
       "verifiedOn": "2026-08",
       "volatility": "normal",
-      "sourceNote": "⚠️ **未由主管部門官方頁核實。**呢條屬漁農自然護理署（第 132AK 章屬食物環境衞生署／食安中心）嘅範圍，唔喺頁面上嗰兩條海關連結（https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html 同 https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/faqs/index.html）冚得到嘅範圍內。2026-08-31 試過：afcd.gov.hk 動植物進口頁（qua_ie_ipab_pab）回 200 但只有 7 行文字；cfs.gov.hk/tc_chi/import/import.html 10 行 —— 兩版都係 JS 導覽殼，搜「15 公斤／許可證」零命中。數值由編輯提供，出處待補。",
+      "sourceNote": "⚠️ 「未由主管部門官方頁核實。」呢條屬漁農自然護理署／食物環境衞生署嘅範圍。2026-09-02 喺香港海關官網掃過六版（免稅優惠、旅客清關常見問題、禁運／受管制物品、禁運物品、出口管制、種類及稅率）：「132AK」零命中；肉類方面海關只講到「香港法例第132章《公眾衞生及市政條例》對一些食品實施進口管制，包括新鮮或冷藏的肉類和家禽…可事先向食物環境衞生署查詢」，冇任何數量門檻。（旅客清關常見問題頁：https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/faqs/index.html ，2026-09-02 curl 200；禁運物品頁：https://www.customs.gov.hk/tc/service-enforcement-information/cargo-clearance/prohibited-articles/index.html 只講到冷藏或冷凍肉類和家禽屬第60A章附表1第I部，同樣冇數量。）🔴 值得留意：海關頁面上出現嘅「15公斤」全部唔係肉類 —— 旅客清關常見問題嗰個 15 公斤講嘅係「食米」，出口管制頁（https://www.customs.gov.hk/tc/service-enforcement-information/trade-facilitation/prohibited-articles/controlled-exports/index.html）嗰個 15 公斤講嘅係「犬牙魚產」。本條 value 嘅「15 公斤肉類」喺海關站搵唔到對應。呢個可能係抄錯（同食米撈亂），亦可能係漁護署／食環署嗰邊真係有呢個數而海關冇覆述 —— 本站冇證據，所以 value 照留唔改，亦唔會喺文中當佢係已核實。要定案就要去食環署／漁護署官方頁核。",
       "_checked": "2026-08-31：由新 W16 守衛捉返出嚟 —— 有 value 冇 sourceNote。本輪只補到「出處係邊個部門、本站試過乜、點解試唔到」，補唔到條文原文。⚠️ 呢條有具體數字同刑期，屬應該補實嗰批。"
     },
     "permit.plant": {
       "value": "第 207 章須漁護署進口証，但在香港以外的中國地方生產並由該等地方進口的植物不受此限；其他國家的切花及供食用蔬果亦不受此限。",
       "verifiedOn": "2026-08",
       "volatility": "normal",
-      "sourceNote": "⚠️ **未由主管部門官方頁核實。**呢條屬漁農自然護理署（第 207 章《植物（進口管制及病蟲害控制）條例》）嘅範圍，唔喺頁面上嗰兩條海關連結（https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html 同 https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/faqs/index.html）冚得到嘅範圍內。2026-08-31 試過：同上，afcd 嗰版 curl 讀唔到內文。數值由編輯提供，出處待補。",
+      "sourceNote": "⚠️ 「未由主管部門官方頁核實。」呢條屬漁農自然護理署（第 207 章《植物（進口管制及病蟲害控制）條例》）嘅範圍。2026-09-02 喺香港海關官網同樣掃過六版：「第207章」零命中，海關站由頭到尾冇覆述植物進口証嘅規定。電子版香港法例 elegislation.gov.hk 對 curl 一律轉去 checkClientConfig 閘門，讀唔到條文原文。所以 value 照留唔改，維持「未核實」狀態。要定案就要去漁護署官方頁，或者喺瀏覽器人手開 elegislation 第 207 章。",
       "_checked": "2026-08-31：由新 W16 守衛捉返出嚟 —— 有 value 冇 sourceNote。本輪只補到「出處係邊個部門、本站試過乜、點解試唔到」，補唔到條文原文。⚠️ 呢條有具體數字同刑期，屬應該補實嗰批。"
     },
     "permit.medicine": {
       "value": "個人隨身行李內合理自用可豁免許可證；屬危險藥物、抗生素或第一部毒藥（第 134／137／138 章）則須醫生處方。",
       "verifiedOn": "2026-08",
       "volatility": "normal",
-      "sourceNote": "⚠️ **未由主管部門官方頁核實。**呢條屬衞生署藥物辦公室（第 134／137／138 章）嘅範圍，唔喺頁面上嗰兩條海關連結（https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html 同 https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/faqs/index.html）冚得到嘅範圍內。2026-08-31 試過：drugoffice.gov.hk 一版 200、80 行，但講嘅係抗真菌藥物用藥指引，唔係旅客攜帶藥物嘅豁免條款。數值由編輯提供，出處待補。",
+      "sourceNote": "⚠️ 「未由主管部門官方頁核實。」呢條屬衞生署藥物辦公室（第 134／137／138 章）嘅範圍，唔喺頁面上嗰兩條海關連結（https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html 同 https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/faqs/index.html）冚得到嘅範圍內。2026-08-31 試過：drugoffice.gov.hk 一版 200、80 行，但講嘅係抗真菌藥物用藥指引，唔係旅客攜帶藥物嘅豁免條款。數值由編輯提供，出處待補。",
       "_checked": "2026-08-31：由新 W16 守衛捉返出嚟 —— 有 value 冇 sourceNote。本輪只補到「出處係邊個部門、本站試過乜、點解試唔到」，補唔到條文原文。⚠️ 呢條有具體數字同刑期，屬應該補實嗰批。"
     },
     "formula.powder": {
       "value": "攜帶 36 個月以下嬰幼兒配方粉出境而無出口許可證屬違法，最高罰款 50 萬元及監禁 2 年；年滿 16 歲旅客如過去 24 小時內不曾出境可獲豁免，每人不超過 1.8 公斤（約兩罐）。",
-      "verifiedOn": "2026-08",
+      "verifiedOn": "2026-09",
       "volatility": "normal",
-      "sourceNote": "⚠️ **未由主管部門官方頁核實。**呢條屬工業貿易署（配方粉出口管制）嘅範圍，唔喺頁面上嗰兩條海關連結（https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html 同 https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/faqs/index.html）冚得到嘅範圍內。2026-08-31 試過：tid.gov.hk 嘅配方粉頁 404，搵唔到現行路徑。數值由編輯提供，出處待補。",
-      "_checked": "2026-08-31：由新 W16 守衛捉返出嚟 —— 有 value 冇 sourceNote。本輪只補到「出處係邊個部門、本站試過乜、點解試唔到」，補唔到條文原文。⚠️ 呢條有具體數字同刑期，屬應該補實嗰批。"
+      "sourceNote": "香港海關官網「出口管制」頁，https://www.customs.gov.hk/tc/service-enforcement-information/trade-facilitation/prohibited-articles/controlled-exports/index.html ，2026-09-02 curl 200 讀原文。原文（配方粉一節）：「《2013年進出口(一般)(修訂)規例》(2013年3月1日起實施)禁止任何人從香港輸出，供36個月以下嬰幼兒食用的配方粉(包括奶粉或豆奶粉)，除非該人士已獲發出口許可證。」；豁免條件：「不適用於作為離開香港的年滿16歲人士的私人隨身行李而輸出的配方粉…在過去24小時內，該人沒有離開香港；及 該等配方粉總淨重不超逾1.8公斤」；罰則：「違例者一經定罪，可被罰款港幣500,000元及監禁2年。」六個數（36 個月／16 歲／24 小時／1.8 公斤／50 萬元／2 年）逐字對得上。⚠️ value 入面「（約兩罐）」係本站自己加嘅換算，唔係官方講法。出口許可證嘅申請由工業貿易署負責（同頁「查詢」段講明）。",
+      "_checked": "2026-08-31：由新 W16 守衛捉返出嚟 —— 有 value 冇 sourceNote。本輪只補到「出處係邊個部門、本站試過乜、點解試唔到」，補唔到條文原文。⚠️ 呢條有具體數字同刑期，屬應該補實嗰批。",
+      "_corrected": "2026-09-02：sourceNote 之前寫住「未由主管部門官方頁核實…屬工業貿易署嘅範圍，唔喺頁面上嗰兩條海關連結」——呢句已經作廢。核 duty.ageLimit 嗰陣發現香港海關自己嘅「出口管制」頁就有成段配方粉條文，六個數全部對得上。當時嘅錯唔係「查唔到」，係「搵錯部門」：以為配方粉一定要去工業貿易署，冇試過海關自己個站。"
     },
     "smoking.alternative": {
       "value": "進口另類吸煙產品（電子煙、加熱煙、草本煙及其器具、零件、配件、煙油）屬違法，不論數量多少、是否自用，包括旅客隨身攜帶入境。刑罰：一經循簡易程序定罪，罰款 50 萬元及監禁 2 年；循公訴程序定罪，罰款 200 萬元及監禁 7 年。另外由 2026-04-30 起，喺公眾地方管有指明另類吸煙產品亦屬違法（定額罰款 3,000 元；超過指定數量則須以檢控處理，可判罰款 5 萬元及監禁 6 個月）。",
