@@ -149,6 +149,11 @@ const EXTERNAL_ALLOWLIST = {
     // ⚠️ 兩個網站都係 SPA（內容 client-side load）。人手開個網址係睇到嘢嘅，
     //    但 curl 攞返嚟係個殼 —— 核實嗰陣要撬佢哋自己嘅 API，唔好因為
     //    curl 見到 1.5KB 就當佢死咗。
+    // 消費者委員會《選擇》月刊。coffee/espresso-machine 引用緊。
+    // 2026-09-01 實測 200：/tc/article/597-espresso-machines
+    // ⚠️ 公開頁只有測試方法同價格／評分區間；逐部機嘅型號同細項數字要下載 PDF，
+    //    唔喺公開頁 —— 所以嗰批只可以標「經傳媒轉述」，唔可以當引咗消委會原文。
+    "www.consumer.org.hk",   // 消委會《選擇》月刊測試報告
     "www.citybus.com.hk",    // 城巴：口岸線轉乘計劃
     "www.kmb.hk",            // 九巴：八達通及電子支付巴士轉乘計劃
     "policies.google.com",   // Google 私隱與條款
