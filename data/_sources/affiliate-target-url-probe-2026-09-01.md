@@ -71,3 +71,29 @@ Sec-Fetch-* 全套 header）同 WebFetch，全部 403。**連 `/robots.txt` 都 
 
 要寫入嘅話，下一步係喺真瀏覽器開一次目標頁、抄實條 URL、再喺呢度補返
 一次紀錄（可以接受「人手喺瀏覽器核實」，但要寫明係人手核，唔可以扮 curl 核過）。
+
+---
+
+## Klook aid=133428 上線後驗證（2026-09-01）
+
+`aid` 由帳戶持有人喺 Klook 後台抄返，帳戶級。組裝後逐條 curl：
+
+| 組裝後嘅 URL | 第一跳 | 跟到底 |
+|---|---|---|
+| `www.klook.com/zh-HK/esim/?aid=133428` | **302** | 200（1 跳） |
+| `www.klook.com/zh-HK/transport/?aid=133428` | **302** | 200（1 跳） |
+| `www.klook.com/zh-HK/attractions/?aid=133428` | **302** | 200（1 跳） |
+
+⚠️ **302 唔係壞咗，反而係最好嗰個證據。**同一條 URL 唔加 `aid` 係直接 200，
+加咗 `aid` 之後 Klook 自己 302 去：
+
+```
+…/zh-HK/esim/?aid=133428&utm_medium=affiliate-alwayson&utm_source=non-network&utm_campaign=133428&utm_term=
+```
+
+`utm_campaign` 嗰度出現返 `133428`，`utm_medium=affiliate-alwayson` ——
+即係 **Klook 嗰邊真係認得呢個 aid，而且行緊聯盟歸因流程**。
+如果 aid 係無效嘅，佢唔會做呢一跳。
+
+（順帶：呢啲 `utm_*` 係 Klook 自己加落自己個網址度嘅，唔關本站事。
+本站寫入 `affiliates.json` 嘅 URL 由頭到尾冇 `utm_*` —— E23 亦唔准有。）
