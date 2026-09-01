@@ -630,6 +630,34 @@ node scripts/check-affiliate-links.mjs --self-test
 `exit 1`，所以連「0 error」呢個誤導畫面都印唔出嚟。self-test
 （唔帶 `--publish`）唔受影響。
 
+#### 🔴 憑據分級：curl 200 唔係唯一一種憑據
+
+站規預設係「**確認 HTTP 200 先寫入**」。但 Klook 有一個**已知限制，唔係缺陷**：
+
+> **Klook 對非瀏覽器 client 會回 403。**受影響嘅主要係 `destination/`、
+> filter 類（`?region=`）呢類 SEO 頁；flat 分類頁（`/zh-HK/wifi-sim-card/` 之類）
+> 就時通時唔通。
+
+所以 **destination／filter 類頁面只可以人手核，唔可以要求 curl 200**。
+硬套 curl 200 嘅結果就係：全站永遠只連得到全球分類頁，連唔到「深圳交通」
+呢種真正有用嘅頁。
+
+三種憑據，寫入之前要講明用咗邊種：
+
+| 憑據 | 證到咩 | 夠唔夠寫入 |
+|---|---|---|
+| **curl 200 ＋ 讀到標題** | 讀者拎得到、內容對題 | ✅ |
+| **人手核（瀏覽器截圖）** | 讀者拎得到、內容對題 | ✅ —— 但 `_checked` **必須**寫明「人手核（瀏覽器截圖）YYYY-MM-DD」，唔准扮 curl 核過 |
+| **出現喺對方 sitemap** | 對方聲明佢係正規頁 | ❌ 攞唔到 body，證唔到對題，**亦證唔到入面啲 query 參數真係 work** |
+
+⚠️ **一條人手核過嘅 URL，之後 curl 到 403 唔可以當佢係反證。**403 只講到
+「curl 攞唔到 body」。撞到呢種情況要睇返 `_checked` 嗰行寫住邊種憑據。
+
+⚠️ 第三行最後嗰句係用血換返嚟嘅：`?region=25-Mainland China` 逐字抄自 Klook
+自己嘅 sitemap，睇落完全正規，人手核先發現 **`?region=` 根本冇生效**
+（麵包屑照樣「首頁>全部」、篩選器照樣「全部」）。負面紀錄寫咗喺
+`data/affiliates.json` 嘅 `_rejectedTargets`，防止下次又有人翻炒。
+
 #### 🔴 403 唔等於連結壞咗
 
 Klook 邊緣對非瀏覽器 client 會回 **403**，而唔存在嘅路徑係回 **404**——

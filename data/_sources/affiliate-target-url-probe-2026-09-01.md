@@ -171,3 +171,45 @@ Sec-Fetch-* 全套 header）同 WebFetch，全部 403。**連 `/robots.txt` 都 
 候選 URL 全部記咗喺 `data/affiliates.json` 各條 link 嘅 `_betterTargetPending`，
 逐字抄自 sitemap。要 flip 只差一步：喺真瀏覽器開一次、確認內容，
 然後喺呢度補一句「人手核」——**唔可以扮 curl 核過**。
+
+---
+
+## 第三輪：人手核（瀏覽器截圖）2026-09-01
+
+⚠️ **呢一節嘅憑據係人手核，唔係 curl。**由帳戶持有人喺真瀏覽器逐條開頁、
+睇標題同麵包屑核實。本站 curl 呢幾條會照樣回 403 —— 嗰個係 Klook 對非瀏覽器
+client 嘅封鎖，**唔准當佢係反證**。
+
+### ✅ 核到、已寫入
+
+| URL | 人手核到嘅嘢 |
+|---|---|
+| `/zh-HK/destination/c23301-shenzhen/4-transport/` | 標題「深圳交通選擇」；麵包屑 首頁>中國內地>深圳>深圳交通選擇；**57 個**交通選擇（巴士／火車票／渡輪／機場接送）；網址無跳轉 |
+| `/zh-HK/destination/c23301-shenzhen/1002-day-trips/` | 標題「深圳一日遊」；麵包屑 首頁>中國內地>深圳>深圳人氣玩樂>深圳一日遊；**41 個**項目，有價錢同評分；網址無跳轉 |
+| `/zh-HK/wifi-sim-card/`（唔帶 query） | 標題「WiFi & 上網SIM卡」；首屏第一項就係「5G eSIM 中國 \| 中國聯通」 |
+
+### ❌ 核完發現無效 —— 唔好再試
+
+`/zh-HK/wifi-sim-card/?region=25-Mainland%20China`
+`/zh-HK/wifi-sim-card/?region=77-Mainland%20China%2C%20Hong%20Kong%20&%20Macau`
+
+兩條都係第二輪由 Klook 自己 `sitemap-wifi-sim-card-plain_zh-hk.xml` **逐字抄**
+出嚟嘅，睇落完全正規。人手核結果：**`?region=` 完全冇生效** ——
+
+- 兩條嘅麵包屑都係「首頁>全部」
+- 篩選器都顯示「全部」
+- 兩條內容一模一樣
+- 聲稱純內地嗰條（`region=25`）首屏仍然出現「5G eSIM 中國、香港及澳門」
+
+🔴 **教訓：出現喺對方 sitemap，唔代表入面個 query 參數真係 work。**
+sitemap 只證到「對方聲明呢條 URL 係正規頁」，證唔到「參數有效」。
+負面紀錄已經寫死喺 `data/affiliates.json` 嘅 `_rejectedTargets`，
+就係為咗擋住下一次「我喺 sitemap 見到有 region 參數喎」嘅提議。
+
+### 三條 link 換咗做咩
+
+| key | 舊值（curl 200，全球） | 新值（人手核，深圳／總表） |
+|---|---|---|
+| `klook-cross-border-bus` | `/zh-HK/transport/` | `/zh-HK/destination/c23301-shenzhen/4-transport/` |
+| `klook-china-esim` | `/zh-HK/esim/` | `/zh-HK/wifi-sim-card/` |
+| `klook-attraction-tickets` | `/zh-HK/attractions/` | `/zh-HK/destination/c23301-shenzhen/1002-day-trips/`（label 由「景點門票」改成「深圳一日遊」，同落地頁講返同一件事） |
