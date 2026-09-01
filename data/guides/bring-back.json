@@ -2,22 +2,26 @@
   "title": "帶咩返香港 — 易耗芯資料",
   "belongsTo": "/guides/bring-back.html",
   "_status": "verified",
-  "_note": "本檔嘅數值由編輯提供（verifiedOn 2026-08）。全部標記 volatility: normal —— 呢啲係法定數字，會修訂，六個月冇覆核就應該當佢有機會過時。\n⚠️ 2026-08-31 更正一句自相矛盾嘅舊註：舊 _note 寫「按編輯指示唔寫任何金額或刑期」，但同檔有四條（permit.meat、permit.medicine、formula.powder、smoking.alternative）寫咗金額同刑期。**啱嘅係四條 entry，唔係嗰句 _note。**嗰句原意只係講 penalty.general 呢一條 —— 佢刻意唔寫數，改為指向海關官方頁，因為罰則按物品類別由唔同法例規管，寫一個數會誤導。其餘四條寫嘅係各自法例入面明文嘅上限，寫得。已經把限制範圍寫返清楚。\n⚠️ 2026-08-31：permit.meat／permit.plant／permit.medicine／formula.powder 四條補咗 sourceNote，但內容係「未由主管部門核實」—— 佢哋唔屬海關範圍，而漁護署／衞生署／工貿署三邊本機都讀唔到內文。其餘九條今輪冇郁，仍然會出 W16。",
+  "_note": "本檔嘅數值由編輯提供（verifiedOn 2026-08）。全部標記 volatility: normal —— 呢啲係法定數字，會修訂，六個月冇覆核就應該當佢有機會過時。\n⚠️ 2026-08-31 更正一句自相矛盾嘅舊註：舊 _note 寫「按編輯指示唔寫任何金額或刑期」，但同檔有四條（permit.meat、permit.medicine、formula.powder、smoking.alternative）寫咗金額同刑期。**啱嘅係四條 entry，唔係嗰句 _note。**嗰句原意只係講 penalty.general 呢一條 —— 佢刻意唔寫數，改為指向海關官方頁，因為罰則按物品類別由唔同法例規管，寫一個數會誤導。其餘四條寫嘅係各自法例入面明文嘅上限，寫得。已經把限制範圍寫返清楚。\n⚠️ 2026-08-31：permit.meat／permit.plant／permit.medicine／formula.powder 四條補咗 sourceNote，但內容係「未由主管部門核實」—— 佢哋唔屬海關範圍，而漁護署／衞生署／工貿署三邊本機都讀唔到內文。其餘九條今輪冇郁，仍然會出 W16。\n⚠️ 2026-09-01：八條法定數字逐條對住官方一手來源核過（香港海關官網 customs.gov.hk、衞生署控煙酒辦公室 taco.gov.hk，全部 curl 200 讀原文）。五條相符（rule.24hour／duty.tobacco／duty.ageLimit／penalty.general／duty.alcohol，最後一條順手補咗量度温度條件），三條唔符已改（duty.alcoholLow、declare.cash、**smoking.alternative** —— 最後一條係把「售賣」嘅罰則錯安咗落「進口」，低估 10 倍）。逐條嘅 sourceNote 都引咗原文同 URL。電子版香港法例 elegislation.gov.hk 對 curl 一律轉去 checkClientConfig 閘門，讀唔到條文原文 —— 本輪冇用到佢，因為海關同控煙酒辦公室兩個官網已經覆蓋晒八條。",
   "entries": {
     "rule.24hour": {
       "value": "持香港身份證者必須離港不少於 24 小時，先享有酒類及煙草免稅額。即日來回深圳等於零免稅額。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "香港海關官網「免稅優惠」頁（服務及執法資訊 › 旅客清關 › 免稅優惠），https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ，2026-09-01 curl 200 讀原文。原文：「持香港身份證的旅客，則必須離港不少於24小時才可以享有以上豁免數量。」「即日來回等於零免稅額」係本站由呢句推出嚟嘅講法，唔係官方原文。"
     },
     "duty.alcohol": {
-      "value": "年滿 18 歲可免稅帶 1 升酒精濃度以量計多於 30% 的飲用酒類自用；持香港身份證者必須離港不少於 24 小時才享此豁免。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "value": "年滿 18 歲可免稅帶 1 升「在攝氏 20 度的溫度下量度所得酒精濃度以量計多於 30%」的飲用酒類自用；持香港身份證者必須離港不少於 24 小時才享此豁免。",
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "香港海關官網「免稅優惠」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ，2026-09-01 curl 200 讀原文。原文：「凡年滿十八歲的旅客，可以免稅攜帶1升在攝氏20度的溫度下量度所得酒精濃度以量計多於30%的飲用酒類進入香港，供其本人自用。」⚠️ 2026-09-01 校對時發現原本 value 漏咗「在攝氏 20 度的溫度下量度所得」呢個量度條件，已補返 —— 濃度係按温度定義嘅，漏咗就唔精確。"
     },
     "duty.alcoholLow": {
-      "value": "酒精濃度不多於 30% 的飲用酒類屬零稅率貨品，攜帶數量不受限制。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "value": "在攝氏 20 度量度所得酒精濃度以量計不多於 30% 的酒類（葡萄酒除外）稅率 0%；葡萄酒亦係 0%。⚠️ 零稅率唔等於「唔受管」：佢哋仍然係應課稅品，而任何作貿易、營商或商業用途嘅應課稅品都冇免稅優惠，要用紅通道申報。",
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "香港海關官網「種類及稅率」頁，https://www.customs.gov.hk/tc/service-enforcement-information/trade-facilitation/dutiable-commodities/types-and-duty-rates/index.html ，2026-09-01 curl 200 讀原文。原文稅率表：「2. 在攝氏20度的溫度下量度所得酒精濃度以量計不多於30%的酒類，葡萄酒除外 — 0%」、「3. 葡萄酒 — 0%」。商業用途嗰句嚟自「免稅優惠」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ：「任何作貿易、營商或商業用途的應課稅品均無免稅優惠。攜有該等物品的旅客必須：使用紅通道…」",
+      "_corrected": "🔴 2026-09-01 改咗。舊 value：「酒精濃度不多於 30% 的飲用酒類屬零稅率貨品，攜帶數量不受限制。」兩處問題：(1)「攜帶數量不受限制」官方由頭到尾冇講過 —— 呢個係由「零稅率」推出嚟嘅結論，而同一個官網明文話商業用途冇免稅優惠、要走紅通道，所以「不受限制」講得太盡；(2) 漏咗葡萄酒係獨立一行、同樣 0%（原本寫法會令人以為葡萄酒要按 30% 界線判斷）。"
     },
     "duty.tobacco": {
       "value": [
@@ -26,13 +30,15 @@
         "25 克其他製成煙草",
         "同樣受 24 小時規則限制"
       ],
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "香港海關官網「免稅優惠」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ，2026-09-01 curl 200 讀原文。原文逐字：「凡年滿十八歲的旅客，可以免稅攜帶下列煙草產品進入香港，供其本人自用: 19支香煙；或 1支雪茄，如多於1支雪茄，則總重量不超過25克；或 25克其他製成煙草。」頁面標題行寫住「旅客攜帶煙酒入境數量規定 (2010年8月1日起生效)」。✅ 「19 支」呢個數異常但**確認正確**，唔係打漏 20 —— 官方原文就係 19。"
     },
     "duty.ageLimit": {
       "value": "18 歲（嬰幼兒配方粉出境豁免係 16 歲，兩者唔同，要分開睇）",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "兩個年齡兩個出處，2026-09-01 兩條都 curl 200 讀原文。18 歲：香港海關「免稅優惠」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ，原文「凡年滿十八歲的旅客」（酒類同煙草兩段都係）。16 歲：香港海關「出口管制」頁，https://www.customs.gov.hk/tc/service-enforcement-information/trade-facilitation/prohibited-articles/controlled-exports/index.html ，原文「《2013年進出口(一般)(修訂)規例》不適用於作為離開香港的年滿16歲人士的私人隨身行李而輸出的配方粉」（條件：過去 24 小時內冇離開香港，且總淨重不超逾 1.8 公斤）。✅ 確認兩個數字係兩件唔同嘅事，value 原本嘅提醒啱。"
     },
     "duty.dutiableList": {
       "value": "香港應課稅品為酒類、煙草、碳氫油及甲醇四類；旅客免稅優惠只涉及酒類同煙草。跨境司機（含港車北上、粵車南下）不享免稅優惠。",
@@ -40,9 +46,11 @@
       "volatility": "normal"
     },
     "declare.cash": {
-      "value": "第 629 章：現金類物品總值高於港幣 12 萬元或等值外幣，須用紅通道申報。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "value": "第 629 章《實體貨幣及不記名可轉讓票據跨境流動條例》：經條例附表 1 所列嘅**指明管制站**抵港，管有總值高於港幣 12 萬元（或等值外幣）嘅現金類物品，須用紅通道向海關申報。喺指明管制站以外抵港、或者即將離港嘅人，喺海關人員要求下須披露，有嘅話要申報。",
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "香港海關官網「現金類物品」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/currency-bearer-negotiable-instruments/index.html ，2026-09-01 curl 200 讀原文。原文：「根據香港法例第629章《實體貨幣及不記名可轉讓票據跨境流動條例》…經《條例》附表1所列的指明管制站抵達香港的人士，如管有大量（即總值高於12萬港元）的貨幣及不記名可轉讓票據（「現金類物品」），須使用紅綠通道系統下的紅通道向海關人員作出申報。」外幣換算按抵港／離港當日香港銀行公會公布嘅外匯賣出開市參考牌價計。",
+      "_corrected": "🔴 2026-09-01 改咗。舊 value：「第 629 章：現金類物品總值高於港幣 12 萬元或等值外幣，須用紅通道申報。」12 萬呢個數啱，但漏咗**兩個限定**：(1) 紅通道申報責任只適用於「經附表 1 指明管制站抵港」；其他情況（例如船隻碇泊處抵港、或者離港）係「應要求披露」，唔係主動紅通道申報。(2) 條例正名係《實體貨幣及不記名可轉讓票據跨境流動條例》—— 之前 audit 憑印象寫成《打擊洗錢及恐怖分子資金籌集（現金及不記名可轉讓票據跨境流動）條例》，**嗰個名係錯嘅**，冇入過 value 但要記低，唔好下次再翻炒。"
     },
     "permit.meat": {
       "value": "個人行李內不超過 15 公斤冷藏／冷凍肉類及家禽，作自用或禮品可免申領進口許可證，但仍須附第 132AK 章嘅官方證明書；而發證實體一般只向食物業人士簽發作商業用途。違例最高罰款 5 萬元及監禁 6 個月。",
@@ -73,14 +81,17 @@
       "_checked": "2026-08-31：由新 W16 守衛捉返出嚟 —— 有 value 冇 sourceNote。本輪只補到「出處係邊個部門、本站試過乜、點解試唔到」，補唔到條文原文。⚠️ 呢條有具體數字同刑期，屬應該補實嗰批。"
     },
     "smoking.alternative": {
-      "value": "進口另類吸煙產品（電子煙、加熱煙、草本煙及其器具、零件、配件、煙油）屬違法，最高罰款 5 萬元及監禁 6 個月。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "value": "進口另類吸煙產品（電子煙、加熱煙、草本煙及其器具、零件、配件、煙油）屬違法，不論數量多少、是否自用，包括旅客隨身攜帶入境。刑罰：一經循簡易程序定罪，罰款 50 萬元及監禁 2 年；循公訴程序定罪，罰款 200 萬元及監禁 7 年。另外由 2026-04-30 起，喺公眾地方管有指明另類吸煙產品亦屬違法（定額罰款 3,000 元；超過指定數量則須以檢控處理，可判罰款 5 萬元及監禁 6 個月）。",
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "衞生署控煙酒辦公室「控煙法例 › 常見問題」頁，https://www.taco.gov.hk/t/tc_chi/legislation/legislation_faq.html ，2026-09-01 curl 200 讀原文。C4 罰則表逐字：「進口 — 一經循簡易程序定罪，可判處罰款50萬元及監禁兩年，或循公訴程序定罪可處罰款200萬元及監禁七年。」C5：「《進出口條例》訂明禁止任何人將另類吸煙產品進口香港，包括當作包裹或貨物運入，或由旅客攜帶入境…條例賦予海關及衞生署權力執行有關規定。」C6：「不論數量多少或者是否自用」。公眾地方管有：同表「在公眾地方管有指明另類吸煙產品（2026年4月30日生效）」，少量非商業用途定額罰款 3,000 元，超量則簡易程序罰款 5 萬元及監禁 6 個月。",
+      "_corrected": "🔴🔴 2026-09-01 **重大更正**。舊 value：「進口另類吸煙產品…屬違法，最高罰款 5 萬元及監禁 6 個月。」官方罰則表入面，5 萬元 ＋ 6 個月係「**製造、售賣、為商業目的而管有，或給予另一人以作推廣**」同「向 18 歲以下人士給予」兩行嘅刑罰；「**進口**」嗰行係 **50 萬元 ＋ 2 年**（簡易程序）／**200 萬元 ＋ 7 年**（公訴程序）。即係舊 value 把隔籬行嘅罰則安咗落進口度，罰款低估 10 倍、監禁低估 4 倍（公訴計就係 40 倍同 14 倍）。呢條係全篇最貼身嘅一條 —— 讀者就係攞住佢決定「帶唔帶支電子煙返嚟」。順帶補返 2026-04-30 生效嘅公眾地方管有禁令（今日已經生效），舊 value 完全冇提。"
     },
     "penalty.general": {
       "value": "未申報可遭檢控或罰款，實際罰則按物品類別由不同法例規管，詳見海關官方頁。",
-      "verifiedOn": "2026-08",
-      "volatility": "normal"
+      "verifiedOn": "2026-09",
+      "volatility": "normal",
+      "sourceNote": "香港海關官網「免稅優惠」頁，https://www.customs.gov.hk/tc/service-enforcement-information/passenger-clearance/duty-free-concessions/index.html ，2026-09-01 curl 200 讀原文。原文：「旅客如沒有遵守香港法例第109章《應課稅品條例》的有關規定，可遭檢控或罰款。」同頁另有：「對攜有禁運／受管制物品入境的旅客所處以的罰則，將視乎規管這類物品進出口的有關法例而定。」—— 即係官方自己都係按物品類別分流，所以本條刻意唔寫一個統一數字係對嘅做法。"
     }
   }
 }
