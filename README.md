@@ -325,6 +325,8 @@ curl -s https://taanworld.com/sitemap.xml | grep -c "<loc>"   #    同埋 sitema
 | E19 | 標咗 `_draft` 嘅頁，出現喺 `sitemap.xml`、首頁 `.post-list`、或者任何 pillar 嘅 `.cluster-list`；另外 pillar 嘅 `jsonld:itemList` 條數同佢畫面 `.cluster-list` 條數對唔上 |
 | E20 | 相片冇 `alt`、`alt` 係空、係佔位字（「圖片」「TODO」…）或者係檔名；`.photo-figure` 入面冇 `<img>`；`.photo-figure` 以外有冇 `alt` 嘅 `<img>` |
 | E21 | footer 自家 app 推廣位出事：頁面冇 `<!-- apppromo -->` 錨點亦冇 `<!-- build:apppromo -->` 區塊、區塊有開頭冇收尾、推廣位唔喺 `<footer class="site-footer">` 入面、`data/apps.json` 讀唔到／冇 `promo.target`／`target` 指去 draft 頁 |
+| E25 | `klook.com` 連結**組裝之後**（partner params ＋ link params 合埋）冇有效 `aid`，或者 `aid` 仲係 `PENDING-*` |
+| E26 | 任何地方（`data/affiliates.json`、`.html`、`js/`）出現 `s.klook.com` —— Klook 明文話呢個格式追蹤唔到成效 |
 | E23 | `data/affiliates.json` 自檢：連結唔係 https、host 唔喺 `AFFILIATE_HOSTS`、指住根網域、`url` 入面寫死咗追蹤參數、`partner` 喺 `partners` 搵唔到；或者一個 partner 登記咗但一條 links 都冇又冇寫 `_pendingUrl: "理由"` |
 | E24 | 任何有 `data-aff` 嘅頁面，正文冇一字不差咁出現 `data/affiliates.json` 嘅 `disclosure` 文案（或者 `disclosure` 本身留空） |
 | E22 | footer 站務連結出事：頁面冇 `<!-- footerlinks -->` 錨點亦冇 `<!-- build:footerlinks -->` 區塊、區塊有開頭冇收尾、唔喺 `<footer class="site-footer">` 入面、`FOOTER_LINKS` 指去 draft 頁、或者同一個 footer 有兩條連去同一個站務頁嘅連結（生成嗰條之外仲有手寫嘅） |
@@ -571,8 +573,41 @@ W17 守佢嘅時間部分（`verifiedOn` 過 6 個月就催你再 curl 一次）
   硬寫一條 `<a href="https://www.klook.com/…">`，`data-aff` 呢層 indirection
   就白做咗。
 - **參數名唔准憑印象填。**填錯參數名嘅後果特別惡劣：條 URL 一樣去到落地頁、
-  一樣 200、讀者一樣撳得到，但佣金追蹤唔到，而且冇任何守衛捉得到。
-  等申請成功之後由聯盟後台抄返。
+  一樣 200、讀者一樣撳得到，但佣金追蹤唔到。等申請成功之後由聯盟後台抄返。
+
+#### Klook：aid=133428（已接通，2026-09-01）
+
+Klook 後台介面原文：
+
+> 於任一 Klook 電腦版或手機版網頁連結後加上「?aid=xxxx」即可生成聯盟連結
+> 必須用 `www.klook.com` 網址格式；`s.klook.com` 格式無法追蹤成效
+
+呢兩句各有一條守衛，因為**兩種錯法都唔會有任何外顯症狀**：連結照樣 200、
+照樣去到正確落地頁、讀者撳落去完全冇分別 —— 分別淨係喺收唔收到錢，
+而你要等到月尾睇報表見到零成效先知，嗰陣啲流量已經過咗。
+
+| 守衛 | 守咩 |
+|---|---|
+| **E25** | 組裝之後嘅 `klook.com` 連結一定要有有效 `aid`（`PENDING-*` 唔算） |
+| **E26** | 全站唔准出現 `s.klook.com` |
+
+`aid` 係**帳戶級**，擺 `partners.klook.params`，唔好逐條 link 寫。
+E25 驗嘅係**組裝之後**嗰條 URL（`buildAffiliateUrl()`），唔係 `links.*.url` ——
+驗錯目標嘅話，`aid` 完全冇填都會照樣過。
+
+`?` 定 `&` 唔使自己拼：`js/affiliates.js` 同 `build.mjs` 兩邊都用
+`new URL()` + `searchParams.set()`，原 URL 有冇 query 都啱。
+
+反面對照（三個 fixture，真係跑一次 build）：
+
+```sh
+node scripts/check-affiliate-links.mjs --self-test
+```
+
+`scripts/fixtures/affiliates-{no-aid,pending-aid,shortlink}.json`，
+靠 `AFFILIATES_JSON=` 環境變數把守衛指去 fixture。守衛邏輯只有一份
+（喺 `build.mjs`），self-test 唔複製 —— 複製咗就會有兩份各自漂移嘅實作，
+而測試會繼續綠。
 
 ### 8. 加廣告位（可選）
 
@@ -1777,7 +1812,7 @@ URL 後面嘅括號係 **2026-08-23 由本機實測嘅 HTTP 狀態**；`200` = �
 | `document.cookie` / `localStorage` / `sessionStorage` / `indexedDB` | 全站零命中 |
 | 外部字體、CDN、`<iframe>` / `<embed>` / `<object>` | 零命中；CSS 零 `@font-face` / `@import` / `url(` |
 | 外部超連結 | 15 條，全部係 `<a href>`（唔會自動載入）。`http://www.w3.org/2000/svg` 係 xmlns，唔係請求 |
-| affiliate 夥伴 | **三個：Klook、Trip.com、KKday**（2026-09-01 更新，Amazon 已全部移除）。五條連結，全部係分類頁、全部 curl 過 200。追蹤參數一個都未填 |
+| affiliate 夥伴 | **三個：Klook、Trip.com、KKday**（2026-09-01 更新，Amazon 已全部移除）。五條連結，全部係分類頁、全部 curl 過 200。**Klook 已接通（`aid=133428`）**；Trip.com、KKday 追蹤參數未填 |
 | 廣告位 | 四個全部 `enabled: false`，`publisher: null` |
 | 托管 | GitHub Pages（`CNAME` = taanworld.com；`taanworld.com` → 200 @ 185.199.111.153，即 GitHub Pages apex IP）。**冇 `.github/workflows`**，產物直接 commit |
 

@@ -1,5 +1,5 @@
 {
-  "_note": "全站唯一嘅 affiliate 連結來源。頁面只准寫 data-aff=\"<key>\"，唔准寫任何 URL 或 tracking 參數。佣金率或連結一變，改呢個檔就全站生效。scripts/build.mjs 會掃描 .html 與 js/，發現硬編碼即報 error 並 exit 1；E23 另外會逐條驗呢個檔本身（host、https、路徑、partner 對唔對得上、url 有冇混入追蹤參數）。",
+  "_note": "反面對照 fixture — E26。唔係真資料，唔准 copy 返落 data/。一條連結改用 s.klook.com 短網址（Klook 明文話呢個格式追蹤唔到成效）。",
   "_todo": "Klook 已接通（aid=133428，2026-09-01）。Trip.com 同 KKday 兩個聯盟帳號仲未申請，params 留空 —— 未填之前唔准喺任何頁面掛佢哋嘅連結做導流。",
   "_paramsPending": "⚠️ 參數名同參數值一律等申請成功之後由聯盟後台抄返，唔准憑印象填。填錯參數名嘅後果特別惡劣：條 URL 一樣去到落地頁、一樣 200、讀者一樣撳得到，但佣金完全追蹤唔到 —— 佢淨係一個「多咗個冇人識嘅 query string」。所以 Trip.com 同 KKday 索性留空 params。\nKlook 已經唔屬於呢個狀態：aid=133428 係由 Klook 後台抄返嘅帳戶級 ID，E25 而家會強制每條 klook 連結都帶到佢。⚠️ 舊有嘅 aff_adid（值係 PENDING-KLOOK-ADID）已經剷走 —— 嗰個參數名本身都未核實過，而 Klook 後台原文只講「加上 ?aid=xxxx 即可生成聯盟連結」，冇提第二個參數。冇核實就唔填。",
   "_hosts": "E23 認嘅 affiliate host 白名單寫喺 scripts/build.mjs 嘅 AFFILIATE_HOSTS。佢同 EXTERNAL_ALLOWLIST 係兩個表，故意唔共用 —— 加一個 affiliate host 唔應該順便令全站任何一頁都可以硬連去嗰個網域。",
@@ -37,7 +37,7 @@
   "links": {
     "klook-china-esim": {
       "partner": "klook",
-      "url": "https://www.klook.com/zh-HK/esim/",
+      "url": "https://s.klook.com/e/abc123",
       "label": "內地上網數據卡／eSIM",
       "verifiedOn": "2026-09",
       "_checked": "2026-09-01 curl 200，標題「5G eSIM、旅遊SIM卡及隨身WiFi | 50多個國家 | Klook」，係分類頁唔係單一產品。⚠️ 舊值係 https://www.klook.com/zh-HK/activity/ —— 2026-09-01 連續三次探測都係 403（同一時間 /zh-HK/transport/ 三次都 200，所以唔係隨機封 bot，係嗰條路徑本身唔通）。舊值標住 verifiedOn 2026-08 但已經唔 work，換咗。"

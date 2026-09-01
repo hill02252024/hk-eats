@@ -32,6 +32,8 @@
  *                        唔准指根網域、url 唔准混入追蹤參數、partner 要對得返；
  *                        partner 冇連結就要有 _pendingUrl 講明點解。
  *   E24 聯盟披露         任何有 data-aff 嘅頁，正文要有 affiliates.json 嗰句披露文案。
+ *   E25 Klook 冇 aid     klook.com 連結組裝之後冇有效 aid（或者仲係 PENDING）。
+ *   E26 Klook 短網址     任何地方出現 s.klook.com —— 呢個格式收唔到佣金。
  *
  * 警告（唔會 exit 1）：
  *   W1 文章冇對應 data/<section>/<name>.json
@@ -52,6 +54,16 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
  * 平時 build 唔受影響 —— 施工中有待核實標記係正常。發布前先跑呢個模式，
  * 任何一頁仲有標記就唔應該出街。 */
 const PUBLISH = process.argv.includes("--publish");
+
+/* 反面對照專用：把 affiliates.json 指去一個 fixture。
+ * **淨係 scripts/check-affiliate-links.mjs 會用**。故意寫到好嘈 ——
+ * 一個可以靜靜咁改守衛讀邊個檔嘅開關，本身就係一個窿。 */
+const AFFILIATES_PATH = process.env.AFFILIATES_JSON
+  ? path.resolve(ROOT, process.env.AFFILIATES_JSON)
+  : null;
+if (AFFILIATES_PATH) {
+  console.error(`⚠️  AFFILIATES_JSON 覆寫生效：affiliate 守衛而家讀緊 ${path.relative(ROOT, AFFILIATES_PATH)}，唔係 data/affiliates.json。呢個係反面對照模式，唔係正常 build。`);
+}
 
 /* 網域嘅單一來源，優先次序：
  *
@@ -1058,7 +1070,7 @@ function checkPageData(relPath, html) {
   }
 
   // data-aff key 對照
-  const affPath = path.join(DATA_DIR, "affiliates.json");
+  const affPath = AFFILIATES_PATH || path.join(DATA_DIR, "affiliates.json");
   let affDoc = null;
   if (fs.existsSync(affPath)) {
     try { affDoc = JSON.parse(fs.readFileSync(affPath, "utf8")); }
@@ -2340,6 +2352,35 @@ const AFFILIATE_HOSTS = new Set([
   "www.kkday.com",   // 特色體驗（2026-09 未有連結，見 partners.kkday._pendingUrl）
 ]);
 
+/* Klook 後台介面原文（2026-09-01）：
+ *   「於任一 Klook 電腦版或手機版網頁連結後加上『?aid=xxxx』即可生成聯盟連結」
+ *   「必須用 www.klook.com 網址格式；s.klook.com 格式無法追蹤成效」
+ *
+ * 呢兩句係全站最貴嗰種錯嘅來源：**兩種寫法都會 200、都會去到正確落地頁、
+ * 讀者撳落去完全冇分別 —— 分別只喺收唔收到錢。**冇守衛就冇人發現得到，
+ * 要等到月尾睇報表見到零成效先知，而嗰陣啲流量已經過咗。
+ * E25 守第一句，E26 守第二句。 */
+const KLOOK_TRACKABLE_HOST = "www.klook.com";
+const KLOOK_SHORTLINK_HOST = "s.klook.com";
+const KLOOK_AID_PARAM = "aid";
+
+/* 同 js/affiliates.js 嘅 buildUrl 一模一樣（URL + searchParams.set）。
+ * ⚠️ 兩份實作要跟到實 —— 守衛驗嘅一定要係讀者實際撳到嗰條 URL，
+ * 唔係一條「應該差唔多」嘅。順帶一提，`?` 定 `&` 唔使自己拼：
+ * searchParams.set() 自己處理，原 URL 有冇 query 都啱。 */
+function buildAffiliateUrl(link, partner) {
+  let url;
+  try { url = new URL(link.url); } catch { return null; }
+  const params = {};
+  if (partner && partner.params) for (const k of Object.keys(partner.params)) params[k] = partner.params[k];
+  if (link.params) for (const k of Object.keys(link.params)) params[k] = link.params[k];
+  for (const k of Object.keys(params)) {
+    if (params[k] === null || params[k] === "") continue;
+    url.searchParams.set(k, params[k]);
+  }
+  return url.toString();
+}
+
 /* 外部落地頁會靜靜咁壞 —— 呢個唔係假設：klook-china-esim 原本嗰條
  * /zh-HK/activity/ 標住 verifiedOn 2026-08，2026-09-01 再探測已經 403。
  * 冇人 curl 過就冇人知。W17 唔會幫你偵測 404，但佢會逼你定期再 curl 一次。 */
@@ -2351,8 +2392,8 @@ function monthsSinceYm(ym) {
   return (now.getFullYear() - y) * 12 + (now.getMonth() + 1 - m);
 }
 
-function checkAffiliates(files) {
-  const p = path.join(DATA_DIR, "affiliates.json");
+function checkAffiliates(files, jsToo = []) {
+  const p = AFFILIATES_PATH || path.join(DATA_DIR, "affiliates.json");
   const out = { links: 0, partners: 0, pages: 0 };
   if (!fs.existsSync(p)) return out;
   let doc;
@@ -2365,7 +2406,7 @@ function checkAffiliates(files) {
   out.links = Object.keys(links).length;
 
   for (const [key, l] of Object.entries(links)) {
-    const at = `data/affiliates.json → links.${key}`;
+    const at = `${rel(p)} → links.${key}`;
     if (!l || typeof l !== "object") { err(`E23 ${at}：唔係一個 object`); continue; }
 
     if (!l.partner || !partners[l.partner]) {
@@ -2380,6 +2421,18 @@ function checkAffiliates(files) {
     try { u = new URL(l.url); }
     catch { err(`E23 ${at}：url 解析唔到「${l.url.slice(0, 70)}」`); continue; }
 
+    const host = u.host.toLowerCase();
+
+    /* E26 先行：s.klook.com 條連結表面上完全正常，所以要用最specific
+     * 嘅訊息講清楚佢衰喺邊，唔可以淨係報一句「host 唔喺白名單」。 */
+    if (host === KLOOK_SHORTLINK_HOST) {
+      err(
+        `E26 ${at}：用咗 ${KLOOK_SHORTLINK_HOST} 短網址（${l.url.slice(0, 70)}）—— ` +
+        `Klook 後台明文：「必須用 ${KLOOK_TRACKABLE_HOST} 網址格式；${KLOOK_SHORTLINK_HOST} 格式無法追蹤成效」。` +
+        `呢條連結一樣 200、一樣去到落地頁，但一蚊佣金都收唔到。改用 ${KLOOK_TRACKABLE_HOST} 嘅完整網址`
+      );
+    }
+
     if (u.protocol !== "https:") err(`E23 ${at}：url 唔係 https（${l.url.slice(0, 70)}）`);
     if (!AFFILIATE_HOSTS.has(u.host.toLowerCase())) {
       err(`E23 ${at}：host「${u.host}」唔喺 AFFILIATE_HOSTS（scripts/build.mjs）→ 新夥伴要先加入嗰個表，唔好加落 EXTERNAL_ALLOWLIST`);
@@ -2389,6 +2442,23 @@ function checkAffiliates(files) {
     }
     if (TRACKING_PARAM_RE.test(l.url)) {
       err(`E23 ${at}：url 入面已經寫死咗追蹤參數 → 追蹤參數只准擺喺 partners.*.params 或者 links.*.params，改一次先會全站生效`);
+    }
+
+    /* E25 驗嘅係**組裝之後**嗰條 URL，唔係 links.*.url ——
+     * aid 住喺 partners.klook.params，links 嗰邊本來就唔應該有。
+     * 驗錯目標嘅話，呢條守衛會喺 aid 完全冇填嘅情況下照樣過。 */
+    if (host === KLOOK_TRACKABLE_HOST || host.endsWith("." + KLOOK_TRACKABLE_HOST.replace(/^www\./, ""))) {
+      const assembled = buildAffiliateUrl(l, partners[l.partner]);
+      let aid = null;
+      if (assembled) { try { aid = new URL(assembled).searchParams.get(KLOOK_AID_PARAM); } catch {} }
+      if (!aid || !String(aid).trim() || /^PENDING/i.test(String(aid))) {
+        err(
+          `E25 ${at}：組裝之後嘅 Klook 連結冇有效嘅 ${KLOOK_AID_PARAM} 參數` +
+          `（組出嚟係「${assembled || "(組唔到)"}」，aid=${aid === null ? "(冇)" : JSON.stringify(aid)}）—— ` +
+          `Klook 後台明文：「於任一 Klook 網頁連結後加上『?${KLOOK_AID_PARAM}=xxxx』即可生成聯盟連結」。` +
+          `冇 ${KLOOK_AID_PARAM} 嘅連結一樣行得通，但係一條免費導流。aid 擺 partners.klook.params，唔好逐條寫`
+        );
+      }
     }
 
     if (typeof l.verifiedOn === "string" && /^\d{4}-\d{2}$/.test(l.verifiedOn)) {
@@ -2408,8 +2478,20 @@ function checkAffiliates(files) {
     if (used.has(pk)) continue;
     const why = pv && typeof pv._pendingUrl === "string" && pv._pendingUrl.trim();
     if (!why) {
-      err(`E23 data/affiliates.json → partners.${pk}：登記咗但一條 links 都冇 —— 係準備緊就寫 _pendingUrl: "理由"，係唔再用就連 partner 一齊剷`);
+      err(`E23 ${rel(p)} → partners.${pk}：登記咗但一條 links 都冇 —— 係準備緊就寫 _pendingUrl: "理由"，係唔再用就連 partner 一齊剷`);
     }
+  }
+
+  /* E26 第二半：短網址亦有可能唔經 affiliates.json，直接手寫入 HTML／JS。
+   * E1 會因為 host 唔喺 EXTERNAL_ALLOWLIST 而攔佢，但嗰句錯誤訊息講唔出
+   * 真正嘅原因（「呢個網域收唔到佣金」），所以照掃多次。 */
+  for (const file of [...files, ...jsToo]) {
+    const text = fs.readFileSync(file, "utf8");
+    if (!text.includes(KLOOK_SHORTLINK_HOST)) continue;
+    err(
+      `E26 ${rel(file)}:${lineOf(text, text.indexOf(KLOOK_SHORTLINK_HOST))} 出現 ${KLOOK_SHORTLINK_HOST} —— ` +
+      `Klook 後台明文：「必須用 ${KLOOK_TRACKABLE_HOST} 網址格式；${KLOOK_SHORTLINK_HOST} 格式無法追蹤成效」`
+    );
   }
 
   /* E24：披露文案嘅正本喺 affiliates.json。以前佢係一個冇人讀嘅欄位 ——
@@ -2417,7 +2499,7 @@ function checkAffiliates(files) {
    * 佣金」嗰句由頭到尾冇出過街。夥伴由一個變三個，呢個窿就更加唔可以留。 */
   const want = typeof doc.disclosure === "string" ? doc.disclosure.replace(/\s+/g, "") : "";
   if (!want) {
-    err("E24 data/affiliates.json 冇 disclosure 文案 —— 披露文案係單一來源，唔准留空");
+    err(`E24 ${rel(p)} 冇 disclosure 文案 —— 披露文案係單一來源，唔准留空`);
   } else {
     for (const file of files) {
       const html = fs.readFileSync(file, "utf8");
@@ -2425,7 +2507,7 @@ function checkAffiliates(files) {
       out.pages++;
       if (!stripTags(html).replace(/\s+/g, "").includes(want)) {
         err(
-          `E24 ${rel(file)}：頁面有 data-aff 連結，但正文冇 data/affiliates.json 嘅披露文案 —— ` +
+          `E24 ${rel(file)}：頁面有 data-aff 連結，但正文冇 ${rel(p)} 嘅披露文案 —— ` +
           `要一字不差咁出現：「${doc.disclosure}」`
         );
       }
@@ -2442,7 +2524,7 @@ console.log(`[5/8] 文章 ↔ data 對應檢查：${articleCount} 篇文章`);
   console.log(`      出處對數（_status: ${[...W16_SCOPE].join("/")}）：${w16.scanned} 個檔、${w16.entries} 條有值 entry`);
 }
 {
-  const aff = checkAffiliates(htmlFiles);
+  const aff = checkAffiliates(htmlFiles, jsFiles);
   console.log(`      聯盟連結：${aff.partners} 個夥伴、${aff.links} 條連結，披露對數 ${aff.pages} 頁`);
 }
 
