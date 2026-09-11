@@ -768,6 +768,65 @@ function renderOg(relPath, metas, title) {
 }
 
 /* ------------------------------------------------------------------ */
+/* 索引指令：canonical + draft 頁嘅 robots                              */
+/* ------------------------------------------------------------------ */
+
+/* 呢兩樣都係「同搜尋引擎講呢一頁點處理」，所以擺埋一個 block。
+ *
+ * canonical 同 og:url 用同一個 canonicalPath()，所以兩者永遠唔會分叉 ——
+ * 分叉咗嘅 canonical 比冇 canonical 更差。
+ *
+ * robots 只會出現喺 draft 頁。原本嘅諗法係「唔入 sitemap 已經夠」，但
+ * sitemap 係邀請，唔係排除指令：唔喺 sitemap 嘅 URL 只要爬得到就索引得到，
+ * 而 draft 頁實測每頁有四條嚟自已索引頁嘅正文內連（E19 只掃機器清單，
+ * 掃唔到正文），所以「本站唔會主動指路過去」呢個前提實際上唔成立。
+ *
+ * 用 `follow` 唔用 `none`：draft 頁自己連出去嘅頁係正常頁，冇理由連累佢哋。
+ * 拆走 `_draft` 嗰刻呢一行就自動消失，唔使人手記得。 */
+const IDX_START = "<!-- build:indexing -->";
+const IDX_END = "<!-- /build:indexing -->";
+const IDX_BLOCK_RE = /[ \t]*<!-- build:indexing -->[\s\S]*?<!-- \/build:indexing -->\n?/g;
+
+function renderIndexing(relPath) {
+  const url = SITE_ORIGIN + canonicalPath(relPath);
+  const lines = [`<link rel="canonical" href="${esc(url)}">`];
+  if (isDraft(relPath)) {
+    lines.push(`<meta name="robots" content="noindex, follow">`);
+  }
+  return IDX_START + "\n" + lines.join("\n") + "\n" + IDX_END + "\n";
+}
+
+/* ------------------------------------------------------------------ */
+/* 聯盟連結嘅 rel:由 build 寫入靜態 HTML                                */
+/* ------------------------------------------------------------------ */
+
+/* `js/affiliates.js` 喺 runtime 會設 href、rel、target —— 但嗰個係
+ * runtime。爬蟲攞到嘅原始 HTML 入面，一條 `<a data-aff="…">` 由頭到尾
+ * 冇 href 亦冇 rel，即係「呢條係推廣連結」呢個聲明淨係存在喺 JS 行完
+ * 之後嘅 DOM。rel="sponsored" 係一個披露訊號，冇理由要人行完 JS 先見到。
+ *
+ * 所以 build 喺靜態 HTML 補一個底：`sponsored nofollow`。runtime 之後會
+ * 用 partner 嗰個 `sponsored nofollow noopener` 覆寫佢 —— 係超集，唔會
+ * 打架。href 照舊唔喺度：E1／E23 一直唔准 HTML 有 affiliate URL，呢個
+ * 唔係本輪要郁嘅嘢。
+ *
+ * 已經有 rel 嘅就唔掂，所以呢個操作係冪等嘅。 */
+const AFF_REL = "sponsored nofollow";
+const AFF_ANCHOR_RE = /<a\b[^>]*\bdata-aff=["'][^"']+["'][^>]*>/gi;
+
+function injectAffiliateRel(relPath, html) {
+  AFF_ANCHOR_RE.lastIndex = 0;
+  let n = 0;
+  const out = html.replace(AFF_ANCHOR_RE, (tag) => {
+    if (/\brel\s*=/i.test(tag)) return tag;
+    n++;
+    return tag.replace(/\s*>$/, ` rel="${AFF_REL}">`);
+  });
+  AFF_ANCHOR_RE.lastIndex = 0;
+  return { html: out, injected: n };
+}
+
+/* ------------------------------------------------------------------ */
 /* 錨點目錄（TOC）+ h2 id                                               */
 /* ------------------------------------------------------------------ */
 
@@ -1560,11 +1619,18 @@ function checkAppsStoreLinkParity() {
  *   1. build 由 SITE_ORIGIN 生成（<!-- build:og --> 同 <!-- build:jsonld --> 兩個區塊）
  *   2. 白名單上嘅外部參考連結
  * 除此之外任何 http(s):// 都係寫死，換網域嗰陣唔會跟住變。
- * 掃描前會剝走上面兩個生成區塊，剩低嘅就係人手寫嘅。 */
+ * 掃描前會剝走生成區塊，剩低嘅就係人手寫嘅。
+ *
+ * indexing 區塊同 og 一樣係生成物 —— 入面條 canonical 就係由 SITE_ORIGIN
+ * 砌出嚟，正正係呢條守衛容許嘅嗰種，所以一齊剝走。 */
 function checkNoHardcodedOrigin(relPath, html) {
-  const stripped = html.replace(OG_BLOCK_RE, "").replace(LD_BLOCK_RE, "");
+  const stripped = html
+    .replace(OG_BLOCK_RE, "")
+    .replace(LD_BLOCK_RE, "")
+    .replace(IDX_BLOCK_RE, "");
   OG_BLOCK_RE.lastIndex = 0;
   LD_BLOCK_RE.lastIndex = 0;
+  IDX_BLOCK_RE.lastIndex = 0;
 
   const re = /https?:\/\/[^\s"'<>)]+/g;
   let m;
@@ -2172,6 +2238,9 @@ let svgCount = 0;
 let bcCount = 0;
 let tocCount = 0;
 let ogCount = 0;
+let canonicalCount = 0;
+let noindexCount = 0;
+let affRelCount = 0;
 const tocPages = [];
 const latestUpdate = latestVerifiedOn();
 for (const file of htmlFiles) {
@@ -2198,6 +2267,25 @@ for (const file of htmlFiles) {
   } else {
     err(`E11 ${relPath}: 冇 <title>`);
   }
+  // 索引指令：canonical（全部頁）＋ robots noindex（draft 頁）
+  {
+    const idx = renderIndexing(relPath);
+    if (IDX_BLOCK_RE.test(html)) {
+      IDX_BLOCK_RE.lastIndex = 0;
+      html = html.replace(IDX_BLOCK_RE, idx);
+    } else if (html.includes(OG_START)) {
+      // 擺喺 OG block 之前，等 head 入面嘅次序穩定，唔會每次 build 都飄。
+      html = html.replace(OG_START, idx + OG_START);
+    } else if (/<\/head>/i.test(html)) {
+      html = html.replace(/<\/head>/i, idx + "</head>");
+    } else {
+      err(`E11 ${relPath}: 搵唔到 </head>，注入唔到 canonical`);
+    }
+    IDX_BLOCK_RE.lastIndex = 0;
+    canonicalCount++;
+    if (isDraft(relPath)) noindexCount++;
+  }
+
   {
     const og = renderOg(relPath, metas, title);
     if (OG_BLOCK_RE.test(html)) {
@@ -2256,6 +2344,13 @@ for (const file of htmlFiles) {
     BC_BLOCK_RE.lastIndex = 0;
   }
 
+  // 聯盟連結 rel：靜態 HTML 要自己講得出「呢條係推廣連結」
+  {
+    const affRes = injectAffiliateRel(relPath, html);
+    html = affRes.html;
+    affRelCount += affRes.injected;
+  }
+
   // footer 站務連結：由 FOOTER_LINKS 常數生成
   html = injectFooterLinks(relPath, html);
 
@@ -2278,6 +2373,8 @@ for (const file of htmlFiles) {
 }
 console.log(`[4/8] SVG ${svgCount} 張；麵包屑 ${bcCount} 頁；目錄 ${tocCount} 頁；JSON-LD ${pages.filter((p) => p.injected).length}/${pages.length} 頁`);
 console.log(`      <title> + Open Graph：${ogCount} 頁（品牌「${SITE_NAME}」）`);
+console.log(`      canonical：${canonicalCount} 頁；robots noindex：${noindexCount} 頁（draft）`);
+console.log(`      聯盟連結 rel="${AFF_REL}"：${affRelCount} 條`);
 console.log(`      全站最新 verifiedOn：${latestUpdate || "（冇）"}`);
 
 for (const { relPath, html } of pages) {
