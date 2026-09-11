@@ -805,25 +805,33 @@ function renderIndexing(relPath) {
  * 冇 href 亦冇 rel，即係「呢條係推廣連結」呢個聲明淨係存在喺 JS 行完
  * 之後嘅 DOM。rel="sponsored" 係一個披露訊號，冇理由要人行完 JS 先見到。
  *
- * 所以 build 喺靜態 HTML 補一個底：`sponsored nofollow`。runtime 之後會
- * 用 partner 嗰個 `sponsored nofollow noopener` 覆寫佢 —— 係超集，唔會
- * 打架。href 照舊唔喺度：E1／E23 一直唔准 HTML 有 affiliate URL，呢個
- * 唔係本輪要郁嘅嘢。
+ * 所以 build 喺靜態 HTML 寫足 `sponsored nofollow noopener` —— 同
+ * affiliates.json partner 層嗰個值一模一樣，亦同 privacy.html 對讀者嘅
+ * 宣稱一模一樣。runtime 之後覆寫返同一個值，兩邊唔會有落差。
+ * href 照舊唔喺度：E1／E23 一直唔准 HTML 有 affiliate URL。
  *
- * 已經有 rel 嘅就唔掂，所以呢個操作係冪等嘅。 */
-const AFF_REL = "sponsored nofollow";
+ * 值飄咗一樣要改返。第一版淨係「冇 rel 先補」，結果改 AFF_REL 常數之後
+ * 舊值原封不動留喺 HTML —— 一個生成物淨係寫得入、改唔到，等於冇生成。
+ * 所以而家係：冇就加，唔啱就覆寫，一樣先跳過。 */
+const AFF_REL = "sponsored nofollow noopener";
 const AFF_ANCHOR_RE = /<a\b[^>]*\bdata-aff=["'][^"']+["'][^>]*>/gi;
+const REL_ATTR_RE = /\srel\s*=\s*["']([^"']*)["']/i;
 
 function injectAffiliateRel(relPath, html) {
   AFF_ANCHOR_RE.lastIndex = 0;
-  let n = 0;
+  let added = 0, fixed = 0;
   const out = html.replace(AFF_ANCHOR_RE, (tag) => {
-    if (/\brel\s*=/i.test(tag)) return tag;
-    n++;
-    return tag.replace(/\s*>$/, ` rel="${AFF_REL}">`);
+    const m = REL_ATTR_RE.exec(tag);
+    if (!m) {
+      added++;
+      return tag.replace(/\s*>$/, ` rel="${AFF_REL}">`);
+    }
+    if (m[1] === AFF_REL) return tag;
+    fixed++;
+    return tag.replace(REL_ATTR_RE, ` rel="${AFF_REL}"`);
   });
   AFF_ANCHOR_RE.lastIndex = 0;
-  return { html: out, injected: n };
+  return { html: out, added, fixed };
 }
 
 /* ------------------------------------------------------------------ */
@@ -2240,7 +2248,8 @@ let tocCount = 0;
 let ogCount = 0;
 let canonicalCount = 0;
 let noindexCount = 0;
-let affRelCount = 0;
+let affRelAdded = 0;
+let affRelFixed = 0;
 const tocPages = [];
 const latestUpdate = latestVerifiedOn();
 for (const file of htmlFiles) {
@@ -2348,7 +2357,8 @@ for (const file of htmlFiles) {
   {
     const affRes = injectAffiliateRel(relPath, html);
     html = affRes.html;
-    affRelCount += affRes.injected;
+    affRelAdded += affRes.added;
+    affRelFixed += affRes.fixed;
   }
 
   // footer 站務連結：由 FOOTER_LINKS 常數生成
@@ -2374,7 +2384,7 @@ for (const file of htmlFiles) {
 console.log(`[4/8] SVG ${svgCount} 張；麵包屑 ${bcCount} 頁；目錄 ${tocCount} 頁；JSON-LD ${pages.filter((p) => p.injected).length}/${pages.length} 頁`);
 console.log(`      <title> + Open Graph：${ogCount} 頁（品牌「${SITE_NAME}」）`);
 console.log(`      canonical：${canonicalCount} 頁；robots noindex：${noindexCount} 頁（draft）`);
-console.log(`      聯盟連結 rel="${AFF_REL}"：${affRelCount} 條`);
+console.log(`      聯盟連結 rel="${AFF_REL}"：新增 ${affRelAdded} 條、改正 ${affRelFixed} 條`);
 console.log(`      全站最新 verifiedOn：${latestUpdate || "（冇）"}`);
 
 for (const { relPath, html } of pages) {

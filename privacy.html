@@ -92,7 +92,7 @@
 
 <ul>
   <li><strong><code>freshness.js</code></strong> —— 由本站自己嘅 <code>/data/*.json</code> 讀資料，填入頁面上嘅數值位，同埋計「呢個數核實咗幾耐」去決定要唔要出過時提示。只讀本站檔案，唔向外發任何請求，唔記低你睇過乜。</li>
-  <li><strong><code>affiliates.js</code></strong> —— 由本站自己嘅 <code>/data/affiliates.json</code> 讀推廣連結，把頁面上做咗標記嘅位換成真連結。佢淨係改 <code>href</code>、<code>rel</code> 同 <code>title</code> 屬性，唔會記錄你有冇撳。</li>
+  <li><strong><code>affiliates.js</code></strong> —— 由本站自己嘅 <code>/data/affiliates.json</code> 讀推廣連結，把頁面上做咗標記嘅位換成真連結。佢會改 <code>href</code>、<code>rel</code>、<code>title</code>、<code>target</code>、<code>data-aff-state</code> 同 <code>data-aff-href</code> 六個屬性，如果嗰個位本身冇字仲會填返連結名落去，唔會記錄你有冇撳。</li>
   <li><strong><code>ads.js</code></strong> —— 由本站自己嘅 <code>/data/ad-slots.json</code> 讀廣告位定義，喺容器上面標記狀態。<strong>呢個檔唔載入任何廣告網絡</strong>：冇 Google 嘅廣告載入腳本、冇 publisher ID、冇 <code>&lt;script&gt;</code> 注入。</li>
 </ul>
 
