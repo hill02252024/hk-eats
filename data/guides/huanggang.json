@@ -1,0 +1,115 @@
+{
+  "title": "新皇崗口岸 — 易耗芯資料",
+  "belongsTo": "/guides/huanggang.html",
+  "_status": "sourced",
+  "_note": "由 border-crossings 拆出。官方數字同一次來回唔准撈埋。開通日期已生效，橫幅唔再寫未公布。",
+  "entries": {
+    "huanggangNew.handover": {
+      "value": "新皇崗口岸港方口岸區已於 2026-07-31 交付香港特區管轄。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。開通日期已經生效，班次同閘機之後唔自動有效。出行前以官方最新公布為準。",
+      "sourceNote": "政府新聞公報 https://www.info.gov.hk/gia/general/202607/17/P2026071700639.htm，2026-07-17（國務院 7 月 8 日批覆，港方口岸區自 2026-07-31 零時起啓用）。"
+    },
+    "huanggangNew.openDate": {
+      "value": "2026-10-12 上午 6:30 正式開通，24 小時旅客及客運車輛通關。同日暫停舊皇崗臨時旅檢樓同香港落馬洲管制站旅檢。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。開通日期已經生效，班次同閘機之後唔自動有效。出行前以官方最新公布為準。",
+      "sourceNote": "保安局同深圳市人民政府口岸辦公室聯合公告 https://www.info.gov.hk/gia/general/202610/09/P2026100900280.htm ，2026-10-09。開通當日局長談話確認六時三十分投入服務、皇巴最後一班上午六時十五分由新田開出：https://www.info.gov.hk/gia/general/202610/12/P2026101200446.htm 。",
+      "_checked": "2026-08-31 補返出處同官方原文。⚠️ 坊間有講「預計最快 2026 年 9 月通關」，官方冇講過，本站唔寫。"
+    },
+    "huanggangNew.buses": {
+      "value": "啟用後皇巴士會終止營運。新口岸港方口岸區會有七條專營巴士路線（含一條通宵）、六條專線小巴路線（含三條通宵）、跨境巴士（含五條 24 小時短途線）同的士；不設公眾停車場。",
+      "verifiedOn": "2026-08",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。開通日期已經生效，班次同閘機之後唔自動有效。出行前以官方最新公布為準。",
+      "sourceNote": "立法會十題（落馬洲管制站及相關設施）https://www.info.gov.hk/gia/general/202607/15/P2026071500283.htm，2026-07-15，答（二）同答（四）。",
+      "_checked": "2026-08-31 改正。⚠️ 舊版寫「改由 **4 條**新專營巴士線接駁」，冇 sourceNote，數目錯 —— 官方係**七條專營巴士＋六條專線小巴**。舊版嗰個數應該係抄自二手源。皇巴士終止營運呢一半係啱嘅，而且係官方講嘅（「往後將毋須再以穿梭巴士連繫」）。"
+    },
+    "huanggangNew.notFutian": {
+      "value": "東鐵綫落馬洲站對接嘅係福田口岸，唔係新皇崗口岸。",
+      "verifiedOn": "2026-08",
+      "volatility": "low",
+      "_noSource": "結構性事實：澄清東鐵綫落馬洲站對接福田口岸，唔係新皇崗口岸。"
+    },
+    "huanggangNew.fiveMinutes": {
+      "value": "行政長官 2026-10-11：整體通關時間由舊落馬洲／皇崗約三十分鐘，縮短至約五分鐘。呢句係設計目標，唔係重陽當日每一條隊嘅實測。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "行政長官出席開通儀式致辭 https://www.info.gov.hk/gia/general/202610/11/P2026101100370.htm ，2026-10-11。",
+      "_note": "同 huanggangVisit.gates、huanggangNew.holiday1018 分開。五分鐘唔准寫成當日實測。"
+    },
+    "huanggangNew.stressTest": {
+      "value": "保安局局長 2026-10-09：開通前超過 100 次測試，其中包括兩次分別約一萬人同約二萬人嘅公務員壓力測試；另講一小時二萬人，對比當時高峰一小時約 7700 人。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "保安局局長會見傳媒 https://www.info.gov.hk/gia/general/202610/09/P2026100900418.htm ，2026-10-09。",
+      "_note": "壓力測試參與者係公務員，唔係第一次用閘機嘅假期旅客。"
+    },
+    "huanggangNew.holiday1018": {
+      "value": "保安局 2026-10-18：中午 12 時至下午 2 時約 19000 人次經皇崗離境；下午 1 時至 2 時一小時 9728 人次。L2 人流分流輪候約 30 至 45 分鐘，L5 離境大堂輪候維持 30 分鐘以內。下午 2 時 10 分取消 L2 分流，下午 2 時 40 分 L5 輪候縮至 15 分鐘以內。局方建議考慮用其他口岸。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "保安局新聞公報 https://www.info.gov.hk/gia/general/202610/18/P2026101800416.htm ，2026-10-18。",
+      "_note": "同一篇講早前大型演練約二萬人。9728 一小時低過局長 10 月 9 日講嘅二萬人演練，但 L2 仍然等 30 至 45 分鐘。"
+    },
+    "huanggangNew.gatesOfficial": {
+      "value": "自助通道有「讀證」同「刷臉」兩種。有回鄉證嘅香港居民，北上或南下都可以揀香港身份證或者回鄉證。預先用入境處「香港 e-道」App 登記合作查驗／刷臉，就可以唔使喺閘口現場登記。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "保安局局長會見傳媒 https://www.info.gov.hk/gia/general/202610/09/P2026100900418.htm ，2026-10-09。",
+      "_note": "呢段係官方話可以點揀。當日現場唔係咁，見 huanggangVisit.gates。"
+    },
+    "huanggangVisit.when": {
+      "value": "重陽三日連假期間來回一次。帳戶持有人稱為連假第一日。相片經 WhatsApp 於 2026-10-19 朝早傳到，入面冇拍攝時間，所以唔寫死係 10 月 17、18 定 19 日。當日人龍大約十人，唔係 10 月 18 日下午 1 時嗰個官方高峰。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "到訪由帳戶持有人口述。日期對唔到相片時間。",
+      "_note": "自費通行，唔係官方安排嘅試行。"
+    },
+    "huanggangVisit.buses": {
+      "value": "香港側帳戶持有人數到 13 條巴士線，要等、要轉車。佢嘅判斷：先去福田過關，入深圳再去皇崗，快過直撲皇崗。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "路線數量由帳戶持有人當日數。立法會 2026-07-15 答覆係七條專營巴士（含一條通宵）加六條專線小巴（含三條通宵），加埋亦係 13 條：https://www.info.gov.hk/gia/general/202607/15/P2026071500283.htm 。牆上路線圖係 2026-10-19 朝早傳到嘅相片，開出點見到新田轉車站同大欖轉車站。",
+      "_note": "13 條係路線數目，唔係同時有 13 架車。快過福田係一次行程嘅判斷，冇計時。"
+    },
+    "huanggangVisit.vertical": {
+      "value": "過關要上到最頂層。帳戶持有人數做 4 樓。牆上相片標 L5。出關之後搭深圳地鐵仲要再落，同羅湖、福田落地就係站唔同。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "樓層感覺由帳戶持有人口述。L5 係相片牆身字。官方 2026-10-18 公報寫離境大堂喺 L5、人流分流喺 L2：https://www.info.gov.hk/gia/general/202610/18/P2026101800416.htm 。",
+      "_note": "4 樓同 L5 唔強制合成同一個號碼。兩句都保留。"
+    },
+    "huanggangVisit.washroom": {
+      "value": "洗手間大，亦靚。呢句係到訪感覺。傳到嘅相片只見到牆身洗手間標誌，冇洗手間內部。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "帳戶持有人口述。"
+    },
+    "huanggangVisit.gates": {
+      "value": "香港出境：香港身份證系統話有問題，職員叫改用回鄉證，現場冇見到公告。QR code 亦用唔到。改用回鄉證之後，去同返都要撳多次同意收集資料。每部機等約 1 至 2 分鐘，卡住就要問職員。大約十人嘅隊，大約一半人有問題。帳戶持有人估坐多兩三次可能唔使再撳，但今次來回都仍然要撳，所以呢個估未驗證。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "全部係帳戶持有人當日口述。本站冇拍到閘機畫面。",
+      "_note": "唔准寫成「身份證永遠用唔到」或者「人人都要等兩分鐘」。只係呢一次。"
+    },
+    "huanggangVisit.judgement": {
+      "value": "急就唔好揀皇崗，去福田或者其他口岸。呢個係一次來回嘅判斷，唔係口岸排名。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "口岸安排同現場狀況會變。呢個係核實當日嘅數，之後唔自動有效。",
+      "sourceNote": "帳戶持有人口述。"
+    }
+  }
+}
