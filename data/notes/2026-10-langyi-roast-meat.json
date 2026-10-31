@@ -1,0 +1,89 @@
+{
+  "title": "深水埗朗益燒味工房：HK$23 雙拼燒味飯 — 易耗芯資料",
+  "belongsTo": "/notes/2026-10-langyi-roast-meat.html",
+  "_status": "mixed",
+  "_note": "實食紀錄一律 volatility high。實付金額、餐牌標價、地址電話、人流、店方資料與一次到訪判斷都只代表所記錄的日期。\n🔴 本次實付來自投稿文字，沒有收據可逐項核對；餐牌價則按照片記錄，兩者分開。\n⚠️ 同區價格比較、付款方式、排隊情況及店方經營資料來自投稿文字，未獨立調查或訪問店方。\n⚠️ 地址和電話根據用戶提供的店內海報照片，可能變更，前往前宜致電確認。\n🔴 沒有提供評分，不加星、不作全區排名。",
+  "_photoAudit": "五張均為用戶提供的 PNG 店面、餐牌、飯盒、燒味櫃及外賣袋照片。沒有使用圖庫圖或生成圖。01 裁至 1144×1180，移除畫面底部相機型號／日期浮水印及路人；05 裁出外賣袋店名和圖案，避開袋上與本篇無關的聯絡資料；其餘相片不裁切。沒有改動食物或合成畫面。輸出為 800px 與不超過原圖寬度的 WebP，quality 80，-strip；輸出後逐檔檢查 RIFF chunks，沒有 EXIF 或 XMP。原圖留在 repo 以外。",
+  "visitDate": "2026-10",
+  "feedsInto": [],
+  "_feedsIntoNote": "本站目前沒有香港燒味／街坊飯堂的分區資料頁。香港頁只涵蓋咖啡地圖，不能把這次燒味到訪硬接到不相干的 key。",
+  "entries": {
+    "visit.date": {
+      "value": "2026-10-28（相片浮水印所示日期；出稿圖片已裁走拍攝時間）",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "這是一次到訪紀錄，日期之後的出品、價格和人流本站沒有再核實。",
+      "sourceNote": "到訪日期根據用戶提供原圖上的日期浮水印；公開版本已裁走相機型號和拍攝時間。"
+    },
+    "order.set": {
+      "value": "燒肉拼叉燒飯，配白飯和生菜（本次點餐）",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "只記錄本次飯盒，菜式和配菜不代表餐牌或每次出品。",
+      "sourceNote": "點餐內容來自用戶提供文字及飯盒照片。"
+    },
+    "price.paid": {
+      "value": "HK$23（本次實付）",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "餐價可能隨時調整；此數字只代表本次到訪。",
+      "sourceNote": "由用戶提供的到訪文字記錄，沒有收據可逐項核對。"
+    },
+    "price.menu": {
+      "value": "相片中的餐牌寫燒味飯單拼／雙拼 HK$21，燒肉或叉燒加 HK$2；這是拍攝當日的牌價，不代表現價。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "餐牌價格會變，請以到店時的標示為準。",
+      "sourceNote": "根據用戶提供的店內餐牌照片；照片中可見的標示與本次實付分開記錄。"
+    },
+    "price.localComparison": {
+      "value": "投稿素材稱同區兩餸飯通常由 HK$28 起；與本次 HK$23 相差約 HK$5。這不是全區價格調查。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "同區價錢和店舖供應會變，這不是全區盤點。",
+      "sourceNote": "來自用戶提供的文章素材，本站沒有獨立收集同區餐牌。"
+    },
+    "access.address": {
+      "value": "九龍深水埗桂林街119號地下（店內海報所列）",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "店址可能更改；出發前宜先確認。",
+      "sourceNote": "根據用戶提供的店內海報照片，非本站另行查冊。"
+    },
+    "access.phone": {
+      "value": "2580 8203（店內海報所列）",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "電話資料可能更改；致電前以店內最新資料為準。",
+      "sourceNote": "根據用戶提供的店內海報照片。"
+    },
+    "payment.mode": {
+      "value": "只收現金（本次資料所記）",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "付款方式可能改變，前往前可先致電確認。",
+      "sourceNote": "來自用戶提供的文章素材，本站未獨立核實現時付款方式。"
+    },
+    "queue.note": {
+      "value": "飯點人多；本次未記錄實際等候時間。怕排隊可避開高峰。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "人流隨日期和時段變化，沒有固定等候時間數據。",
+      "sourceNote": "來自用戶提供的文章素材。"
+    },
+    "shop.claims": {
+      "value": "按投稿素材轉述，店主方先生表示每份叉燒或燒肉飯至少有10至11件肉，使用正規供應商、每日新鮮製作，並定期聯同社福機構派飯予長者。本站未獨立核實。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "這是店方經營資料的轉述，不代表本站核實或保證日後仍然如此。",
+      "sourceNote": "根據用戶提供的文章素材，本站沒有獨立訪問店主或核對供應商、製作及派飯資料。"
+    },
+    "value.judgement": {
+      "value": "本站判斷：本次飯盒有兩款肉和生菜，份量足，吃完有飽足感；以當日實付來說性價比高。只代表一次到訪，不作全區排名。",
+      "verifiedOn": "2026-10",
+      "volatility": "high",
+      "volatileNote": "這是一次到訪的個人判斷，同店不同日子的出品和份量可能不同。",
+      "sourceNote": "根據用戶提供的飯盒照片和到訪文字整理，並非平台評分。"
+    }
+  }
+}
