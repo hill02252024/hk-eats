@@ -2057,3 +2057,17 @@ sitemap、唔出現喺 nav、亦冇任何 `hreflang` 指住佢**——冇內容�
 
 第 3 步同第 4 步之間唔好 push；第 6 步之前 DNS 未落都唔好剔 Enforce HTTPS
 —— 憑證簽唔到會卡住，要等佢自己 retry。
+
+## AI search／answer-engine discovery
+
+`scripts/build_ai_discovery.mjs` 以正式 `sitemap.xml` 為準，輸出
+`content-catalog.json` 同 `llms.txt`，只收 canonical、可索引頁，不收 draft 或本機資料。
+`scripts/ai_discovery.json` 負責品牌、分區名及重要連結。一般 `node scripts/build.mjs`
+完成時會自動執行；獨立檢查用：
+
+```bash
+node scripts/build_ai_discovery.mjs --check
+```
+
+`robots.txt` 同樣由 `build.mjs` 生成，明確允許常見搜尋及 AI answer crawler。
+`llms.txt` 不是收錄或引用保證；部署後可連同正式 sitemap URL 提交 IndexNow。

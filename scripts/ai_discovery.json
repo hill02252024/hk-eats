@@ -1,0 +1,19 @@
+{
+  "siteName": "歎世界",
+  "description": "香港出發的食飲與旅行指南：北上實務、內地食飲地圖、實食紀錄、咖啡入門及行程；易變資料標明核實月份。",
+  "publisher": "歎世界",
+  "language": "zh-HK",
+  "sectionLabels": {
+    "home": "首頁",
+    "guides": "北上實務",
+    "areas": "內地食飲地圖",
+    "notes": "實食紀錄",
+    "coffee": "港深咖啡入門",
+    "trips": "北上行程",
+    "en": "English"
+  },
+  "importantLinks": [
+    {"name": "關於歎世界", "url": "/about.html"},
+    {"name": "私隱政策", "url": "/privacy.html"}
+  ]
+}

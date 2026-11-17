@@ -1,0 +1,264 @@
+{
+  "schemaVersion": "1.0",
+  "name": "歎世界 content catalogue",
+  "siteName": "歎世界",
+  "publisher": "歎世界",
+  "origin": "https://taanworld.com",
+  "catalogueUrl": "https://taanworld.com/content-catalog.json",
+  "pageCount": 36,
+  "note": "Canonical public pages from the published sitemap. Read each page for current details and sources.",
+  "pages": [
+    {
+      "url": "https://taanworld.com/about.html",
+      "title": "關於本站：點樣分開常青同易耗 — 歎世界",
+      "description": "歎世界嘅寫法：唔會過期嘅原理寫喺正文，會過期嘅數值抽出嚟獨立存放並標明核實月份同變動速度；未核實嘅一律留白唔作。",
+      "language": "zh-HK",
+      "section": "about.html"
+    },
+    {
+      "url": "https://taanworld.com/areas/hk-coffee-map.html",
+      "title": "香港咖啡店分區：租金決定咗地圖 — 歎世界",
+      "description": "香港嘅咖啡地圖唔係由口味畫出嚟，係由租金畫出嚟。街舖、樓上舖、工廈舖三種型態各自嘅性格、時段同代價，同點樣按你有幾多時間去揀。",
+      "language": "zh-HK",
+      "section": "areas"
+    },
+    {
+      "url": "https://taanworld.com/areas/",
+      "title": "內地食飲地圖 — 歎世界",
+      "description": "以「一次行得完」為單位嘅分區地圖：寫街區結構、食飲密度、步行動線同時段性格，而唔係逐間舖評分。以內地城市為主，保留一篇香港分區做對照基準。",
+      "language": "zh-HK",
+      "section": "areas"
+    },
+    {
+      "url": "https://taanworld.com/coffee/brewing-basics.html",
+      "title": "手沖參數入門：一次只改一個 — 歎世界",
+      "description": "五個變數點樣互相牽扯、一套可以重複嘅調參紀律，同一張由味道倒推應該改邊個參數嘅診斷對照。冇秘方，只有方法。",
+      "language": "zh-HK",
+      "section": "coffee"
+    },
+    {
+      "url": "https://taanworld.com/coffee/espresso-machine.html",
+      "title": "買咖啡機定係手沖？先搞清楚兩者解決緊咩問題 — 歎世界",
+      "description": "消委會 2026 年測 10 款特濃咖啡機，$649 到 $23,880 都有杯與杯之間十度以上嘅溫差。呢篇唔推薦機——講清楚機同手沖各自解決緊咩問題，同埋你屬邊一種。本站冇試過任何一部機。",
+      "language": "zh-HK",
+      "section": "coffee"
+    },
+    {
+      "url": "https://taanworld.com/coffee/grinder-guide.html",
+      "title": "手搖磨豆機點揀：刀盤、定位、公差，同價錢的關係 — 歎世界",
+      "description": "由刀盤幾何、定位機構同機械公差三個角度，解釋手搖磨豆機嘅價差究竟買緊咩，以及點樣按沖煮方式決定應該付到邊個層級。",
+      "language": "zh-HK",
+      "section": "coffee"
+    },
+    {
+      "url": "https://taanworld.com/coffee/",
+      "title": "港深咖啡入門 — 歎世界",
+      "description": "由杯入面嘅變數層級講起：點解一杯咖啡會咁樣、點揀器材、點睇一間店嘅豆單。只寫原理，唔寫型號同售價。",
+      "language": "zh-HK",
+      "section": "coffee"
+    },
+    {
+      "url": "https://taanworld.com/guides/border-crossings.html",
+      "title": "深圳六大口岸點揀？由出發點倒推的選關邏輯 — 歎世界",
+      "description": "六個口岸點揀。新皇崗 2026-10-12 已開通；「約五分鐘」係設計目標。重陽連假本站來回一次：十人隊已有一半問職員，急就去福田。",
+      "language": "zh-HK",
+      "section": "guides"
+    },
+    {
+      "url": "https://taanworld.com/guides/bring-back.html",
+      "title": "帶酒帶煙返香港：免稅額點計（2026） — 歎世界",
+      "description": "即日來回深圳等於零免稅額——持香港身份證要離港滿 24 小時先有酒煙免稅額。加上肉類、植物、藥物、配方粉同另類吸煙產品嘅實際規管，同綠色紅色通道嘅分別。",
+      "language": "zh-HK",
+      "section": "guides"
+    },
+    {
+      "url": "https://taanworld.com/guides/bus-interchange.html",
+      "title": "口岸巴士轉乘：邊程免費，睇你喺邊度上車 — 歎世界",
+      "description": "城巴同九巴嘅口岸線轉乘優惠唔係一律「免費一程」——官方分四級，而且同一對路線喺唔同上車點、唔同方向可以完全唔同。呢篇講機制，同埋教你用官方查詢器查自己嗰條線。",
+      "language": "zh-HK",
+      "section": "guides"
+    },
+    {
+      "url": "https://taanworld.com/guides/huanggang.html",
+      "title": "新皇崗口岸：10月12日開通、點去、五分鐘過關 — 歎世界",
+      "description": "2026-10-12 上午 6:30 開通，24 小時。香港側 13 條線都要轉車，過關要再上到 L5。五分鐘係設計目標；重陽本站來回，十人隊一半要問職員。",
+      "language": "zh-HK",
+      "section": "guides"
+    },
+    {
+      "url": "https://taanworld.com/guides/",
+      "title": "港人北上完整指南 — 歎世界",
+      "description": "由出發前嘅準備、揀口岸、支付設定，去到返程帶嘢過關，一份由頭到尾嘅北上操作指南。寫判斷邏輯，唔寫會過期嘅清單。",
+      "language": "zh-HK",
+      "section": "guides"
+    },
+    {
+      "url": "https://taanworld.com/",
+      "title": "歎世界 — 香港出發的食飲與旅行指南",
+      "description": "用常青內容加可變資料兩層寫成的中文指南：深圳北上實務、分區食飲地圖、咖啡器材原理與北上行程。所有會過期的數字都標明核實月份。",
+      "language": "zh-HK",
+      "section": "home"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-08-fangwenshan-yunnan-mixian.html",
+      "title": "深圳桃園芳雯山：開咗一個月，上咗小食榜第一 — 歎世界",
+      "description": "深圳桃園一間開咗一個月、冇分店嘅雲南小鍋米線。四樣嘢嘅次序、薄荷葉點解係標配唔係選配，同呢種單店喺香港點解愈嚟愈少。呢餐係平台試單套餐，全免。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-08-manji-claypot-rice.html",
+      "title": "廣州北京路民記煲仔飯：飯焦贏，米飯同肉料平淡 — 歎世界",
+      "description": "1979 年開嘅老店。飯焦火候到位，但米飯同肉料調味偏淡；生滾湯反而係意外。同深圳蛇口一間對比之後嘅結論。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-08-panxi-restaurant.html",
+      "title": "廣州泮溪酒家：環境同冬瓜盅贏，其餘合格 — 歎世界",
+      "description": "荔灣湖公園隔籬嘅 78 年園林酒家，重遊。冬瓜盅係全餐最大驚喜，點心合格；環境同食物之間嘅落差，同「兩人飲茶」喺香港係咩水平。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-08-sinsumkee-claypot.html",
+      "title": "膳心記四寶煲仔飯（沙井西薈城店）：團購價唔等於門市價 — 歎世界",
+      "description": "深圳沙井一間廣式煲仔飯連鎖：團購實付 ¥30.6、門市價 ¥36，兩個數放埋一齊先睇得出折扣真係幾多。出品及格但未到位——飯焦同四寶嘅融合味冇出到。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-08-taizai-boat-noodle.html",
+      "title": "泰仔船面（華強北店）：一碗 ¥38 嘅泰式牛肉船面 — 歎世界",
+      "description": "深圳華強北一間泰式船面店：¥88 雙人套餐食咗牛肉船面同香茅炸雞翼，湯頭同雞翼都做得好，唯一要留意係夏天冷氣。附門市價目牌逐行讀數同平台數據對照。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-08-xiaoyueshan-laoyoufen.html",
+      "title": "小越山南寧老友粉（西麗店）：食得辣都要一支豆奶頂住 — 歎世界",
+      "description": "深圳西麗一碗招牌三鮮老友粉：酸筍同豆豉夠地道，但辣係慢慢滲出嚟嘅，一支冰豆奶唔係配菜係必需品。順手拆四個價錢數字，同埋點解掛出嚟嗰個優惠價唔會自動落喺你張單度。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-09-dayang-stewed-soup.html",
+      "title": "達揚原味燉品（文明路店）：原隻椰子燉竹絲雞 ¥24 — 歎世界",
+      "description": "廣州越秀文明路一間燉品老店：¥24 一個原隻椰子燉竹絲雞，湯清但味濃。店內個爐好巨大、好滾燙，室內開住風扇都照樣出汗。順手講埋點解平台人均 ¥24 同實付 ¥24 撞埋，都唔算互相印證。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-09-genroku-sushi.html",
+      "title": "元祿壽司（心斎橋店）：兩個人 3103 日圓，五項加埋一個都唔差 — 歎世界",
+      "description": "大阪心斎橋一間按盤色計價嘅壽司店，兩個人埋單 3103 日圓（含稅）：四種盤色加一個茶碗蒸，五項逐項加埋啱啱等於 3103，一個日圓都唔差。金槍魚赤身、炙烤壽司同大阪燒風格腐皮壽司點樣，同埋醋飯同落單流程。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-09-hanrengong-massage.html",
+      "title": "漢仁宮古法按摩（南山中心店）：90 分鐘足道實付 ¥255 — 歎世界",
+      "description": "深圳南山一次 90 分鐘古法足道：原價 ¥329、實付 ¥255。技師初期力度偏重，出聲之後即刻調整；隔日背部仍有少少酸脹。附平台數據對照。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-09-komeda-coffee.html",
+      "title": "コメダ珈琲店（淀屋橋南店）：一頓早餐，本次冇記低單價 — 歎世界",
+      "description": "大阪淀屋橋一頓早餐：招牌黑咖啡、手工雞蛋熱狗同迷你米漢堡套餐。一入店就有熱毛巾同冰水，黑咖啡醇厚順滑、有復古韻味。呢篇冇價錢拆解 —— 本次冇記低單價，唔會用平台人均頂替。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-09-lianshang-leshan.html",
+      "title": "戀上樂山小吃（水圍恆春園店）：套餐 ¥50.5，埋單 ¥61.1 — 歎世界",
+      "description": "深圳福田水圍村巷仔入面一間細舖，地圖上搵唔到，招牌唔顯眼。涼麵同經典紅油好食，串燒係現烤。落單嗰陣套餐計 ¥50.5、埋單 ¥61.1 —— 中間嗰 ¥10.6 同一次性餐具費 ¥4，兩樣都係事前睇唔到嘅成本。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-09-mingkee-cheungfun.html",
+      "title": "西關明記腸粉（荔灣店）：四十年功力套餐團購 ¥26.8 — 歎世界",
+      "description": "廣州荔灣一張 ¥26.8 團購券：招牌拉腸「發財三元」同西關艇仔粥。腸粉好滑、足料新鮮，落單前值得對一對 ¥22＋¥17＝¥39 呢條數。就喺泮溪酒家隔籬。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-09-xiaoyangshengjian-shengjian.html",
+      "title": "小楊生煎（深圳坪山益田店）：團購蝦生煎套餐 ¥33.9 — 歎世界",
+      "description": "深圳坪山一張 ¥33.9 團購券：大蝦生煎同老鴨粉絲湯。外皮同爆汁做得好，但蝦肉鮮度輸咗畀預期，粉絲份量一個人食唔完。附三個價錢數字點對照。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-10-langyi-roast-meat.html",
+      "title": "深水埗朗益燒味工房：HK$23 雙拼燒味飯 — 歎世界",
+      "description": "深水埗朗益燒味工房一次實食記錄：燒肉拼叉燒飯、店內餐牌、飯盒份量、地址和到店提醒；價格與店方資料只代表到訪當日。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-10-lekaisha-daqianli.html",
+      "title": "樂凱撒披薩（寶安大仟里店）：一人套餐實付 ¥65.90 — 歎世界",
+      "description": "深圳寶安大仟里樂凱撒晚市一人套餐：標價 ¥65.9，微信實付 ¥65.90。6 英寸 BBQ 烤雞披薩、一對雞翅、牛油果奶昔。大眾點評 2026-10-19 截取 4.3 分、2110 條、人均 ¥55。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-10-senryo-telford.html",
+      "title": "千両（德福廣場1期店）：兩個人約一千港元，刺身拼盤同烤魷魚 — 歎世界",
+      "description": "九龍灣德福廣場1期千両（sen-ryo）2026-09-24 晚市：兩個人自費約一千港元，刺身拼盤、烤魷魚、和牛鍋。地址在1樓F27。大眾點評截取當日 4.2 分、5 條評價，本站冇逐項收據。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/",
+      "title": "實食紀錄 — 歎世界",
+      "description": "有日期嘅單次到訪紀錄：我嗰次食咗咩、幾錢、等幾耐、點判斷。刻意會過期，用嚟餵返分區地圖嗰邊唔會過期嘅結構。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/privacy.html",
+      "title": "私隱政策 — 歎世界",
+      "description": "歎世界嘅私隱政策：本站唔設表單、唔用 cookie、唔用 localStorage、唔載入任何第三方資源。托管商日誌、推廣連結同將來嘅廣告安排逐項寫明。",
+      "language": "zh-HK",
+      "section": "privacy.html"
+    },
+    {
+      "url": "https://taanworld.com/trips/day-trip.html",
+      "title": "深圳一日遊骨架 — 歎世界",
+      "description": "由返程時間倒推嘅一日框架：四個時段、緩衝點樣擺、兩個決策點、五個失敗點，同一張你自己量時間嘅工作表。",
+      "language": "zh-HK",
+      "section": "trips"
+    },
+    {
+      "url": "https://taanworld.com/trips/",
+      "title": "北上行程 — 歎世界",
+      "description": "北上行程真正難嘅唔係揀去邊，係排時間。呢度講一條完整北上行程由咩組成、點樣由返程倒推、緩衝要點擺、每個環節靠咩知道實際情況。",
+      "language": "zh-HK",
+      "section": "trips"
+    },
+    {
+      "url": "https://taanworld.com/trips/overnight.html",
+      "title": "北上過夜兩日 — 歎世界",
+      "description": "過夜唔係一日遊嘅加長版，係另一種結構。行李點處理、兩日點分工、退房同返程點夾，同住宿登記呢個最容易被忽略嘅前置條件。",
+      "language": "zh-HK",
+      "section": "trips"
+    },
+    {
+      "url": "https://taanworld.com/trips/trip-tools.html",
+      "title": "行街同北上，手機要裝咩 — 歎世界",
+      "description": "行街最花時間嘅唔係行，係等。呢篇講香港呢一段路邊幾個環節值得靠工具、邊幾個根本唔使——實時到站、泊車、天氣，加上北上專屬嘅返程問題。",
+      "language": "zh-HK",
+      "section": "trips"
+    },
+    {
+      "url": "https://taanworld.com/trips/with-family.html",
+      "title": "帶長輩或小朋友嘅版本 — 歎世界",
+      "description": "唔係「行慢啲」咁簡單。休息點密度、廁所間距、垂直移動、走散預案，同點解口岸選擇喺呢種行程入面重要好多。",
+      "language": "zh-HK",
+      "section": "trips"
+    }
+  ]
+}

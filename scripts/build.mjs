@@ -2199,7 +2199,14 @@ function writeSitemap(pages) {
 function writeRobots() {
   fs.writeFileSync(path.join(ROOT, "robots.txt"),
     "# hk_eats — 由 scripts/build.mjs 生成，唔好手改\n" +
-    "User-agent: *\nAllow: /\n\n" + `Sitemap: ${SITE_ORIGIN}/sitemap.xml\n`, "utf8");
+    "# Search engines and AI search/answer crawlers; not a training policy.\n" +
+    "User-agent: Googlebot\nUser-agent: Bingbot\nUser-agent: Applebot\nUser-agent: DuckDuckBot\n" +
+    "User-agent: OAI-SearchBot\nUser-agent: ChatGPT-User\n" +
+    "User-agent: PerplexityBot\nUser-agent: Perplexity-User\n" +
+    "User-agent: Claude-SearchBot\nUser-agent: Claude-User\nAllow: /\n\n" +
+    "User-agent: *\nAllow: /\n\n" +
+    `# JSON: ${SITE_ORIGIN}/content-catalog.json\n# Text: ${SITE_ORIGIN}/llms.txt\n` +
+    `Sitemap: ${SITE_ORIGIN}/sitemap.xml\n`, "utf8");
 }
 
 /* ------------------------------------------------------------------ */
@@ -2839,6 +2846,8 @@ for (const [p, d] of [...linkStats.depth.entries()].sort((a, b) => a[1] - b[1] |
   const inb = linkStats.inbound.get(p);
   console.log(`  ${String(d)} click  ${p.padEnd(34)} 入連 ${inb ? inb.size : 0} 條  出連 ${(linkStats.graph.get(p) || new Set()).size} 條`);
 }
+
+if (!errors.length) await import("./build_ai_discovery.mjs");
 
 if (warnings.length) { console.log(""); for (const m of warnings) console.log(`WARNING ${m}`); }
 if (errors.length) { console.log(""); for (const m of errors) console.error(`ERROR   ${m}`); }
