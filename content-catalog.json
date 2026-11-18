@@ -5,7 +5,7 @@
   "publisher": "歎世界",
   "origin": "https://taanworld.com",
   "catalogueUrl": "https://taanworld.com/content-catalog.json",
-  "pageCount": 36,
+  "pageCount": 37,
   "note": "Canonical public pages from the published sitemap. Read each page for current details and sources.",
   "pages": [
     {
@@ -208,6 +208,13 @@
       "url": "https://taanworld.com/notes/2026-10-senryo-telford.html",
       "title": "千両（德福廣場1期店）：兩個人約一千港元，刺身拼盤同烤魷魚 — 歎世界",
       "description": "九龍灣德福廣場1期千両（sen-ryo）2026-09-24 晚市：兩個人自費約一千港元，刺身拼盤、烤魷魚、和牛鍋。地址在1樓F27。大眾點評截取當日 4.2 分、5 條評價，本站冇逐項收據。",
+      "language": "zh-HK",
+      "section": "notes"
+    },
+    {
+      "url": "https://taanworld.com/notes/2026-11-hefeng-changfen.html",
+      "title": "坪洲和豐腸粉店：兩日實食 ¥38，腸粉比粥更值得點 — 歎世界",
+      "description": "深圳寶安坪洲和豐腸粉店兩次實食：星期五晚、星期六早，兩餐共 ¥38。招牌腸粉有鑊氣、粥小份已大碗，另記排隊、免費豆漿和到訪提醒。",
       "language": "zh-HK",
       "section": "notes"
     },
